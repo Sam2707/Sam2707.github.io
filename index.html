@@ -429,6 +429,25 @@
     .grain, .stars i, .stars .star-layer, .cursor, .sparkle, .clock .colon { animation: none; }
       .belief-b .lines .ln { color: var(--cream); }
   }
+
+  /* ===== card covers: real UI in a device frame ===== */
+  .cover-device { display: block; }
+  .cover-device .dev-disc { position: absolute; left: 50%; top: 50%; width: min(64%, 330px); aspect-ratio: 1; border-radius: 50%; background: var(--coral); transform: translate(-50%, -50%); opacity: .9; }
+  .cover-device:has(.laptop) .dev-disc { width: min(80%, 420px); }
+  .cover-device .phone, .cover-device .laptop { transition: transform .9s var(--ease); }
+  .card:hover .cover-device .phone { transform: translateX(-50%) translateY(-6px); }
+  .card:hover .cover-device .laptop { transform: translate(-50%, calc(-50% - 6px)); }
+  .phone { position: absolute; top: 30px; bottom: 30px; left: 50%; transform: translateX(-50%); aspect-ratio: 590 / 1361; max-height: 520px;
+           border: 7px solid var(--ink); border-radius: 30px; background: var(--ink); overflow: hidden; box-shadow: 8px 9px 0 rgba(12, 12, 14, .22); }
+  .phone img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 23px; }
+  .laptop { position: absolute; left: 50%; top: 50%; width: min(82%, 540px); transform: translate(-50%, -50%); }
+  .laptop-screen { border: 9px solid var(--ink); border-bottom-width: 13px; border-radius: 14px 14px 4px 4px; background: var(--ink); box-shadow: 8px 9px 0 rgba(12, 12, 14, .22); }
+  .laptop-screen img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; border-radius: 4px; background: #fff; }
+  .laptop-base { position: relative; height: 13px; margin: 0 -7%; background: var(--ink); border-radius: 2px 2px 12px 12px; }
+  .laptop-base::after { content: ""; position: absolute; left: 50%; top: 0; width: 16%; height: 5px; transform: translateX(-50%); background: #3a3a40; border-radius: 0 0 6px 6px; }
+  @media (prefers-reduced-motion: reduce) { .cover-device .phone, .cover-device .laptop { transition: none; } }
+  /* single-column layouts: the cover keeps a fixed shape so the device always fits */
+  @media (max-width: 900px) { .cover.cover-device { min-height: 0; aspect-ratio: 16 / 11; } }
 </style>
 </head>
 <body>
@@ -606,16 +625,9 @@
           <div class="metrics"><div><b>+20%</b><small>Faster inspections</small></div><div><b>−12%</b><small>Post-sale disputes</small></div><div><b>+15%</b><small>Bid velocity</small></div></div>
           <span class="go">Read the case study <i>→</i></span>
         </div>
-        <div class="cover">
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-            <g fill="none" stroke="#0c0c0e" stroke-width="2">
-              <rect x="92" y="62" width="64" height="48" rx="8"/><rect x="168" y="62" width="64" height="48" rx="8"/><rect x="244" y="62" width="64" height="48" rx="8"/>
-              <rect x="92" y="122" width="64" height="48" rx="8"/><rect x="244" y="122" width="64" height="48" rx="8"/>
-              <rect x="92" y="182" width="64" height="48" rx="8"/><rect x="168" y="182" width="64" height="48" rx="8"/><rect x="244" y="182" width="64" height="48" rx="8"/>
-            </g>
-            <rect x="168" y="122" width="64" height="48" rx="8" fill="#ff8a5b" stroke="#0c0c0e" stroke-width="2"/>
-            <path d="M187 146l9 9 17-17" stroke="#0c0c0e" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+        <div class="cover cover-device">
+          <span class="dev-disc" aria-hidden="true"></span>
+          <div class="phone"><img src="assets/thumbs/openlane-screen.webp" alt="Openlane app: vehicle details for a 2014 Harley-Davidson listing" width="590" height="1361" loading="lazy" decoding="async"></div>
         </div>
       </a>
 
@@ -628,16 +640,9 @@
           <div class="metrics"><div><b>28%</b><small>Faster decisions</small></div><div><b>−30%</b><small>Support tickets</small></div><div><b>−37%</b><small>Audit kickbacks</small></div></div>
           <span class="go">Read the case study <i>→</i></span>
         </div>
-        <div class="cover">
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-            <g stroke="#b9b5aa" stroke-width="7" stroke-linecap="round">
-              <line x1="110" y1="74" x2="290" y2="74"/><line x1="110" y1="98" x2="250" y2="98"/><line x1="110" y1="122" x2="280" y2="122"/>
-              <line x1="110" y1="174" x2="230" y2="174"/><line x1="110" y1="198" x2="270" y2="198"/><line x1="110" y1="222" x2="210" y2="222"/>
-            </g>
-            <g stroke="#0c0c0e" stroke-width="2"><line x1="100" y1="98" x2="262" y2="98"/><line x1="100" y1="198" x2="282" y2="198"/></g>
-            <rect x="100" y="136" width="200" height="26" rx="13" fill="#ff8a5b" stroke="#0c0c0e" stroke-width="2"/>
-            <circle cx="284" cy="149" r="6" fill="#0c0c0e"/>
-          </svg>
+        <div class="cover cover-device">
+          <span class="dev-disc" aria-hidden="true"></span>
+          <div class="laptop"><div class="laptop-screen"><img src="assets/thumbs/finra-workspace-screen.webp" alt="Redesigned FINRA manual approval queue with filters and review status" width="1400" height="885" loading="lazy" decoding="async"></div><div class="laptop-base"></div></div>
         </div>
       </a>
 
@@ -650,20 +655,9 @@
           <div class="metrics"><div><b>58</b><small>Components</small></div><div><b>105</b><small>Styles defined</small></div><div><b>20+</b><small>Designers trained</small></div></div>
           <span class="go">Read the case study <i>→</i></span>
         </div>
-        <div class="cover">
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-            <g fill="none" stroke="#0c0c0e" stroke-width="2">
-              <path d="M200 98v26M110 124h180M110 124v22M170 124v22M230 124v22M290 124v22"/>
-              <rect x="92" y="146" width="36" height="36" rx="6"/><rect x="152" y="146" width="36" height="36" rx="6"/><rect x="212" y="146" width="36" height="36" rx="6"/><rect x="272" y="146" width="36" height="36" rx="6"/>
-              <path d="M110 182v20M170 182v20M230 182v20M290 182v20"/>
-            </g>
-            <g stroke="#b9b5aa" stroke-width="7" stroke-linecap="round">
-              <line x1="96" y1="214" x2="124" y2="214"/><line x1="156" y1="214" x2="184" y2="214"/><line x1="216" y1="214" x2="244" y2="214"/><line x1="276" y1="214" x2="304" y2="214"/>
-              <line x1="96" y1="232" x2="116" y2="232"/><line x1="156" y1="232" x2="176" y2="232"/><line x1="216" y1="232" x2="236" y2="232"/><line x1="276" y1="232" x2="296" y2="232"/>
-            </g>
-            <rect x="146" y="62" width="108" height="36" rx="6" fill="#ff8a5b" stroke="#0c0c0e" stroke-width="2"/>
-            <line x1="172" y1="80" x2="228" y2="80" stroke="#0c0c0e" stroke-width="3.5" stroke-linecap="round"/>
-          </svg>
+        <div class="cover cover-device">
+          <span class="dev-disc" aria-hidden="true"></span>
+          <div class="laptop"><div class="laptop-screen"><img src="assets/thumbs/finra-ds-screen.webp" alt="FINRA UI guidebook colours page showing the Blue, Slate and Gray palettes" width="1400" height="875" loading="lazy" decoding="async"></div><div class="laptop-base"></div></div>
         </div>
       </a>
     </div>
