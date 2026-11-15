@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="170" viewBox="0 0 720 170" role="img" aria-labelledby="streetcar-title">
+  <title id="streetcar-title">Pastel Toronto streetcar</title>
+
+  <defs>
+    <path id="streetcar-body" d="M51 49h613c16 0 26 10 29 25l8 38v12c0 10-7 17-17 17H37c-11 0-18-6-18-17v-12l9-38c4-15 11-25 23-25Z"/>
+    <clipPath id="streetcar-silhouette">
+      <use href="#streetcar-body"/>
+    </clipPath>
+    <g id="streetcar-door">
+      <rect width="35" height="51" rx="4" fill="#d0bfb1"/>
+      <rect x="3" y="3" width="13" height="43" rx="2" fill="#78949a"/>
+      <rect x="19" y="3" width="13" height="43" rx="2" fill="#78949a"/>
+    </g>
+    <g id="streetcar-joint">
+      <path d="M0 49h12v92H0z" fill="#71666d"/>
+      <path d="M4 52v87m4-87v87" fill="none" stroke="#958389" stroke-width="1.2"/>
+    </g>
+    <g id="streetcar-wheelset">
+      <circle cx="0" cy="139" r="12" fill="#494750"/>
+      <circle cx="27" cy="139" r="12" fill="#494750"/>
+      <circle cx="0" cy="139" r="5.5" fill="#817a80"/>
+      <circle cx="27" cy="139" r="5.5" fill="#817a80"/>
+    </g>
+  </defs>
+
+  <g fill="none" stroke="#a68e80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M346 18h40m-21 0-19 13 24 14"/>
+    <path d="M346 31l7 14" stroke-width="2"/>
+  </g>
+  <rect x="333" y="43" width="49" height="10" rx="4" fill="#988187"/>
+
+  <use href="#streetcar-wheelset" x="79"/>
+  <use href="#streetcar-wheelset" x="347"/>
+  <use href="#streetcar-wheelset" x="616"/>
+
+  <use href="#streetcar-body" fill="#eaddcd"/>
+  <g clip-path="url(#streetcar-silhouette)">
+    <path d="M19 49h682v15H19zm0 72h682v20H19z" fill="#bf7774"/>
+    <path d="M19 58h32L40 108l15 33H19z" fill="#bf7774"/>
+
+    <path d="M37 70c1-3 4-5 7-5h18c3 0 5 2 5 5v30c0 3-2 5-5 5H29z" fill="#587781"/>
+    <path d="M678 69c4 0 7 2 8 6l7 30h-22c-3 0-5-2-5-5V74c0-3 2-5 5-5z" fill="#587781"/>
+
+    <g fill="#78949a">
+      <rect x="74" y="69" width="26" height="34" rx="4"/>
+      <rect x="106" y="69" width="27" height="34" rx="4"/>
+      <rect x="204" y="69" width="34" height="34" rx="4"/>
+      <rect x="244" y="69" width="34" height="34" rx="4"/>
+      <rect x="309" y="69" width="34" height="34" rx="4"/>
+      <rect x="350" y="69" width="22" height="34" rx="4"/>
+      <rect x="438" y="69" width="34" height="34" rx="4"/>
+      <rect x="479" y="69" width="33" height="34" rx="4"/>
+      <rect x="539" y="69" width="34" height="34" rx="4"/>
+      <rect x="620" y="69" width="39" height="34" rx="4"/>
+    </g>
+
+    <use href="#streetcar-door" x="141" y="66"/>
+    <use href="#streetcar-door" x="378" y="66"/>
+    <use href="#streetcar-door" x="579" y="66"/>
+
+    <use href="#streetcar-joint" x="184"/>
+    <use href="#streetcar-joint" x="289"/>
+    <use href="#streetcar-joint" x="419"/>
+    <use href="#streetcar-joint" x="520"/>
+
+    <rect x="24" y="116" width="17" height="6" rx="3" fill="#f2deb0"/>
+    <rect x="683" y="116" width="14" height="6" rx="3" fill="#e9ab98"/>
+  </g>
+  <use href="#streetcar-body" fill="none" stroke="#605057" stroke-width="1.6" stroke-linejoin="round"/>
+</svg>

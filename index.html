@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sambit Mohanty — Product designer for complex B2B workflows</title>
+<meta name="description" content="Sambit Mohanty — Product Designer in Toronto. I help teams shape product strategy, simplify end-to-end workflows, and build accessible, reusable design systems. 100K+ users served, $50M+ business impact, 7+ years at FINRA, Comcast, Ameritas and Openlane." />
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=melodrama@400,500,600,700&display=swap" rel="stylesheet" />
+<style>
+  /* trial: Calm Serif (demo licence: personal use only) — hero statement only */
+  @font-face { font-family: "Calm Serif"; src: url("assets/calm-serif-font/CalmSerif-1j6G4.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    /* Toronto palette */
+    --night: #2b3154;
+    --lake: #285a66;
+    --brick: #84432f;
+    --indigo: #262a46;
+    --streetcar: #7a2b31;
+    --ravine: #37563b;
+    --dusk: #4d3a60;
+    --harbour: #2f4466;
+
+    --cream: #f1eee6;
+    --cream-2: rgba(241, 238, 230, 0.72);
+    --cream-3: rgba(241, 238, 230, 0.4);
+    --cream-line: rgba(241, 238, 230, 0.22);
+    --coral: #ff8a5b;
+    --mint: #8fdcb5;
+    --select: #4ea1ff;
+    --ink: #0c0c0e;
+
+    --f-big: "Anton", "Impact", sans-serif;
+    --f-ui: "Barlow Condensed", ui-sans-serif, system-ui, sans-serif;
+    --f-fine: "Melodrama", "Barlow Condensed", Georgia, serif;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --edge: 12px;
+    --pad: clamp(20px, 3vw, 44px);
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--night);
+    color: var(--cream);
+    font-family: var(--f-ui);
+    font-size: 20px;
+    line-height: 1.35;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+  ::selection { background: var(--coral); color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; border-radius: 4px; }
+
+  /* ===== fixed atmosphere ===== */
+  .bg { position: fixed; inset: 0; z-index: -4; background: var(--night); transition: background-color 1s var(--ease); }
+  .stars { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
+  .stars i { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: var(--cream); opacity: var(--o); animation: twinkle var(--t) ease-in-out infinite; animation-delay: var(--dl); }
+  @keyframes twinkle { 50% { opacity: calc(var(--o) * 0.2); } }
+  /* chalky pastel finish on the background only: white speckle (screen) lifts the colour, dark speckle (multiply) adds tooth.
+     Sits between .bg and the content, so text, cards and images stay clean. */
+  :root { --card-fill: color-mix(in srgb, var(--lake) 93%, #f1eee6); --card-fill-hover: color-mix(in srgb, var(--lake) 90%, #f1eee6); --noise-lift: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.62' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.6 -0.55'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); --noise-tooth: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.5 -0.5'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  .grain { position: fixed; inset: 0; z-index: -3; pointer-events: none; }
+  .grain.lift { opacity: .18; mix-blend-mode: screen; background-image: var(--noise-lift); }
+  .grain.tooth { opacity: .2; mix-blend-mode: multiply; background-image: var(--noise-tooth); }
+  /* soft bands in the current scene colour keep nav + ruler legible over cards */
+  .band { position: fixed; left: 0; right: 0; z-index: 75; pointer-events: none; }
+  .band.top { top: 0; height: calc(var(--edge) + 84px); background: linear-gradient(var(--scene, var(--night)) 62%, transparent); }
+  .band.bottom { bottom: 0; height: calc(var(--edge) + 76px); background: linear-gradient(to top, var(--scene, var(--night)) 58%, transparent); }
+  /* the bands are painted in the scene colour, so they carry the same texture, faded with the gradient */
+  .band::before, .band::after { content: ""; position: absolute; inset: 0; }
+  .band::before { opacity: .18; mix-blend-mode: screen; background-image: var(--noise-lift); }
+  .band::after { opacity: .2; mix-blend-mode: multiply; background-image: var(--noise-tooth); }
+  .band.top::before, .band.top::after { -webkit-mask-image: linear-gradient(#000 50%, transparent 62%); mask-image: linear-gradient(#000 50%, transparent 62%); }
+  .band.bottom::before, .band.bottom::after { -webkit-mask-image: linear-gradient(to top, #000 46%, transparent 58%); mask-image: linear-gradient(to top, #000 46%, transparent 58%); }
+  .frame { position: fixed; inset: var(--edge); border-radius: 22px; box-shadow: 0 0 0 60px var(--ink); pointer-events: none; z-index: 80; }
+
+  /* ===== nav ===== */
+  .nav {
+    position: fixed; z-index: 90; top: calc(var(--edge) + 18px); left: calc(var(--edge) + var(--pad)); right: calc(var(--edge) + var(--pad));
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    font-family: var(--f-ui); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600;
+  }
+  .nav-left { display: flex; align-items: center; gap: 14px; }
+  .nav .name { display: inline-flex; align-items: center; gap: 11px; white-space: nowrap; font-size: 22px; letter-spacing: 0.06em; }
+  .nav .logo { width: 36px; height: 36px; border-radius: 7px; flex: none; transition: transform .4s var(--ease); }
+  .nav .name:hover .logo { transform: rotate(-8deg); }
+  .nav-links { display: flex; gap: 26px; font-size: 20px; }
+  .nav-links a { position: relative; }
+  .nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: var(--coral); transform: scaleX(0); transform-origin: right; transition: transform .4s var(--ease); }
+  .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+  /* ===== bottom ruler ===== */
+  .ruler { position: fixed; z-index: 90; left: calc(var(--edge) + var(--pad)); right: calc(var(--edge) + var(--pad)); bottom: calc(var(--edge) + 14px); height: 40px; }
+  .ruler .ticks {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 10px;
+    background:
+      repeating-linear-gradient(90deg, var(--cream-3) 0 1px, transparent 1px 13px) bottom / 100% 5px no-repeat,
+      repeating-linear-gradient(90deg, var(--cream-3) 0 1px, transparent 1px 65px) bottom / 100% 10px no-repeat;
+  }
+  .ruler .lbl {
+    position: absolute; bottom: 16px; transform: translateX(-2px);
+    font-size: 14px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cream-3);
+    transition: color .3s; white-space: nowrap;
+  }
+  .ruler .lbl:hover, .ruler .lbl.on { color: var(--cream); }
+  .ruler .needle { position: absolute; bottom: 0; width: 2px; height: 20px; background: var(--coral); border-radius: 2px; transform: translateX(-1px); left: 0; }
+
+  /* ===== shared scene bits ===== */
+  .scene { position: relative; min-height: 100vh; min-height: 100svh; padding: 130px calc(var(--edge) + var(--pad)) 120px; display: grid; align-content: center; }
+  .eyebrow { font-family: var(--f-ui); font-weight: 600; font-size: clamp(16px, 1.5vw, 20px); letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-2); }
+  .big { font-family: var(--f-big); font-weight: 400; text-transform: uppercase; line-height: 0.92; letter-spacing: 0.005em; }
+  .fine { font-family: var(--f-fine); font-weight: 400; line-height: 1.05; letter-spacing: 0.01em; }
+  .body { font-family: var(--f-ui); font-size: clamp(20px, 1.9vw, 26px); line-height: 1.38; color: var(--cream-2); max-width: 36ch; }
+  .center { text-align: center; justify-items: center; }
+
+  .rv { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease), transform 1s var(--ease); transition-delay: var(--d, 0ms); }
+  .rv.in { opacity: 1; transform: none; }
+
+  /* jumbled letters that untangle */
+  .jumble .ch { display: inline-block; transform: translateY(var(--y)) rotate(var(--r)) scale(var(--s)); transition: transform 1.3s var(--ease); transition-delay: calc(var(--i) * 28ms); }
+  .jumble.in .ch { transform: translateY(calc(var(--y) * 0.12)) rotate(calc(var(--r) * 0.22)) scale(calc(1 + (var(--s) - 1) * 0.45)); }
+  /* in the reading zone: letters align; leaving it: they relax back to crooked */
+  .jumble.focus .ch { transform: none; transition-duration: 1s; transition-delay: calc(var(--i) * 16ms); }
+
+  /* ===== 01 hero ===== */
+  .hero-track { position: relative; height: 200vh; }
+  .hero { position: sticky; top: 0; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; display: grid; justify-items: center; align-content: start; padding: calc(var(--edge) + 88px) calc(var(--edge) + var(--pad)) 0; text-align: center; }
+  .sel { position: relative; margin-top: 76px; padding: 14px 30px 16px; border: 1.5px solid var(--select); }
+  .sel h1 { display: grid; justify-items: center; font-weight: 400; }
+  .h1-a { font-family: var(--f-fine); font-size: clamp(24px, 3.2vw, 50px); line-height: 1.05; letter-spacing: 0.02em; }
+  .h1-b { font-family: var(--f-big); font-size: clamp(50px, 7.6vw, 128px); line-height: 0.95; text-transform: uppercase; letter-spacing: 0.005em; margin-top: 6px; }
+  .h1-b em { font-style: normal; color: var(--coral); display: inline-block; }
+  .hero-sub { margin-top: clamp(28px, 3vw, 44px); max-width: 900px; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45; color: var(--cream-2); }
+  .hero-sub { text-wrap: balance; }
+  .nowrap { white-space: nowrap; }
+  .hero-sub .hw { color: var(--coral); }
+  .hero-sub b { display: block; text-wrap: balance; font-family: var(--f-ui); font-weight: 500; font-size: clamp(20px, 1.75vw, 25px); line-height: 1.15; color: var(--cream); }
+  .hero-cta { position: relative; z-index: 6; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px 22px; margin-top: 22px; }
+  .btn-work { display: inline-flex; align-items: center; gap: 8px; padding: 6px 0; color: var(--cream-2); font: 500 16px/1 var(--f-ui); letter-spacing: .08em; text-transform: uppercase; text-decoration: none; transition: color .3s; }
+  .btn-work .t { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; text-decoration-color: rgba(255,255,255,.35); transition: text-decoration-color .3s; }
+  .btn-work .arr { display: inline-block; text-decoration: none; transition: transform .35s var(--ease); }
+  .btn-work:hover { color: var(--coral); }
+  .btn-work:hover .t { text-decoration-color: var(--coral); }
+  .btn-work:hover .arr { transform: translateX(4px); }
+  .btn-work:focus-visible { outline: 2px solid var(--select); outline-offset: 3px; }
+  .sel .h { position: absolute; width: 9px; height: 9px; background: var(--cream); border: 1.5px solid var(--select); }
+  .sel .tl { top: -5px; left: -5px; } .sel .tr { top: -5px; right: -5px; } .sel .bl { bottom: -5px; left: -5px; } .sel .br { bottom: -5px; right: -5px; }
+  .sel .dim { position: absolute; top: -26px; right: -2px; background: var(--select); color: #fff; font: 600 12px/1 var(--f-ui); letter-spacing: 0.04em; padding: 5px 7px; border-radius: 4px; }
+  .sel .lyr { position: absolute; top: -26px; left: -2px; color: var(--select); font: 600 13px/1 var(--f-ui); letter-spacing: 0.06em; padding: 5px 0; text-transform: uppercase; }
+
+  .cursor { position: absolute; z-index: 5; pointer-events: none; display: flex; align-items: flex-start; gap: 2px; animation: drift 9s ease-in-out infinite; }
+  .cursor svg { width: 20px; height: 20px; filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
+  .cursor span { margin-top: 14px; font: 600 13px/1 var(--f-ui); letter-spacing: 0.04em; padding: 5px 8px; border-radius: 4px 10px 10px 10px; color: var(--ink); }
+  .cursor path { fill: var(--c); }
+  .cursor span { background: var(--c); }
+  .cursor.pm { --c: var(--coral); right: 14%; top: 37%; }
+  .cursor.eng { --c: var(--mint); left: 7.2%; top: 28%; animation-name: drift-l; animation-duration: 11s; animation-delay: -4s; }
+  .cursor.design { --c: #c9c2ff; right: 6px; top: -86px; animation-duration: 12s; animation-delay: -7s; }
+  .cursor.business { --c: #ff9ecf; left: 17%; top: 11%; animation-duration: 13s; animation-delay: -9s; }
+  @keyframes drift { 0%,100% { transform: translate(0,0); } 30% { transform: translate(-26px, 14px); } 60% { transform: translate(18px, -10px); } }
+  @keyframes drift-l { 0%,100% { transform: translate(0,0); } 30% { transform: translate(-22px, 14px); } 60% { transform: translate(4px, -10px); } }
+
+  .tangle-box { position: absolute; left: 0; right: 0; bottom: 64px; height: 22%; max-height: 200px; }
+  #tangle { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  #tangle path { fill: none; stroke-linecap: round; }
+
+  /* ===== 02 hello ===== */
+  .hello h2 { font-size: clamp(64px, 11vw, 180px); }
+  .sparkle { position: absolute; width: 30px; height: 30px; color: var(--cream); opacity: .85; animation: spin 14s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== 03 what I bring ===== */
+  .bring { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 22px); width: 100%; max-width: 1180px; margin-top: 46px; text-align: left; }
+  .hello { --card-fill: color-mix(in srgb, var(--dusk) 93%, #f1eee6); --card-fill-hover: color-mix(in srgb, var(--dusk) 90%, #f1eee6); }
+  .pillar { padding: clamp(22px, 2.2vw, 30px); background: var(--card-fill); border-radius: 16px; box-shadow: 5px 6px 0 rgba(12, 12, 14, 0.38); transition: background-color .3s, box-shadow .4s var(--ease), transform .4s var(--ease); }
+  .pillar:hover { background: var(--card-fill-hover); transform: translate(-2px, -2px); box-shadow: 7px 8px 0 rgba(12, 12, 14, 0.42); }
+  .bring.with-photo { grid-template-columns: minmax(0, .9fr) repeat(2, minmax(0, 1fr)); max-width: 1180px; }
+  .bring.with-photo .pillar.photo { grid-row: span 2; }
+  .bring.with-photo .pillar:not(.photo) b { font-size: clamp(34px, 3.2vw, 50px); }
+  .pillar.photo { position: relative; margin: 0; padding: 0; overflow: hidden; min-height: 260px; }
+  .pillar.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 28%; filter: saturate(.92) contrast(1.02); transition: transform .9s var(--ease); }
+  .pillar.photo:hover img { transform: scale(1.04); }
+  .pillar.photo figcaption {
+    position: absolute; left: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 7px;
+    padding: 5px 11px; border-radius: 999px; background: rgba(12, 12, 14, .62); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    font-size: 14px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--cream);
+  }
+  .pillar.photo figcaption i { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); }
+  .pillar b { display: block; font-family: var(--f-big); font-weight: 400; font-size: clamp(40px, 4.4vw, 66px); line-height: 1; text-transform: uppercase; }
+  .pillar b em { font-style: normal; color: var(--coral); }
+  .pillar .k { display: block; margin-top: 6px; font-size: 16px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--coral); }
+  .pillar p { margin-top: 12px; font-size: clamp(18px, 1.5vw, 21px); line-height: 1.4; color: var(--cream-2); max-width: 34ch; }
+
+  /* ===== 04 how I work ===== */
+  .how { align-content: start; }
+  .how .lead { font-size: clamp(28px, 3.4vw, 52px); color: var(--cream-2); }
+  .how h2 { font-size: clamp(64px, 9.6vw, 156px); transform: rotate(-3deg); transform-origin: left center; margin: 0.32em 0 0; transition: transform 1.1s var(--ease); }
+  .how h2.focus { transform: rotate(0deg); }
+  .process { position: relative; list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(20px, 2.6vw, 40px); margin-top: clamp(56px, 6vw, 84px); }
+  .process::before { content: ""; position: absolute; left: 0; right: 0; top: 10px; height: 2px; background: var(--coral); transform-origin: left; transform: scaleX(0); transition: transform 1.6s var(--ease) .2s; }
+  .process.in::before { transform: scaleX(1); }
+  .process li { position: relative; padding-top: 40px; }
+  .process li::before { content: ""; position: absolute; top: 0; left: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--coral); border: 2px solid var(--ink); }
+  .process .n { font-size: 15px; font-weight: 600; letter-spacing: .14em; color: var(--coral); }
+  .process h3 { margin-top: 6px; font-family: var(--f-big); font-weight: 400; font-size: clamp(28px, 2.7vw, 40px); line-height: 1; text-transform: uppercase; }
+  .process p { margin-top: 12px; font-size: 18px; line-height: 1.4; color: var(--cream-2); }
+
+  .sticker {
+    background: var(--cream); color: var(--ink); border-radius: 22px; border: 2px solid var(--ink); box-shadow: 7px 8px 0 var(--ink);
+    padding: clamp(22px, 2.6vw, 36px);
+  }
+  .ct-card { margin-top: clamp(56px, 6vw, 88px); }
+  .ct-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 14px 40px; margin-bottom: clamp(22px, 2.4vw, 32px); }
+  .ct-head .tag { font-size: 15px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5b5a63; }
+  .ct-head h3 { margin-top: 10px; font-family: var(--f-fine); font-size: clamp(30px, 3vw, 46px); line-height: 1.05; max-width: 22ch; }
+  .ct { display: grid; }
+  .ct-row { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.5fr) minmax(0, .85fr); gap: clamp(18px, 2.4vw, 36px); align-items: start; padding: 22px 0; border-top: 1.5px solid rgba(12, 12, 14, .14); }
+  .ct-row.th { padding: 0 0 12px; border-top: none; font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #8a877e; }
+  .ct-c { display: flex; gap: 12px; align-items: baseline; }
+  .ct-c .n { font-size: 14px; font-weight: 600; letter-spacing: .1em; color: var(--coral); }
+  .ct-c b { font-family: var(--f-big); font-weight: 400; font-size: clamp(24px, 2.2vw, 32px); line-height: 1.02; text-transform: uppercase; }
+  .ct-r { font-size: 19px; line-height: 1.45; color: #3d3c44; }
+  .ct-e .proj { display: block; font-size: 14px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #5b5a63; }
+  .ct-e b { display: block; margin-top: 4px; font-family: var(--f-big); font-weight: 400; font-size: clamp(28px, 2.5vw, 36px); line-height: 1; }
+  .ct-e small { display: block; margin-top: 4px; font-size: 15px; color: #5b5a63; }
+  .velocity { margin-top: 30px; text-align: center; font-family: var(--f-fine); font-size: clamp(24px, 2.4vw, 36px); }
+  .velocity em { font-style: normal; color: var(--coral); }
+
+  /* ===== 05 beliefs ===== */
+  .belief-b { gap: 0; }
+  .belief-b .lines { text-align: center; font-weight: 400; }
+  .belief-b .lines .ln { display: block; padding: 0.12em 0; color: var(--cream-line); transition: color .7s var(--ease); }
+  .belief-b .lines .ln.on { color: var(--cream); }
+  .belief-b .lines .small { font-family: var(--f-fine); font-size: clamp(26px, 3.2vw, 46px); line-height: 1.1; }
+  .belief-b .lines .loud { font-family: var(--f-big); text-transform: uppercase; font-size: clamp(48px, 8.6vw, 136px); line-height: 0.98; }
+  .belief-b .lines .ln.on .hl { color: var(--coral); }
+  .belief-body .quiet { transition: color .7s var(--ease); }
+  .belief-body .quiet.on { color: var(--coral); }
+  .belief-body { margin: clamp(28px, 3.4vw, 48px) auto 0; max-width: 54ch; text-align: center; text-wrap: pretty; font-size: clamp(20px, 1.75vw, 25px); line-height: 1.45; color: var(--cream-2); }
+
+  /* ===== 06 toronto ===== */
+  .toronto { align-content: start; padding-top: 150px; padding-bottom: calc(25vw + 150px); }
+  .toronto h2 { font-size: clamp(84px, 14.5vw, 232px); }
+  .facts-row { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 1.4vw, 18px); width: 100%; max-width: 1100px; margin-top: 34px; }
+  .facts-row li { padding: 20px 16px 18px; text-align: center; background: var(--card-fill); border-radius: 16px; box-shadow: 5px 6px 0 rgba(12, 12, 14, 0.38); transition: background-color .3s, box-shadow .4s var(--ease), transform .4s var(--ease); }
+  .facts-row li:hover { background: var(--card-fill-hover); transform: translate(-2px, -2px); box-shadow: 7px 8px 0 rgba(12, 12, 14, 0.42); }
+  .facts-row .k { display: block; font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--coral); }
+  .facts-row b { display: block; margin-top: 6px; font-family: var(--f-big); font-weight: 400; font-size: clamp(26px, 2.6vw, 38px); line-height: 1.05; text-transform: uppercase; }
+  .facts-row small { display: block; margin-top: 4px; font-size: 16px; color: var(--cream-2); }
+  .clock .colon { animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: .2; } }
+  /* skyline + streetcar scene: full-bleed, scales with width so nothing distorts */
+  .skyline { position: absolute; left: var(--edge); right: var(--edge); bottom: 76px; }
+  .skyline svg { display: block; width: 100%; height: auto; overflow: hidden; }
+  .skyline .draw { stroke-dasharray: var(--dash, 8000) var(--dash, 8000); stroke-dashoffset: var(--dash, 8000); transition: stroke-dashoffset 3s var(--ease) .3s; }
+  .skyline.in .draw { stroke-dashoffset: 0; }
+  .skyline path, .skyline .track { fill: none; stroke: #f5f4f0; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+
+  /* ===== 07 work (stacked cards) ===== */
+  .work { align-content: start; }
+  .work-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 18px 40px; margin-bottom: clamp(40px, 5vw, 64px); }
+  .work-head h2 { font-size: clamp(76px, 11vw, 176px); }
+  .work-head .body { font-size: 22px; max-width: 30ch; }
+  .work-head .body span { color: var(--cream); }
+  .work-list { display: grid; gap: clamp(28px, 3.4vw, 44px); }
+  .card {
+    position: relative; display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: clamp(24px, 3vw, 48px); align-items: stretch;
+    width: 100%; padding: clamp(22px, 2.6vw, 36px);
+    background: var(--cream); color: var(--ink); border: 2px solid var(--ink); border-radius: 22px; box-shadow: 7px 8px 0 var(--ink);
+    transition: transform .6s var(--ease), box-shadow .6s var(--ease), opacity 1s var(--ease);
+  }
+  .card:hover { transform: translate(-4px, -4px); box-shadow: 11px 12px 0 var(--ink); }
+  .card .info { display: flex; flex-direction: column; min-width: 0; }
+  .card .idx { font-family: var(--f-big); font-size: clamp(54px, 5.4vw, 84px); line-height: .9; color: var(--coral); }
+  .card .meta { display: flex; flex-wrap: wrap; gap: 6px 10px; margin-top: 18px; }
+  .card .meta span { font-size: 15px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 4px 11px; border: 1.5px solid var(--ink); border-radius: 999px; }
+  .card .meta span:first-child { background: var(--ink); color: var(--cream); }
+  .card h3 { margin-top: 18px; font-family: var(--f-fine); font-size: clamp(34px, 3.6vw, 58px); line-height: 1.02; }
+  .card p { margin-top: 12px; font-size: 20px; line-height: 1.4; color: #4a4850; text-wrap: pretty; }
+  .card .metrics { display: flex; flex-wrap: wrap; gap: 26px; margin-top: auto; padding-top: 26px; }
+  .card .metrics b { display: block; font-family: var(--f-big); font-weight: 400; font-size: clamp(30px, 2.8vw, 42px); line-height: 1; }
+  .card .metrics small { font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: #5b5a63; }
+  .card .go { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-top: 24px; padding: 10px 18px; border-radius: 999px; background: var(--ink); color: var(--cream); font-size: 17px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; transition: background-color .3s, color .3s; }
+  .card .go i { font-style: normal; display: inline-block; transition: transform .35s var(--ease); }
+  .card:hover .go { background: var(--coral); color: var(--ink); }
+  .card:hover .go i { transform: translateX(5px); }
+  .cover { position: relative; min-height: 320px; border-radius: 14px; overflow: hidden; background: #e6e1d5; border: 2px solid var(--ink); }
+  .cover svg { position: absolute; inset: 0; width: 100%; height: 100%; transition: transform .9s var(--ease); }
+  .card:hover .cover svg { transform: scale(1.05); }
+
+  /* ===== 07b testimonials ===== */
+  .words { align-content: start; }
+  .words-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 18px 40px; margin-bottom: clamp(44px, 5vw, 72px); }
+  .words-head h2 { font-size: clamp(76px, 11vw, 176px); }
+  .words-head .body { font-size: 22px; max-width: 30ch; }
+  .quotes { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(26px, 3vw, 44px) clamp(22px, 2.6vw, 36px); align-items: start; width: 100%; max-width: 1320px; margin: 0 auto; }
+  .quote { grid-column: span 2; }
+  .quote:nth-child(4) { grid-column: 2 / span 2; }
+  .quote:nth-child(5) { grid-column: 4 / span 2; }
+  .quote { position: relative; transform: rotate(var(--tilt, 0deg)); transition: transform .6s var(--ease); }
+  .quote:nth-child(1) { --tilt: -1.6deg; }
+  .quote:nth-child(2) { --tilt: 1.2deg; margin-top: 46px; }
+  .quote:nth-child(3) { --tilt: -0.8deg; margin-top: 14px; }
+  .quote:nth-child(4) { --tilt: 1deg; }
+  .quote:nth-child(5) { --tilt: -1deg; margin-top: 30px; }
+  .words-more { margin-top: clamp(40px, 4.4vw, 64px); text-align: center; }
+  .words-more a { display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; border-radius: 999px; border: 1.5px solid var(--cream-line); color: var(--cream); font: 600 17px/1 var(--f-ui); letter-spacing: .08em; text-transform: uppercase; transition: background-color .3s, color .3s, border-color .3s; }
+  .words-more a:hover { background: var(--cream); color: var(--ink); border-color: var(--cream); }
+  .words-more a:focus-visible { outline: 2px solid var(--select); outline-offset: 3px; }
+  .quote:hover { transform: rotate(0deg) translateY(-4px); }
+  .quote .pin {
+    position: absolute; left: -14px; top: -14px; z-index: 2; width: 36px; height: 36px;
+    border-radius: 50% 50% 50% 0; background: var(--coral); border: 2px solid var(--ink);
+    display: grid; place-items: center; font: 600 14px/1 var(--f-ui); color: var(--ink);
+  }
+  .quote .bubble {
+    background: var(--cream); color: var(--ink); border: 2px solid var(--ink); border-radius: 18px;
+    box-shadow: 6px 7px 0 var(--ink); padding: 22px 22px 20px;
+  }
+  .quote .who { display: flex; align-items: center; gap: 12px; }
+  .quote .avatar {
+    flex: 0 0 auto; width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--ink);
+    display: grid; place-items: center; background: var(--av, var(--mint)); font: 600 17px/1 var(--f-ui); letter-spacing: .04em;
+  }
+  .quote .name { font-size: 20px; font-weight: 600; line-height: 1.1; }
+  .quote .role { font-size: 15px; color: #5b5a63; letter-spacing: .03em; }
+  .quote blockquote { margin-top: 18px; font-family: var(--f-fine); font-weight: 500; font-size: clamp(22px, 1.8vw, 27px); line-height: 1.18; }
+  .quote blockquote::before { content: "\201C"; display: block; height: .42em; margin-bottom: 4px; font-family: var(--f-big); font-size: 2.4em; line-height: 1; color: var(--coral); }
+  .quote .ctx { display: flex; justify-content: space-between; gap: 10px; margin-top: 18px; padding-top: 12px; border-top: 1.5px dashed #b9b5aa; font-size: 14px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #5b5a63; }
+  .quote .full { margin-top: 14px; }
+  .quote .full summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); border-bottom: 1.5px solid var(--coral); padding-bottom: 2px; }
+  .quote .full summary::-webkit-details-marker { display: none; }
+  .quote .full summary::after { content: "+"; font-size: 18px; line-height: 1; color: var(--coral); transition: transform .3s var(--ease); }
+  .quote .full[open] summary::after { transform: rotate(45deg); }
+  .quote .full-text { margin-top: 12px; display: grid; gap: 10px; font-size: 17px; line-height: 1.45; color: #3d3c44; }
+
+  /* ===== 08 craft ===== */
+  .craft { min-height: 0; padding-top: 140px; padding-bottom: 140px; }
+  .craft .cols { margin-top: 0; }
+  .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px clamp(30px, 4vw, 64px); margin-top: 70px; padding-top: 22px; border-top: 1px solid var(--cream-line); }
+  .col h3 { font-size: 16px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--coral); margin-bottom: 14px; }
+  .col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 19px; }
+  .col .tools { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  .col .tools li { padding: 3px 11px; border: 1px solid var(--cream-3); border-radius: 999px; font-size: 16px; }
+  .col .xp li { display: flex; justify-content: space-between; gap: 10px; }
+  .col .xp li span { color: var(--cream-2); }
+
+  /* ===== 09 contact ===== */
+  .contact h2 { font-size: clamp(70px, 12vw, 200px); }
+  .contact h2 .ch-accent { color: var(--coral); }
+  .contact .fine { font-size: clamp(30px, 4vw, 60px); color: var(--cream-2); margin-top: 6px; }
+  .links { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px 30px; margin-top: 40px; font-size: clamp(20px, 2vw, 26px); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+  .links a, .links button { border-bottom: 2px solid var(--cream-3); padding-bottom: 2px; transition: border-color .2s, color .2s; }
+  .links a:hover, .links button:hover { border-color: var(--coral); color: var(--coral); }
+  .copy { display: inline-flex; align-items: center; gap: 8px; }
+  .copy .ok { display: none; color: var(--mint); }
+  .copy.done .ok { display: inline; }
+  .copy.done .ic { display: none; }
+  .straight { position: absolute; left: 0; right: 0; bottom: 112px; height: 64px; opacity: .9; }
+  .contact { padding-bottom: 210px; }
+  .straight svg { width: 100%; height: 100%; }
+  .site-foot { position: absolute; left: calc(var(--edge) + var(--pad)); right: calc(var(--edge) + var(--pad)); bottom: 74px; display: flex; justify-content: space-between; gap: 12px; font-size: 16px; letter-spacing: .06em; text-transform: uppercase; color: var(--cream-3); }
+  .site-foot a:hover { color: var(--cream); }
+
+  /* ===== responsive ===== */
+  @media (max-width: 900px) {
+    .process { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; }
+    .process::before { display: none; }
+    .bring { grid-template-columns: 1fr; }
+    .bring.with-photo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pillar.photo { min-height: 0; aspect-ratio: 4 / 5; }
+    .quotes { grid-template-columns: 1fr; max-width: 640px; }
+    .quote:nth-child(n) { margin-top: 0; grid-column: auto; }
+    .card { grid-template-columns: 1fr; }
+    .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; }
+    .cols .col:first-child { grid-column: 1 / -1; }
+    .ruler .lbl:not(.on) { opacity: 0; }
+  }
+  @media (max-width: 720px) {
+    :root { --edge: 6px; }
+    body { font-size: 18px; }
+    .frame { border-radius: 16px; }
+    .nav { top: calc(var(--edge) + 14px); }
+    .nav .name { font-size: 19px; gap: 9px; }
+    .nav .logo { width: 30px; height: 30px; border-radius: 6px; }
+    .nav-links { gap: 18px; }
+    .nav-links a:not(.keep) { display: none; }
+    .scene { padding-top: 110px; padding-bottom: 100px; }
+    .hero { padding-top: 110px; }
+    .sel { margin-top: 44px; padding: 12px 14px 12px; }
+    .cursor.eng { left: 5%; top: 11%; }
+    .cursor.pm { right: 4%; top: 30%; }
+    .cursor.design, .cursor.business { display: none; }
+                .tangle-box { height: 13%; bottom: 76px; }
+    .process { grid-template-columns: 1fr; }
+    .ct-row { grid-template-columns: 1fr; gap: 10px; }
+    .ct-row.th { display: none; }
+    .bring { text-align: left; }
+    .bring.with-photo { grid-template-columns: 1fr; }
+    .bring.with-photo .pillar.photo { grid-row: auto; }
+    .pillar.photo { aspect-ratio: 1 / 1; }
+    .cover { min-height: 220px; order: -1; }
+      .cols { grid-template-columns: 1fr; }
+    .toronto { padding-bottom: calc(25vw + 90px); }
+    .skyline { bottom: 36px; }
+    .facts-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .site-foot { flex-direction: column; align-items: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .skyline .draw { stroke-dashoffset: 0; transition: none; }
+    html { scroll-behavior: auto; }
+    .rv { opacity: 1; transform: none; transition: none; }
+    .jumble .ch { transform: none !important; transition: none; }
+    .grain, .stars i, .cursor, .sparkle, .clock .colon { animation: none; }
+      .belief-b .lines .ln { color: var(--cream); }
+  }
+</style>
+</head>
+<body>
+<div class="bg" id="bg" aria-hidden="true"></div>
+<div class="stars" id="stars" aria-hidden="true"></div>
+<div class="grain lift" aria-hidden="true"></div><div class="grain tooth" aria-hidden="true"></div>
+<div class="band top" aria-hidden="true"></div><div class="band bottom" aria-hidden="true"></div>
+<div class="frame" aria-hidden="true"></div>
+
+<header class="nav">
+  <div class="nav-left">
+    <a href="#top" class="name"><img class="logo" src="assets/logo.svg" alt="" width="30" height="30" />Sambit Mohanty</a>
+  </div>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#hello">About</a>
+    <a href="#work">Work</a>
+    <a href="#contact" class="keep">Contact</a>
+  </nav>
+</header>
+
+<div class="ruler" aria-label="Page sections">
+  <div class="ticks" aria-hidden="true"></div>
+  <div id="rulerLabels"></div>
+  <i class="needle" id="needle" aria-hidden="true"></i>
+</div>
+
+<main>
+  <!-- ===== 01 HERO ===== -->
+  <div class="hero-track" id="top" data-scene="Start" data-bg="var(--night)">
+    <section class="hero" aria-label="Introduction">
+      <div class="sel" id="sel">
+        <span class="lyr">Frame / Headline</span>
+        <span class="dim" id="dim">— × —</span>
+        <div class="cursor design" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-8.1L21 10.3z" stroke="#0c0c0e" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Design</span></div>
+        <h1><span class="h1-a">Product designer for</span><span class="h1-b"><em class="jumble">Complex</em> B2B workflows</span></h1>
+        <span class="h tl"></span><span class="h tr"></span><span class="h bl"></span><span class="h br"></span>
+      </div>
+      <p class="hero-sub"><b>I help teams shape <span class="hw">product strategy</span>, simplify <span class="hw"><span class="nowrap">end-to-end</span> workflows</span>, and build <span class="hw">accessible</span>, reusable <span class="hw">design systems</span>, bringing product, design, and engineering together early so feedback and decisions happen sooner.</b></p>
+      <div class="hero-cta">
+        <a class="btn-work" href="#work"><span class="t">See the work</span> <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="cursor eng" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-8.1L21 10.3z" stroke="#0c0c0e" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Eng</span></div>
+      <div class="cursor pm" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-8.1L21 10.3z" stroke="#0c0c0e" stroke-width="1.6" stroke-linejoin="round"/></svg><span>PM</span></div>
+      <div class="cursor business" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-8.1L21 10.3z" stroke="#0c0c0e" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Business</span></div>
+
+      <div class="tangle-box" aria-hidden="true"><svg id="tangle" viewBox="0 0 1200 360" preserveAspectRatio="none"></svg></div>
+    </section>
+  </div>
+
+  <!-- ===== 02 HELLO + WHAT I BRING ===== -->
+  <section class="scene hello center" id="hello" data-scene="Hello" data-bg="var(--dusk)">
+    <svg class="sparkle" style="left:9%;top:17%" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg>
+    <svg class="sparkle" style="right:11%;top:14%;width:22px;height:22px;animation-direction:reverse" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg>
+    <h2 class="big jumble">Hi, I'm Sambit.</h2>
+    <div class="bring with-photo rv" style="--d:200ms">
+      <figure class="pillar photo">
+        <img src="assets/sambit-portrait.jpg" alt="Portrait of Sambit Mohanty" width="900" height="1211" loading="lazy" decoding="async" />
+        <figcaption><i aria-hidden="true"></i>Sambit · Toronto</figcaption>
+      </figure>
+      <div class="pillar">
+        <b><span data-count="7">7</span>+ Years</b><span class="k">Enterprise B2B</span>
+        <p>Shipped enterprise-level B2B SaaS and worked in design teams as small as 2 and as large as 10.</p>
+      </div>
+      <div class="pillar">
+        <b><span data-count="100">100</span>K+</b><span class="k">Users served</span>
+        <p>Fintech, SaaS and marketplace experiences, from regulated finance to field operations.</p>
+      </div>
+      <div class="pillar">
+        <b>AI <em>+</em> Systems</b><span class="k">Built to scale</span>
+        <p>Fluent in AI-driven workflows, and in design systems that scale and meet accessibility standards (WCAG and AODA).</p>
+      </div>
+      <div class="pillar">
+        <b>$<span data-count="50">50</span>M+</b><span class="k">Business impact</span>
+        <p>Cut 4 minutes from every on-site visit for 25K+ Comcast technicians, adding up to $50M+ in operational value.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 04 HOW I WORK ===== -->
+  <section class="scene how" data-scene="Process" data-bg="var(--brick)">
+    <p class="lead fine rv">I bring structure to</p>
+    <h2 class="big jumble">The messy middle.</h2>
+
+    <ol class="process rv">
+      <li><span class="n">01</span><h3>Ask before assuming</h3><p>Align product, engineering and stakeholders on who's stuck, what's in their way, and what success looks like.</p></li>
+      <li><span class="n">02</span><h3>Map the real work</h3><p>Pair interviews and observation with behaviour data and operational context. What people do often differs from what they say, and the unofficial workarounds reveal how the work really gets done.</p></li>
+      <li><span class="n">03</span><h3>Prototype the hard part</h3><p>Make the trade-offs explicit, then prototype the riskiest decisions, using AI when it helps us learn faster.</p></li>
+      <li><span class="n">04</span><h3>Measure what changed</h3><p>Track task completion, errors and adoption after launch. If reality disagrees with the prototype, I adjust.</p></li>
+    </ol>
+
+    <div class="sticker ct-card rv" style="--d:150ms">
+      <div class="ct-head">
+        <div>
+          <span class="tag">Real constraints</span>
+          <h3>Ideal frameworks are great on paper. Here's what I do when reality shows up.</h3>
+        </div>
+      </div>
+      <div class="ct" role="table" aria-label="Constraints, responses and examples">
+        <div class="ct-row th" role="row"><span role="columnheader">Constraint</span><span role="columnheader">How I responded</span><span role="columnheader">Where it happened</span></div>
+        <div class="ct-row" role="row">
+          <div class="ct-c" role="cell"><span class="n">01</span><b>0→1 product, unreliable data</b></div>
+          <div class="ct-r" role="cell">I checked with engineering what the system could actually return and worked with SMEs and the PM to define the PRD around it. Then I designed for the gaps, so a failed scan became a normal next step, not a dead end.</div>
+          <div class="ct-e" role="cell"><span class="proj">Openlane · Powersports</span><b>+20%</b><small>faster inspections</small></div>
+        </div>
+        <div class="ct-row" role="row">
+          <div class="ct-c" role="cell"><span class="n">02</span><b>Experts and new users in one tool</b></div>
+          <div class="ct-r" role="cell">I tested with experts and newer users side by side, kept the experts' familiar scan, and used progressive disclosure to give new users the context they needed to decide with confidence.</div>
+          <div class="ct-e" role="cell"><span class="proj">FINRA · Regulator Workspace</span><b>28%</b><small>faster decisions</small></div>
+        </div>
+        <div class="ct-row" role="row">
+          <div class="ct-c" role="cell"><span class="n">03</span><b>Little time for research</b></div>
+          <div class="ct-r" role="cell">I started from support tickets, analytics and past studies, and ran a 5-day design sprint with PM, engineering and business to align everyone on the problem. Then I ran small, fast usability tests on the decisions that mattered most.</div>
+          <div class="ct-e" role="cell"><span class="proj">Ameritas · Producer Portal</span><b>2 wks</b><small>saved in discovery</small></div>
+        </div>
+        <div class="ct-row" role="row">
+          <div class="ct-c" role="cell"><span class="n">04</span><b>Users in the field, not at a desk</b></div>
+          <div class="ct-r" role="cell">Interviews couldn't show what a job looks like inside a customer's home. I did monthly ride-alongs with the technicians who used the app to see how they worked on site and where the bottlenecks were.</div>
+          <div class="ct-e" role="cell"><span class="proj">Comcast</span><b>−4 min</b><small>per on-site visit</small></div>
+        </div>
+      </div>
+    </div>
+    <p class="velocity rv">Great design should <em>support</em> product velocity, not block it.</p>
+  </section>
+
+  <!-- ===== 05 BELIEFS ===== -->
+  <section class="scene belief-b center" data-scene="Beliefs" data-bg="var(--streetcar)">
+    <h2 class="lines" id="lines">
+      <span class="ln small">Good enterprise design is</span>
+      <span class="ln loud"><span class="hl">invisible.</span></span>
+      <span class="ln small">You only notice it</span>
+      <span class="ln loud">when it's missing.</span>
+    </h2>
+    <p class="belief-body rv">A confusing step <span class="quiet">wastes minutes</span> each time someone repeats it. An unclear warning can lead to <span class="quiet">expensive rework</span>. Even in a sales demo, an ambiguous permission setting can make buyers question whether they'll have control after rollout. When the design works, people just get on with their jobs. <span class="quiet">I look for that quiet success in shorter task times and fewer support requests.</span></p>
+  </section>
+
+  <!-- ===== 06 TORONTO ===== -->
+  <section class="scene toronto center" data-scene="Location" data-bg="var(--lake)">
+    <h2 class="big jumble">Based in Toronto.</h2>
+    <ul class="facts-row rv" style="--d:200ms">
+      <li><span class="k">Time in Toronto</span><b class="clock" id="clock">--<span class="colon">:</span>--</b><small>Eastern Time</small></li>
+      <li><span class="k">Work style</span><b>Hybrid</b><small>Remote or on-site for the right team</small></li>
+      <li><span class="k">Availability</span><b>1–2 weeks</b><small>from an accepted offer</small></li>
+      <li><span class="k">Contracts</span><b>3+ months</b><small>long enough to do it properly</small></li>
+    </ul>
+    <div class="skyline" id="skyline" aria-hidden="true">
+      <svg viewBox="30 10 1140 288" preserveAspectRatio="xMidYMax meet">
+        <path class="draw" id="skyPath" d="M30 278 H65 V250 H106 V227 H137 V207 H181 V255 H209 V229
+          H240 V199 H283 V252 H307 V235 H336 V278 H351 V259
+          C360 245 385 233 415 233 C445 233 470 245 479 259 V278 H501
+          Q514 239 518 153 L509 149 L500 140 V134 L505 129 H520
+          L522 83 H517 V76 L521 73 H523 L524 46 H525 L526 22
+          L527 46 H528 L529 73 H531 L535 76 V83 H530 L532 129
+          H547 L552 134 V140 L543 149 L534 153 Q538 239 551 278
+          H573 V231 H606 V197 H635 V172 H661 V155 H702 V232
+          H724 V180 H751 V164 H780 V140 H819 V212
+          H847 V182 H878 V168 H916 V235 H945 V207 H980 V227
+          H1016 V196 H1057 V245 H1091 V222 H1135 V256 H1161 V278 H1170"/>
+        <line class="track" x1="30" y1="293" x2="1170" y2="293"/>
+        <g id="tram" transform="translate(1010 232) scale(.4)"><image href="assets/toronto-streetcar.svg" width="720" height="170"/></g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===== 07 WORK ===== -->
+  <section class="scene work" id="work" data-scene="Work" data-bg="var(--ravine)">
+    <div class="work-head">
+      <h2 class="big jumble">Selected work</h2>
+    </div>
+
+    <div class="work-list">
+      <a class="card rv" href="openlane/">
+        <div class="info">
+          <span class="idx">01</span>
+          <div class="meta"><span>Openlane · Powersports</span><span>B2B marketplace</span><span>iOS &amp; Web</span><span>Lead designer</span></div>
+          <h3>Listing a motorbike is now as easy as listing a car.</h3>
+          <p>Built for cars, the listing app failed on motorcycles, ATVs and snowmobiles, and 62% of dealers quit at step one. I led the 0→1 redesign so a failed scan never dead-ends a listing.</p>
+          <div class="metrics"><div><b>+20%</b><small>Faster inspections</small></div><div><b>−12%</b><small>Post-sale disputes</small></div><div><b>+15%</b><small>Bid velocity</small></div></div>
+          <span class="go">Read the case study <i>→</i></span>
+        </div>
+        <div class="cover">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <g fill="none" stroke="#0c0c0e" stroke-width="2">
+              <rect x="92" y="62" width="64" height="48" rx="8"/><rect x="168" y="62" width="64" height="48" rx="8"/><rect x="244" y="62" width="64" height="48" rx="8"/>
+              <rect x="92" y="122" width="64" height="48" rx="8"/><rect x="244" y="122" width="64" height="48" rx="8"/>
+              <rect x="92" y="182" width="64" height="48" rx="8"/><rect x="168" y="182" width="64" height="48" rx="8"/><rect x="244" y="182" width="64" height="48" rx="8"/>
+            </g>
+            <rect x="168" y="122" width="64" height="48" rx="8" fill="#ff8a5b" stroke="#0c0c0e" stroke-width="2"/>
+            <path d="M187 146l9 9 17-17" stroke="#0c0c0e" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+      <a class="card rv" href="finra-workspace/">
+        <div class="info">
+          <span class="idx">02</span>
+          <div class="meta"><span>FINRA · Regulator Workspace</span><span>RegTech</span><span>Web</span><span>Product designer</span></div>
+          <h3>From data entry to risk judgment.</h3>
+          <p>State regulators jumped across 5–7 pages to review one application. I redesigned the end-to-end workflow so evidence, actions, comments and audit history sit in one task view.</p>
+          <div class="metrics"><div><b>28%</b><small>Faster decisions</small></div><div><b>−30%</b><small>Support tickets</small></div><div><b>−37%</b><small>Audit kickbacks</small></div></div>
+          <span class="go">Read the case study <i>→</i></span>
+        </div>
+        <div class="cover">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <g stroke="#b9b5aa" stroke-width="7" stroke-linecap="round">
+              <line x1="110" y1="74" x2="290" y2="74"/><line x1="110" y1="98" x2="250" y2="98"/><line x1="110" y1="122" x2="280" y2="122"/>
+              <line x1="110" y1="174" x2="230" y2="174"/><line x1="110" y1="198" x2="270" y2="198"/><line x1="110" y1="222" x2="210" y2="222"/>
+            </g>
+            <g stroke="#0c0c0e" stroke-width="2"><line x1="100" y1="98" x2="262" y2="98"/><line x1="100" y1="198" x2="282" y2="198"/></g>
+            <rect x="100" y="136" width="200" height="26" rx="13" fill="#ff8a5b" stroke="#0c0c0e" stroke-width="2"/>
+            <circle cx="284" cy="149" r="6" fill="#0c0c0e"/>
+          </svg>
+        </div>
+      </a>
+
+      <a class="card rv" href="finra-design-system/">
+        <div class="info">
+          <span class="idx">03</span>
+          <div class="meta"><span>FINRA · FINRA UI</span><span>Design system</span><span>Figma</span><span>Product designer</span></div>
+          <h3>Moving FINRA's design system from XD to Figma.</h3>
+          <p>A fragile Adobe XD library, a volunteer team and no budget. We rebuilt FINRA UI in Figma as a token-based atomic system and documented it on a live guidebook site.</p>
+          <div class="metrics"><div><b>58</b><small>Components</small></div><div><b>105</b><small>Styles defined</small></div><div><b>20+</b><small>Designers trained</small></div></div>
+          <span class="go">Read the case study <i>→</i></span>
+        </div>
+        <div class="cover">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <g fill="none" stroke="#0c0c0e" stroke-width="2">
+              <path d="M200 98v26M110 124h180M110 124v22M170 124v22M230 124v22M290 124v22"/>
+              <rect x="92" y="146" width="36" height="36" rx="6"/><rect x="152" y="146" width="36" height="36" rx="6"/><rect x="212" y="146" width="36" height="36" rx="6"/><rect x="272" y="146" width="36" height="36" rx="6"/>
+              <path d="M110 182v20M170 182v20M230 182v20M290 182v20"/>
+            </g>
+            <g stroke="#b9b5aa" stroke-width="7" stroke-linecap="round">
+              <line x1="96" y1="214" x2="124" y2="214"/><line x1="156" y1="214" x2="184" y2="214"/><line x1="216" y1="214" x2="244" y2="214"/><line x1="276" y1="214" x2="304" y2="214"/>
+              <line x1="96" y1="232" x2="116" y2="232"/><line x1="156" y1="232" x2="176" y2="232"/><line x1="216" y1="232" x2="236" y2="232"/><line x1="276" y1="232" x2="296" y2="232"/>
+            </g>
+            <rect x="146" y="62" width="108" height="36" rx="6" fill="#ff8a5b" stroke="#0c0c0e" stroke-width="2"/>
+            <line x1="172" y1="80" x2="228" y2="80" stroke="#0c0c0e" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== 07b TESTIMONIALS ===== -->
+  <section class="scene words" id="words" data-scene="Testimonials" data-bg="var(--harbour)">
+    <div class="words-head">
+      <h2 class="big jumble">In their words</h2>
+      <p class="body rv">From the designers, product managers and UX leaders I've worked alongside.</p>
+    </div>
+
+    <div class="quotes">
+      <figure class="quote rv">
+        <span class="pin" aria-hidden="true">1</span>
+        <div class="bubble">
+          <div class="who">
+            <span class="avatar" style="--av: var(--coral)" aria-hidden="true">BD</span>
+            <figcaption><div class="name">Brooke Davidson Hoareau</div><div class="role">Senior Product Designer, FINRA</div></figcaption>
+          </div>
+          <blockquote>Sambit is a top-notch enterprise-level Product Designer who navigates complexity with a user-centric approach.</blockquote>
+          <details class="full">
+            <summary>Read full recommendation</summary>
+            <div class="full-text"><p>Sambit is a top-notch enterprise-level Product Designer who navigates complexity with a user-centric approach. He works well with developers and product partners, balancing business goals and user needs with technical constraints.</p><p>Sambit adapts exceptionally well to a range of challenges, from consumer-facing web experiences to flagship enterprise software, serving diverse business users with conflicting needs.</p><p>Sambit and I worked very closely on some difficult challenges, and he was such an amazing collaborator under pressure. I would absolutely work with Sambit again in the future.</p></div>
+          </details>
+          <div class="ctx"><span>Worked together</span><span>FINRA</span></div>
+        </div>
+      </figure>
+
+      <figure class="quote rv" style="--d:120ms">
+        <span class="pin" aria-hidden="true">2</span>
+        <div class="bubble">
+          <div class="who">
+            <span class="avatar" style="--av: var(--mint)" aria-hidden="true">DG</span>
+            <figcaption><div class="name">Dmitry Golovsky</div><div class="role">Director of UX and Product, FINRA</div></figcaption>
+          </div>
+          <blockquote>Any team would be lucky to have an individual like Sambit not only for his abilities as a designer but for what he contributes to the growth of team culture and dynamics.</blockquote>
+          <details class="full">
+            <summary>Read full recommendation</summary>
+            <div class="full-text"><p>Sambit is an amazing teammate who always shows up, ready to bring his best to every opportunity and make it a success.</p><p>Sambit used his curiosity and drive to grow immensely over the years we worked together and helped his colleagues become stronger, more user-centred contributors.</p><p>Throughout his time at FINRA, Sambit contributed his expertise across dozens of products and was always up for taking on the most complex problems with a smile.</p><p>Any team would be lucky to have an individual like Sambit not only for his abilities as a designer but for what he contributes to the growth of team culture and dynamics.</p></div>
+          </details>
+          <div class="ctx"><span>Worked together</span><span>FINRA</span></div>
+        </div>
+      </figure>
+
+      <figure class="quote rv" style="--d:240ms">
+        <span class="pin" aria-hidden="true">3</span>
+        <div class="bubble">
+          <div class="who">
+            <span class="avatar" style="--av: #c9c2ff" aria-hidden="true">ML</span>
+            <figcaption><div class="name">Michael Landreman</div><div class="role">UX Lead, Ameritas</div></figcaption>
+          </div>
+          <blockquote>Sambit is a very collaborative UX designer with the ability to move complex work through challenging environments.</blockquote>
+          <details class="full">
+            <summary>Read full recommendation</summary>
+            <div class="full-text"><p>Sambit is a very collaborative UX designer with the ability to move complex work through challenging environments.</p><p>During the time I worked alongside Sambit, he consistently demonstrated a consistent design approach and a continual push to improve the product.</p><p>Sambit is very thoughtful in his communication with other designers and business partners, and is able to guide conversations accordingly.</p><p>He consistently brings new ideas to the table to evolve design work and keep conversations moving in the right direction.</p></div>
+          </details>
+          <div class="ctx"><span>Worked together</span><span>Ameritas</span></div>
+        </div>
+      </figure>
+
+      <figure class="quote rv" style="--d:360ms">
+        <span class="pin" aria-hidden="true">4</span>
+        <div class="bubble">
+          <div class="who">
+            <span class="avatar" style="--av: #ff9ecf" aria-hidden="true">CA</span>
+            <figcaption><div class="name">Chris Ashton</div><div class="role">Product Manager, FINRA</div></figcaption>
+          </div>
+          <blockquote>Remarkably flexible, Sambit consistently adapted to evolving project needs, demonstrating a rare combination of creativity and efficiency.</blockquote>
+          <details class="full">
+            <summary>Read full recommendation</summary>
+            <div class="full-text"><p>I highly recommend Sambit for their outstanding contributions to our team. He excelled in collaborative efforts, consistently generating innovative ideas that significantly enhanced our projects.</p><p>His ability to deliver exceptional work for stakeholders showcased a deep understanding of user experience principles. Remarkably flexible, Sambit consistently adapted to evolving project needs, demonstrating a rare combination of creativity and efficiency.</p><p>Their swift and effective work made a lasting positive impact on our team's success. He will be a great asset to any team he works with.</p></div>
+          </details>
+          <div class="ctx"><span>Worked together</span><span>FINRA</span></div>
+        </div>
+      </figure>
+
+      <figure class="quote rv" style="--d:480ms">
+        <span class="pin" aria-hidden="true">5</span>
+        <div class="bubble">
+          <div class="who">
+            <span class="avatar" style="--av: #ffd27a" aria-hidden="true">CD</span>
+            <figcaption><div class="name">Carissa DuPuy</div><div class="role">Senior UX Design Lead, Comcast</div></figcaption>
+          </div>
+          <blockquote>During our time working together, he always contributed creative ideas to solving complex user flows and consistently executed them well.</blockquote>
+          <details class="full">
+            <summary>Read full recommendation</summary>
+            <div class="full-text"><p>Sambit is a dedicated team member and a pleasure to work with. During our time working together, he always contributed creative ideas to solving complex user flows and consistently executed them well. I give him my full recommendation</p></div>
+          </details>
+          <div class="ctx"><span>Worked together</span><span>Comcast</span></div>
+        </div>
+      </figure>
+    </div>
+    <p class="words-more rv"><a href="https://www.linkedin.com/in/mohanty-sambit/details/recommendations/" target="_blank" rel="noopener">See recommendations on LinkedIn <span aria-hidden="true">↗</span></a></p>
+  </section>
+
+  <!-- ===== 08 CRAFT ===== -->
+  <section class="scene craft" id="about" data-scene="Craft" data-bg="var(--streetcar)">
+    <div class="cols rv" style="--d:200ms">
+      <div class="col"><h3>Now</h3><ul><li>Looking for a team where design has a real seat at the table, shaping product decisions with product, engineering and business partners from day one.</li></ul></div>
+      <div class="col"><h3>Experience</h3><ul class="xp"><li>Storya <span>2025–now</span></li><li>Openlane <span>2024–25</span></li><li>FINRA <span>2021–23</span></li><li>Ameritas <span>2020–21</span></li><li>Comcast <span>2018–20</span></li></ul></div>
+      <div class="col"><h3>Toolkit</h3><ul class="tools"><li>Figma</li><li>FigJam</li><li>Miro</li><li>Framer</li><li>Figma AI</li><li>Claude</li><li>Dovetail</li><li>UserTesting</li><li>Mixpanel</li><li>FullStory</li><li>Jira</li><li>HTML/CSS</li><li>VS Code</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ===== 09 CONTACT ===== -->
+  <section class="scene contact center" id="contact" data-scene="Contact" data-bg="var(--night)">
+    <h2 class="big jumble">Got a messy workflow?</h2>
+    <p class="fine rv">Let's untangle it together.</p>
+    <div class="links rv" style="--d:150ms">
+      <button class="copy" id="copyBtn" data-email="sambitmohanty2707@gmail.com" aria-live="polite">sambitmohanty2707@gmail.com <span class="ic" aria-hidden="true">⧉</span><span class="ok">Copied ✓</span></button>
+      <a href="https://www.linkedin.com/in/mohanty-sambit/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="assets/Sambit_Mohanty_Resume.pdf" target="_blank" rel="noopener">Resume ↓</a>
+    </div>
+    <div class="straight" aria-hidden="true">
+      <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <g fill="none" stroke="var(--cream)" stroke-linecap="round" vector-effect="non-scaling-stroke">
+          <path d="M0 20H1200" opacity=".18"/><path d="M0 34H1200" opacity=".26"/><path d="M0 48H1200" opacity=".34"/>
+          <path d="M0 62H1200" stroke="var(--coral)" stroke-width="2.5" opacity="1"/>
+          <path d="M0 76H1200" opacity=".34"/><path d="M0 90H1200" opacity=".26"/><path d="M0 104H1200" opacity=".18"/>
+        </g>
+      </svg>
+    </div>
+    <div class="site-foot">
+      <span>© <span id="year">2026</span> Sambit Mohanty</span>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- stars ---------- */
+  var stars = document.getElementById('stars');
+  var seed = 11;
+  function rand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  for (var s = 0; s < 80; s++) {
+    var st = document.createElement('i');
+    st.style.left = (rand() * 100) + '%';
+    st.style.top = (rand() * 100) + '%';
+    st.style.setProperty('--o', (0.25 + rand() * 0.6).toFixed(2));
+    st.style.setProperty('--t', (2 + rand() * 4).toFixed(1) + 's');
+    st.style.setProperty('--dl', (-rand() * 5).toFixed(1) + 's');
+    if (rand() > 0.85) { st.style.width = st.style.height = '3px'; }
+    stars.appendChild(st);
+  }
+
+  /* ---------- jumbled letters ---------- */
+  document.querySelectorAll('.jumble').forEach(function (el) {
+    var text = el.textContent;
+    el.setAttribute('aria-label', text);
+    el.textContent = '';
+    var i = 0;
+    text.split(' ').forEach(function (word, w, all) {
+      var wrap = document.createElement('span');
+      wrap.style.whiteSpace = 'nowrap';
+      wrap.setAttribute('aria-hidden', 'true');
+      for (var c = 0; c < word.length; c++) {
+        var ch = document.createElement('span');
+        ch.className = 'ch';
+        ch.textContent = word[c];
+        ch.style.setProperty('--r', ((rand() - 0.5) * 34).toFixed(1) + 'deg');
+        ch.style.setProperty('--y', ((rand() - 0.5) * 0.5).toFixed(2) + 'em');
+        ch.style.setProperty('--s', (rand() > 0.78 ? 0.72 : 0.92 + rand() * 0.2).toFixed(2));
+        ch.style.setProperty('--i', i++);
+        wrap.appendChild(ch);
+      }
+      el.appendChild(wrap);
+      if (w < all.length - 1) el.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  /* ---------- reveals ---------- */
+  /* streetcar: drives right to left (headlight is on the left) as its track scrolls through view.
+     It covers a shorter stretch over the whole time the track is on screen, and glides toward
+     its scroll position instead of jumping, so it reads as a slow, steady drive past. */
+  var sky = document.getElementById('skyline'), tram = document.getElementById('tram');
+  var tramX = null, tramTarget = 0, tramRaf = 0;
+  function tramGoal() {
+    var r = sky.getBoundingClientRect(), vh = window.innerHeight;
+    var start = vh - 50, end = 80;
+    var p = reduce ? 0.62 : Math.max(0, Math.min(1, (start - r.bottom) / (start - end)));
+    return 1010 + (-80 - 1010) * p;
+  }
+  function drawTram(x) { tram.setAttribute('transform', 'translate(' + x.toFixed(1) + ' 232) scale(.4)'); }
+  function stepTram() {
+    tramX += (tramTarget - tramX) * 0.08;
+    if (Math.abs(tramTarget - tramX) < 0.3) { tramX = tramTarget; tramRaf = 0; } else { tramRaf = requestAnimationFrame(stepTram); }
+    drawTram(tramX);
+  }
+  function onTramScroll() {
+    tramTarget = tramGoal();
+    if (tramX === null || reduce) { tramX = tramTarget; drawTram(tramX); return; }
+    if (!tramRaf) tramRaf = requestAnimationFrame(stepTram);
+  }
+  if (sky && tram) {
+    onTramScroll();
+    window.addEventListener('scroll', onTramScroll, { passive: true });
+    window.addEventListener('resize', onTramScroll);
+  }
+
+  /* skyline draw: size the dash to the outline's real on-screen length so it always completes */
+  var skyPath = document.getElementById('skyPath');
+  function sizeSkyDash() {
+    if (!skyPath) return;
+    var k = skyPath.ownerSVGElement.getBoundingClientRect().width / 1140;
+    var d = Math.ceil(skyPath.getTotalLength() * Math.max(1, k)) + 20;
+    skyPath.style.setProperty('--dash', d);
+  }
+  sizeSkyDash();
+  window.addEventListener('resize', sizeSkyDash);
+
+  var revealEls = document.querySelectorAll('.rv, .jumble, .skyline');
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.1 });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* ---------- headers straighten while in the reading zone ---------- */
+  if ('IntersectionObserver' in window && !reduce) {
+    var fo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { en.target.classList.toggle('focus', en.isIntersecting); });
+    }, { rootMargin: '-15% 0px -30% 0px', threshold: 0 });
+    document.querySelectorAll('.jumble').forEach(function (el) { fo.observe(el); });
+  }
+
+  /* ---------- manifesto lines ---------- */
+  var lines = document.querySelectorAll('#lines .ln, .belief-body .quiet');
+  if ('IntersectionObserver' in window && !reduce) {
+    var lo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { en.target.classList.toggle('on', en.isIntersecting || en.boundingClientRect.top < 0); });
+    }, { rootMargin: '0px 0px -38% 0px' });
+    lines.forEach(function (li) { lo.observe(li); });
+  } else { lines.forEach(function (li) { li.classList.add('on'); }); }
+
+  /* ---------- count up ---------- */
+  function countUp(el) {
+    var target = +el.getAttribute('data-count'), start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var k = Math.min(1, (ts - start) / 1400);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - k, 4)));
+      if (k < 1) requestAnimationFrame(step);
+    }
+    el.textContent = '0'; requestAnimationFrame(step);
+  }
+  if ('IntersectionObserver' in window && !reduce) {
+    var co = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { countUp(en.target); co.unobserve(en.target); } });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('[data-count]').forEach(function (c) { co.observe(c); });
+  }
+
+  /* ---------- selection-box dimensions ---------- */
+  var sel = document.getElementById('sel'), dim = document.getElementById('dim');
+  function measure() { var r = sel.getBoundingClientRect(); dim.textContent = Math.round(r.width) + ' × ' + Math.round(r.height); }
+
+  /* ---------- tangle ---------- */
+  var svg = document.getElementById('tangle'), NS = 'http://www.w3.org/2000/svg';
+  var W = 1200, H = 360, LINES = 7, PTS = 30, threads = [];
+  for (var i = 0; i < LINES; i++) {
+    var p = document.createElementNS(NS, 'path'), mid = (LINES - 1) / 2, accent = i === Math.floor(mid);
+    p.setAttribute('stroke', accent ? 'var(--coral)' : 'var(--cream)');
+    p.setAttribute('stroke-width', accent ? '2.8' : '1.3');
+    p.setAttribute('stroke-opacity', accent ? '1' : String(0.16 + 0.34 * (1 - Math.abs(i - mid) / mid)));
+    p.setAttribute('vector-effect', 'non-scaling-stroke');
+    svg.appendChild(p);
+    threads.push({ el: p, target: H / 2 + (i - mid) * 18, f1: 0.004 + rand() * 0.008, ph1: rand() * 6.28, f2: 0.011 + rand() * 0.012, ph2: rand() * 6.28, amp: 90 + rand() * 80, sp: 0.4 + rand() * 0.6 });
+  }
+  function toPath(pts) {
+    var d = 'M' + pts[0][0].toFixed(1) + ' ' + pts[0][1].toFixed(1);
+    for (var k = 0; k < pts.length - 1; k++) {
+      var p0 = pts[k - 1] || pts[k], p1 = pts[k], p2 = pts[k + 1], p3 = pts[k + 2] || p2;
+      d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ' ' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ' ' + (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ' ' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ' ' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1);
+    }
+    return d;
+  }
+  var heroTrack = document.getElementById('top');
+  var progress = 0, heroVisible = true;
+  function drawTangle(time) {
+    var e = 1 - Math.pow(1 - progress, 3), t = reduce ? 0 : time * 0.00035;
+    for (var i = 0; i < threads.length; i++) {
+      var th = threads[i], pts = [];
+      for (var j = 0; j < PTS; j++) {
+        var x = (j / (PTS - 1)) * W, env = Math.pow(Math.sin(Math.PI * x / W), 0.7);
+        var off = th.amp * (0.6 * Math.sin(x * th.f1 + th.ph1 + t * th.sp) + 0.4 * Math.sin(x * th.f2 + th.ph2 - t * th.sp * 1.3));
+        pts.push([x, th.target + off * env * (1 - e)]);
+      }
+      th.el.setAttribute('d', toPath(pts));
+    }
+  }
+
+  /* ---------- scenes: background colour + ruler ---------- */
+  var bg = document.getElementById('bg');
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('[data-bg]'));
+  var labelled = scenes.filter(function (s) { return s.hasAttribute('data-scene'); });
+  var rulerLabels = document.getElementById('rulerLabels'), needle = document.getElementById('needle');
+  var labelEls = labelled.map(function (s) {
+    var b = document.createElement('button');
+    b.className = 'lbl'; b.textContent = s.getAttribute('data-scene');
+    b.addEventListener('click', function () { window.scrollTo({ top: s.offsetTop, behavior: reduce ? 'auto' : 'smooth' }); });
+    rulerLabels.appendChild(b);
+    return b;
+  });
+  function layoutRuler() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var W = rulerLabels.clientWidth, n = labelEls.length, gap = 14;
+    var lefts = labelled.map(function (s) { return Math.min(1, s.offsetTop / max) * W; });
+    lefts[n - 1] = W - labelEls[n - 1].offsetWidth;
+    // short sections can land labels on top of each other: nudge each one left of its neighbour
+    for (var k = n - 2; k >= 0; k--) lefts[k] = Math.max(0, Math.min(lefts[k], lefts[k + 1] - labelEls[k].offsetWidth - gap));
+    labelEls.forEach(function (el, k) { el.style.right = 'auto'; el.style.left = lefts[k] + 'px'; });
+  }
+
+  function onScroll() {
+    var y = window.scrollY, vh = window.innerHeight, max = document.documentElement.scrollHeight - vh;
+    // hero untangle
+    var dist = heroTrack.offsetHeight - vh;
+    progress = dist > 0 ? Math.min(1, Math.max(0, y / (dist * 0.9))) : 1;
+    heroVisible = y < heroTrack.offsetHeight;
+    if (reduce) drawTangle(0);
+    // scene colour
+    var mid = y + vh * 0.5, current = scenes[0];
+    scenes.forEach(function (s) { if (s.offsetTop <= mid) current = s; });
+    bg.style.backgroundColor = current.getAttribute('data-bg');
+    document.documentElement.style.setProperty('--scene', current.getAttribute('data-bg'));
+    // ruler
+    var frac = max > 0 ? y / max : 0;
+    needle.style.left = (frac * 100) + '%';
+    var on = 0; labelled.forEach(function (s, k) { if (s.offsetTop <= mid) on = k; });
+    labelEls.forEach(function (b, k) { b.classList.toggle('on', k === on); });
+  }
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () { onScroll(); ticking = false; });
+  }, { passive: true });
+  function onResize() { layoutRuler(); measure(); onScroll(); }
+  window.addEventListener('resize', onResize);
+  window.addEventListener('load', onResize);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(onResize);
+  onResize(); drawTangle(0);
+  if (!reduce) (function loop(t) { if (heroVisible) drawTangle(t); requestAnimationFrame(loop); })(0);
+
+  /* ---------- copy email ---------- */
+  var copyBtn = document.getElementById('copyBtn');
+  copyBtn.addEventListener('click', function () {
+    var email = copyBtn.getAttribute('data-email');
+    function done() { copyBtn.classList.add('done'); clearTimeout(copyBtn._t); copyBtn._t = setTimeout(function () { copyBtn.classList.remove('done'); }, 1800); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(email).then(done, function () { location.href = 'mailto:' + email; });
+    else location.href = 'mailto:' + email;
+  });
+
+  /* ---------- clock ---------- */
+  var clock = document.getElementById('clock');
+  function tick() {
+    try {
+      var h = '', m = '';
+      new Intl.DateTimeFormat('en-CA', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'America/Toronto' }).formatToParts(new Date()).forEach(function (p) { if (p.type === 'hour') h = p.value; if (p.type === 'minute') m = p.value; });
+      clock.innerHTML = h + '<span class="colon">:</span>' + m;
+    } catch (e) {}
+  }
+  tick(); setInterval(tick, 15000);
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

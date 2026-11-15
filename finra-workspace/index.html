@@ -1,0 +1,2476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FINRA Regulator Workspace · Sambit Mohanty</title>
+<meta name="description" content="Redesigning an end-to-end regulatory review workflow so state regulators could make faster, more defensible decisions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   FINRA Regulator Workspace — Case Study
+   Design System v3 · Inter · brand #6f4fd3 · bands #140935
+   ============================================================ */
+:root{
+  color-scheme:light;
+  --space-4:4px; --space-8:8px; --space-12:12px; --space-16:16px;
+  --space-24:24px; --space-36:36px; --space-48:48px; --space-60:60px;
+  --space-96:96px; --space-120:120px;
+  --container:1440px; --content:1280px; --measure:60ch; --hero-measure:720px;
+  --gutter:80px; --section-y:var(--space-120); --header-gap:var(--space-48);
+  --radius-6:6px; --radius-8:8px; --radius-12:12px; --radius-16:16px;
+  --radius-20:20px; --radius-full:999px; --border:1px;
+  --duration-fast:80ms; --duration-base:150ms; --duration-slow:250ms;
+  --duration-reveal:620ms;
+  --ease:cubic-bezier(.2,.6,.3,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
+  --serif:'Times New Roman',Times,'Liberation Serif',Georgia,serif;
+
+  /* Brand */
+  --brand:#6f4fd3; --brand-2:#81459b; --brand-deep:#704ed4; --stat-ink:#593bb8;
+  --brand-wash:#f2edff; --brand-mid:#dcccff; --brand-stroke:#e2b8f1;
+  --brand-soft:#faf0fd;
+
+  /* Neutrals */
+  --ground:#ffffff; --surface:#ffffff; --sunken:#f9fafb;
+  --rule:#eaecf0; --rule-2:#dcccff;
+  --ink:#101828; --ink-2:#344054; --ink-3:#667085;
+  --on-brand:#ffffff;
+
+  /* Dark bands */
+  --band:#140935; --band-alt:#17132b; --band-card:#1e1938;
+  --band-rule:#2c2545; --band-ink:#ffffff; --band-ink-2:#c9c3e0;
+  --band-accent:#b9a5f0;
+
+  /* Impact band */
+  --impact-bg:#f7f5ff; --impact-rule:#e9e3fb;
+
+  /* Semantic */
+  --friction:#8a0002; --friction-rule:#edbfbf; --friction-dot:#f1b8b9;
+  --ph:#f2edff; --ph-line:#dcccff; --ph-ink:#667085;
+  --glare:rgba(255,255,255,.55);
+
+  --shadow-1:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);
+  --shadow-2:0 4px 4px rgba(0,0,0,.10);
+  --shadow-3:0 32px 64px -12px rgba(16,24,40,.22);
+}
+@media(max-width:720px){
+  :root{--section-y:var(--space-60);--header-gap:var(--space-24);--gutter:var(--space-24)}
+}
+*{box-sizing:border-box;margin:0;padding:0}
+/* Sticky nav is 74px; the rest is breathing room under it. */
+html{scroll-behavior:smooth;scroll-padding-top:128px}
+body{background:var(--ground);color:var(--ink);
+  font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;overflow-wrap:break-word}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:var(--radius-6)}
+img{max-width:100%}
+
+/* ---------- Type ---------- */
+.display-1{font-size:56px;line-height:1.14;letter-spacing:-1.12px;font-weight:700;text-wrap:balance}
+/* Accent — brand purple italic, picking out the phrase a line turns on. In
+   running text it keeps the surrounding face and weight so only colour and
+   slant set it apart; the display headline takes the pull quote's serif, where
+   the change of face is the point. */
+.accent{font-style:italic;color:var(--brand)}
+.display-1 .accent{font-family:var(--serif);font-weight:400;letter-spacing:0;font-size:1.04em}
+.heading-1{font-size:38px;line-height:1.15;letter-spacing:-1px;font-weight:700;text-wrap:balance}
+.heading-3{font-size:24px;line-height:1.3;letter-spacing:-.264px;font-weight:700}
+.heading-4{font-size:18px;line-height:1.4;letter-spacing:-.1px;font-weight:700}
+.body-large{font-size:18px;font-weight:400;line-height:1.7}
+.overline{font-size:12px;line-height:1.2;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:700;color:var(--brand)}
+@media(max-width:720px){
+  .display-1{font-size:34px;letter-spacing:-.6px;line-height:1.15}
+  .heading-1{font-size:26px;letter-spacing:-.4px}.heading-3{font-size:20px}
+}
+.display-1,.heading-1,.heading-3,.heading-4,
+.slide-copy h3,.card h3,.card h4,.heat figcaption h4{text-wrap:balance}
+p,li,dd,figcaption,blockquote,.stat .k,.lb-sub,.hs-legend{text-wrap:pretty}
+.measure{max-width:var(--measure)}
+.wrap{max-width:var(--content);margin-inline:auto;padding-inline:var(--gutter)}
+section{padding-block:var(--section-y);position:relative}
+.alt{background:var(--sunken)}
+/* 06 and the two 07s all sit on white now, so their stacked section paddings
+   read as one 240px void rather than a break between sections. Half the padding
+   on each facing edge puts a single --section-y (120px) gap between them, and it
+   still halves with the rest of the rhythm at the mobile breakpoint. */
+#iteration{padding-bottom:calc(var(--section-y) / 2)}
+#final{padding-block:calc(var(--section-y) / 2)}
+#final-details{padding-top:calc(var(--section-y) / 2)}
+/* Heading and intro share one width so their right edges line up and the block
+   reads as a single column. Capping the heading and body separately left them
+   wrapping at different widths, which is what reads as awkward space. */
+.sec-head{margin-bottom:var(--header-gap);display:flex;flex-direction:column;gap:var(--space-24);
+  max-width:var(--head-measure,960px)}
+.sec-head p{color:var(--ink-2)}
+.sec-head .measure{max-width:none}
+.sec-head .overline+*{margin-top:var(--space-12)}
+
+/* ---------- Scroll progress ---------- */
+.progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:60;background:transparent;pointer-events:none}
+.progress i{display:block;height:100%;width:100%;background:var(--brand);transform:scaleX(0);
+  transform-origin:0 50%;transition:transform 60ms linear}
+
+/* ---------- Nav ---------- */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);
+  backdrop-filter:saturate(1.6) blur(14px);-webkit-backdrop-filter:saturate(1.6) blur(14px);
+  box-shadow:0 4px 4px rgba(0,0,0,.04);border-bottom:var(--border) solid var(--rule)}
+.nav-in{max-width:var(--container);margin-inline:auto;padding:var(--space-16) var(--gutter);
+  display:flex;align-items:center;gap:var(--space-24)}
+.brand{display:flex;align-items:center;gap:var(--space-16)}
+.brand-mark{width:40px;height:40px;border-radius:var(--radius-8);background:var(--brand-wash);
+  border:var(--border) solid var(--brand-stroke);display:grid;place-items:center;
+  font:700 14px/1 var(--sans);color:var(--brand);flex:none}
+.brand-name{font-size:16px;font-weight:700;line-height:1.4;color:var(--ink-2)}
+.brand-role{font-size:13px;line-height:1.4;color:var(--ink-3)}
+.nav-items{margin-left:auto;display:flex;gap:var(--space-8)}
+.nav-items a{position:relative;color:var(--ink-2);text-decoration:none;font-size:14px;font-weight:600;
+  padding:var(--space-8) var(--space-12);border-radius:var(--radius-8);
+  transition:color var(--duration-base) var(--ease),background var(--duration-base) var(--ease)}
+.nav-items a:hover{color:var(--brand);background:var(--brand-wash)}
+.nav-items a[aria-current="true"]{color:var(--brand);background:var(--brand-wash)}
+@media(max-width:900px){.nav-items{display:none}}
+
+/* ---------- Reveal ---------- */
+.reveal{opacity:0;transform:translate3d(0,16px,0);
+  transition:opacity var(--duration-reveal) var(--ease-out),transform var(--duration-reveal) var(--ease-out);
+  transition-delay:calc(var(--i,0) * 70ms)}
+.reveal.in{opacity:1;transform:none}
+/* Parallax offsets are rounded to whole pixels and the layer is only promoted
+   while it is moving. A permanently promoted layer sitting at a fractional
+   offset gets resampled, which softens fine UI text inside it. */
+.px{transform:translate3d(0,var(--py,0px),0)}
+.px.px-live{will-change:transform}
+
+/* ---------- Hero ---------- */
+.hero{padding-block:var(--space-96) var(--section-y);overflow:hidden}
+.hero-in{display:flex;flex-direction:column;align-items:center;gap:var(--space-24);text-align:center}
+.badge{font-size:12px;font-weight:500;padding:var(--space-4) var(--space-8);
+  border-radius:var(--radius-12);background:var(--surface);color:var(--brand);
+  border:var(--border) solid var(--brand-stroke)}
+.hero h1{max-width:var(--hero-measure);color:var(--ink-2)}
+.hero .body-large{color:var(--ink-3);max-width:var(--hero-measure)}
+.actions{display:flex;gap:var(--space-12);flex-wrap:wrap;justify-content:center;margin-top:var(--space-12)}
+/* Narrow screens: matched buttons rather than two different widths — side by
+   side while both labels still fit on one line, stacked below that. The cap
+   keeps them from stretching the full width of a tablet. */
+@media(max-width:720px){
+  .actions{display:grid;grid-template-columns:1fr 1fr;width:100%;max-width:540px;margin-inline:auto}
+  .actions .btn{justify-content:center}
+}
+@media(max-width:600px){
+  .actions{grid-template-columns:1fr}
+}
+.btn{font:600 15px/1 var(--sans);padding:var(--space-12) var(--space-24);border-radius:var(--radius-8);
+  border:var(--border) solid transparent;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;
+  transition:filter var(--duration-base) var(--ease),transform var(--duration-base) var(--ease),box-shadow var(--duration-base) var(--ease)}
+.btn-primary{background:var(--brand);color:var(--on-brand);box-shadow:var(--shadow-2)}
+.btn-secondary{background:var(--surface);color:var(--ink-2);border-color:var(--rule-2)}
+.btn:hover{filter:brightness(1.06);transform:translateY(-1px);box-shadow:0 8px 16px rgba(111,79,211,.20)}
+.btn:active{filter:brightness(.96);transform:none;transition-duration:var(--duration-fast)}
+
+/* Meta row with dot separators, as in the deck */
+.meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:var(--space-24);margin-top:var(--space-24);max-width:var(--hero-measure)}
+.meta>div{display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-4)}
+.meta dt{font-size:12px;line-height:1.55;font-weight:700;color:var(--ink-3)}
+.meta dd{font-size:12px;line-height:1.55;font-weight:600;color:#000;white-space:nowrap}
+.meta .sep{width:2px;height:2px;border-radius:1px;background:var(--brand-mid);flex:none;align-self:center}
+/* Narrow screens: a wrapping row breaks unevenly, so the four facts sit in a
+   fixed 2x2 grid instead. The dots go with it — a grid has its own structure. */
+@media(max-width:720px){
+  .meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:var(--space-16) var(--space-24);width:100%;max-width:340px;margin-inline:auto}
+  .meta .sep{display:none}
+}
+
+/* ---------- Before / after compare ----------
+   Behaviour ported from Motiq's CompareReveal (MIT): the divider chases the
+   pointer through a spring (k=140, c=18, damping ratio ~0.76) so the lag reads
+   as elastic resistance, and it demonstrates itself once on first view.
+   Recoloured to the case-study purple. */
+/* The hero visual breaks out of the reading column into the gutters: copy stays
+   at a comfortable measure while the screenshots render larger, which is the
+   only lever left on legibility once the source export is fixed. */
+.compare-wrap{margin-top:var(--space-48);display:flex;flex-direction:column;gap:var(--space-12);
+  align-items:center;
+  width:calc(100% + var(--gutter) * 2);
+  max-width:calc(100vw - var(--space-24) * 2);
+  margin-inline:calc(var(--gutter) * -1)}
+@media(max-width:720px){
+  .compare-wrap{width:100%;margin-inline:0}
+}
+/* Minimal screen mockup around the comparator. The frame owns the border,
+   radius and shadow; the comparator inside sits flush. */
+.mock{width:100%;border-radius:var(--radius-16);overflow:hidden;background:var(--surface);
+  border:var(--border) solid var(--brand-mid);box-shadow:var(--shadow-2)}
+.mock-bar{display:flex;align-items:center;gap:7px;height:34px;flex:none;
+  padding-inline:var(--space-16);background:var(--sunken);
+  border-bottom:var(--border) solid var(--rule)}
+.mock-dot{width:10px;height:10px;border-radius:var(--radius-full);flex:none;
+  background:color-mix(in srgb,var(--ink-3) 28%,transparent)}
+.mock .compare{border:0;border-radius:0;box-shadow:none}
+/* A still screenshot can use the same mockup: the frame owns the border,
+   radius and shadow, so the shot inside drops its own chrome and purple wash. */
+.mock .shot{border:0;border-radius:0;background:transparent;aspect-ratio:auto}
+.mock .shot img{width:100%;height:auto;object-fit:contain;background:transparent}
+@media(max-width:720px){.mock-bar{height:28px;padding-inline:var(--space-12)}
+  .mock-dot{width:8px;height:8px}}
+
+.compare{position:relative;width:100%;aspect-ratio:16/10;border-radius:var(--radius-16);
+  overflow:hidden;background:var(--surface);border:var(--border) solid var(--brand-mid);
+  box-shadow:var(--shadow-2);touch-action:pan-y;user-select:none;isolation:isolate;
+  cursor:ew-resize;
+  /* The two exports have different proportions, so one of them sets the frame.
+     It is the redesign's 3574x2261, so the screen the case study is actually
+     about fits edge to edge with nothing cropped; the legacy shot is wider in
+     proportion and letterboxes against the white behind it. */
+  aspect-ratio:3574/2261}
+.compare img{position:absolute;inset:0;width:100%;height:100%;display:block;
+  user-select:none;-webkit-user-drag:none;pointer-events:none}
+/* The frame is cut to this image, so it fills it exactly — contain rather than
+   cover keeps the pagination row and footer that a crop used to cut off. */
+.cmp-after{object-fit:contain;object-position:center center}
+/* The clipped layer is composited once and only its clip-path changes per frame. */
+/* Opaque, so the bands left by containing this wider shot read as white rather
+   than letting the redesign underneath show through on the legacy side. */
+.cmp-before{object-fit:contain;object-position:center center;background:var(--surface);
+  will-change:clip-path;clip-path:inset(0 50% 0 0)}
+
+.cmp-tag{position:absolute;top:var(--space-16);z-index:8;pointer-events:none;
+  padding:6px var(--space-12);border-radius:var(--radius-full);
+  font:600 10.5px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:#fff;
+  /* Letter-spacing also lands after the final letter, so the ink sits left of
+     centre. The indent itself widens this shrink-to-fit box, so it takes a full
+     space — not half — to balance the two sides. */
+  text-indent:.12em;
+  background:rgba(20,9,53,.55);border:var(--border) solid rgba(220,204,255,.30);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:opacity var(--duration-slow) var(--ease)}
+.cmp-tag-a{left:var(--space-16)}
+.cmp-tag-b{right:var(--space-16);background:color-mix(in oklab,var(--brand) 78%,transparent);
+  border-color:color-mix(in oklab,var(--brand) 40%,white)}
+
+.cmp-divider{position:absolute;top:0;bottom:0;left:50%;z-index:10;width:2px;margin-left:-1px;
+  pointer-events:none;will-change:left;
+  background:color-mix(in oklab,var(--brand) 85%,white)}
+.cmp-grip{position:absolute;left:50%;top:50%;width:46px;height:46px;
+  transform:translate(-50%,-50%);border-radius:var(--radius-full);
+  display:grid;place-items:center;
+  border:2px solid var(--brand);color:var(--brand);
+  background:color-mix(in oklab,#fff 82%,transparent);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  box-shadow:0 0 0 6px color-mix(in oklab,var(--brand) 18%,transparent),
+             0 0 26px color-mix(in oklab,var(--brand) 45%,transparent);
+  transition:transform var(--duration-base) var(--ease),box-shadow var(--duration-slow) var(--ease)}
+.cmp-grip svg{width:18px;height:14px;stroke:currentColor;stroke-width:2;fill:none;
+  stroke-linecap:round;stroke-linejoin:round}
+.compare:hover .cmp-grip{transform:translate(-50%,-50%) scale(1.06)}
+
+.cmp-range{position:absolute;inset:0;z-index:12;width:100%;height:100%;margin:0;opacity:0;
+  cursor:ew-resize;-webkit-appearance:none;appearance:none;background:transparent}
+.cmp-range::-webkit-slider-thumb{-webkit-appearance:none;width:46px;height:100%;cursor:ew-resize}
+.cmp-range::-moz-range-thumb{width:46px;height:100%;border:0;background:transparent;cursor:ew-resize}
+.cmp-range:focus-visible{outline:none}
+.compare:has(.cmp-range:focus-visible) .cmp-grip{
+  box-shadow:0 0 0 6px color-mix(in oklab,var(--brand) 30%,transparent),
+             0 0 0 9px color-mix(in oklab,var(--brand) 55%,transparent)}
+@media(max-width:720px){.compare{aspect-ratio:3/2}}
+@media(prefers-reduced-motion:reduce){
+  .cmp-before,.cmp-divider{will-change:auto}
+}
+
+/* ---------- Shots ---------- */
+.shot{position:relative;width:100%;display:block;border-radius:var(--radius-8);overflow:hidden;
+  background:var(--brand-wash);border:var(--border) solid var(--brand-wash)}
+.shot img{width:100%;height:100%;object-fit:contain;display:block;background:var(--brand-wash)}
+.shot video{width:100%;height:auto;display:block;background:var(--brand-wash)}
+.r-16-9{aspect-ratio:16/9}.r-4-3{aspect-ratio:4/3}.r-3-2{aspect-ratio:3/2}.r-11-10{aspect-ratio:1040/908}
+.shot.missing{background:
+    repeating-linear-gradient(135deg,transparent 0 11px,color-mix(in srgb,var(--ph-line) 40%,transparent) 11px 12px),var(--ph);
+  border:var(--border) dashed var(--ph-line);display:grid;place-content:center;text-align:center;
+  padding:var(--space-24);gap:var(--space-4)}
+.shot.missing img,.shot.missing video,.shot.missing .expand,.shot.missing .media-btn{display:none}
+.shot.missing::before{content:"IMAGE";position:absolute;top:var(--space-8);left:var(--space-12);
+  font:700 9.5px/1 var(--mono);letter-spacing:.14em;color:var(--ph-ink);opacity:.6}
+.shot.missing::after{content:attr(data-slot);font:500 12px/1.6 var(--mono);color:var(--ink-2)}
+
+.shot.zoomable,.zoom-card{cursor:zoom-in}
+.shot.zoomable .media-btn,.zoom-card button{cursor:pointer}
+/* Copy stays selectable inside a clickable panel. */
+.zoom-card p,.zoom-card li,.zoom-card h3,.zoom-card .lbl{cursor:text}
+/* Expand — white pill button, as drawn in the deck */
+.expand{position:absolute;bottom:var(--space-12);right:var(--space-12);z-index:2;
+  width:36px;height:36px;border-radius:var(--radius-full);cursor:pointer;
+  border:0;background:#fff;color:var(--ink);box-shadow:0 4px 4px rgba(0,0,0,.25);
+  display:grid;place-items:center;opacity:.92;
+  transition:opacity var(--duration-slow) var(--ease),transform var(--duration-base) var(--ease)}
+.expand svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.shot:hover .expand,.expand:focus-visible{opacity:1;transform:scale(1.06)}
+.expand:active{transform:scale(.94);transition-duration:var(--duration-fast)}
+
+/* Play/pause for animated shots (WCAG 2.2.2) */
+.media-btn{position:absolute;bottom:var(--space-12);right:56px;z-index:2;
+  height:36px;padding:0 var(--space-12);border-radius:var(--radius-full);cursor:pointer;
+  border:0;background:#fff;color:var(--ink);box-shadow:0 4px 4px rgba(0,0,0,.25);
+  display:inline-flex;align-items:center;gap:var(--space-8);
+  font:600 12px/1 var(--sans);opacity:.92;
+  transition:opacity var(--duration-slow) var(--ease),transform var(--duration-base) var(--ease)}
+.media-btn svg{width:12px;height:12px;fill:currentColor;stroke:none;flex:none}
+.shot:hover .media-btn,.media-btn:focus-visible{opacity:1}
+.media-btn:hover{transform:scale(1.04)}
+.media-btn:active{transform:scale(.94);transition-duration:var(--duration-fast)}
+
+/* ---------- Lightbox ---------- */
+.lb{position:fixed;inset:0;z-index:100;display:none;padding:var(--space-24);
+  width:100%;height:100%;max-width:none;max-height:none;
+  background:transparent;border:0;color:#fff;overflow:hidden}
+.lb[open]{display:block}
+.lb::backdrop{background:rgba(20,9,53,.88);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.lb-in{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;gap:var(--space-12);
+  max-width:1400px;margin-inline:auto;
+  opacity:0;transform:scale(.985) translateY(6px);
+  transition:opacity var(--duration-slow) var(--ease-out),transform var(--duration-slow) var(--ease-out)}
+.lb.ready .lb-in{opacity:1;transform:none}
+.lb-bar{display:flex;align-items:flex-start;gap:var(--space-16);color:#fff;flex:none}
+.lb-title{font-size:15px;font-weight:700;line-height:1.4}
+.lb-sub{font-size:13px;line-height:1.5;color:var(--band-ink-2);margin-top:2px}
+.lb-close{margin-left:auto;flex:none;width:40px;height:40px;border-radius:var(--radius-8);cursor:pointer;
+  border:var(--border) solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#fff;
+  display:grid;place-items:center;transition:background var(--duration-base) var(--ease)}
+.lb-close:hover{background:var(--brand)}
+.lb-close svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round}
+/* No sheet behind the artwork: every screen that can be expanded is an opaque,
+   light-backgrounded export that carries its own frame, so the backdrop showing
+   at its rounded corners is the point rather than a gap to be filled. */
+.lb-stage{flex:1;min-height:0;overflow:auto;border-radius:var(--radius-12);background:transparent;
+  overscroll-behavior:contain;display:flex}
+.lb-stage img,.lb-stage video{width:100%;height:auto;margin:auto;display:block}
+.lb-stage video{background:#000;aspect-ratio:var(--lb-ar,16/9)}
+.lb-stage[data-kind="video"]{background:transparent;align-items:center}
+.lb-stage[data-kind="video"] img,.lb-stage[data-kind="image"] video{display:none}
+.lb-stage.tall img{max-width:none;width:100%}
+.lb-hint{flex:none;font-size:12px;line-height:1.5;color:rgba(255,255,255,.55);text-align:center}
+/* Tab strip — only appears for a shot that declares more than one screen, and
+   it mirrors the tabs drawn inside those screenshots. */
+.lb-tabs{display:flex;gap:var(--space-8);flex:none;flex-wrap:wrap}
+.lb-tabs[hidden]{display:none}
+.lb-tab{font:600 13px/1 var(--sans);padding:var(--space-8) var(--space-16);cursor:pointer;
+  border-radius:var(--radius-full);border:var(--border) solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.08);color:#fff;
+  transition:background var(--duration-base) var(--ease),border-color var(--duration-base) var(--ease)}
+.lb-tab:hover{background:rgba(255,255,255,.18)}
+.lb-tab[aria-selected="true"]{background:var(--brand);border-color:transparent}
+
+/* ---------- Grids / cards ---------- */
+.grid{display:grid;gap:var(--space-24)}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+/* Five across on desktop; below that they wrap like .g4. */
+.g5{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:1100px){.g5{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}
+.card{background:var(--surface);border:var(--border) solid var(--brand);border-radius:var(--radius-12);
+  padding:var(--space-36);display:flex;flex-direction:column;gap:var(--space-24)}
+.card .lbl{font-size:12px;line-height:1.4;font-weight:600;color:var(--brand)}
+.card h3,.card h4{color:#000}
+.card p{font-size:16px;line-height:1.55;color:#000}
+/* Solid brand card — the "outcome" tile */
+.card-solid{background:var(--brand);border-color:var(--brand)}
+.card-solid .lbl,.card-solid h3,.card-solid h4,.card-solid p{color:#fff}
+/* Numbered KPI card */
+.card .num{font-size:12px;font-weight:600;color:#000}
+.card-kpi h3{color:var(--brand);font-size:24px;line-height:1.3;font-weight:700}
+.card-kpi p{font-size:16px}
+
+/* Nutshell tiles.
+   Colour: the eyebrow drops to plain black and the headline carries the brand
+   purple — the reverse of the default card, so the claim leads the label.
+   The solid outcome tile keeps its all-white treatment.
+   Alignment: each card spans three rows of the section grid and subgrids them,
+   so label, heading and body share row lines across all four cards. Without it
+   a heading that wraps to two lines pulls its own body copy down and the row
+   stops reading as one band. Falls back to the flex stack where subgrid is
+   unsupported. */
+#nutshell .card:not(.card-solid) .lbl{color:#000}
+#nutshell .card:not(.card-solid) h3{color:var(--brand)}
+/* Five to a row leaves each tile narrow, so the inset comes down a step. */
+@media(min-width:1101px){#nutshell .g5{gap:var(--space-12)}#nutshell .g5 .card{padding:var(--space-24)}}
+/* Nutshell and Product strategy cards start white; hovering one fills it with
+   the brand purple and turns its text white. Pointer devices only, so a tap
+   doesn't leave a card stuck in the filled state. */
+#nutshell .card,#strategy .card{transition:transform 420ms var(--ease-out),box-shadow var(--duration-slow) var(--ease),
+  background-color var(--duration-slow) var(--ease),border-color var(--duration-slow) var(--ease)}
+#nutshell .card.live,#strategy .card.live{transition:transform 90ms linear,box-shadow var(--duration-slow) var(--ease),
+  background-color var(--duration-slow) var(--ease),border-color var(--duration-slow) var(--ease)}
+#nutshell .card :is(.lbl,.num,h3,p),#strategy .card :is(.lbl,.num,h3,p){transition:color var(--duration-slow) var(--ease)}
+@media(hover:hover) and (pointer:fine){
+  #nutshell .card:hover,#strategy .card:hover{background:var(--brand);border-color:var(--brand)}
+  #nutshell .card:hover :is(.lbl,.num,h3,p),#strategy .card:hover :is(.lbl,.num,h3,p){color:#fff}
+}
+@supports (grid-template-rows:subgrid){
+  #nutshell .card{display:grid;grid-row:span 3;grid-template-rows:subgrid}
+}
+
+/* Stat tiles */
+.stat{background:var(--brand-wash);border:0;border-radius:var(--radius-12);
+  box-shadow:var(--shadow-2);padding:var(--space-36);
+  display:flex;flex-direction:column;justify-content:center;gap:var(--space-24)}
+.stat .v{font-size:48px;line-height:1.1;font-weight:700;color:#000;
+  font-variant-numeric:tabular-nums;display:flex;align-items:baseline;gap:var(--space-4)}
+.stat .v small{font-size:24px;font-weight:500;line-height:1.2;color:#000}
+.stat .k{font-size:16px;line-height:1.4;color:#000}
+.stat .k b{display:block;font-weight:700;margin-bottom:var(--space-4)}
+.stat-center{align-items:center;text-align:center}
+.stat-center .v{justify-content:center}
+@media(max-width:720px){.stat .v{font-size:36px}.stat{padding:var(--space-24)}}
+
+/* Tilt + glare */
+.tilt{position:relative;transform-style:preserve-3d;
+  transition:transform 420ms var(--ease-out),box-shadow var(--duration-slow) var(--ease),border-color var(--duration-slow) var(--ease)}
+.tilt::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  opacity:0;transition:opacity var(--duration-slow) var(--ease);
+  background:radial-gradient(180px circle at var(--gx,50%) var(--gy,50%),var(--glare),transparent 62%)}
+.tilt.live{transition:transform 90ms linear,box-shadow var(--duration-slow) var(--ease),border-color var(--duration-slow) var(--ease)}
+.tilt.live::after{opacity:1}
+.tilt.live{box-shadow:0 18px 32px -12px rgba(111,79,211,.35)}
+
+/* ---------- Context: copy left, 2x2 stat grid right ---------- */
+/* Two rows: the eyebrow occupies row 1 of the left column on its own, so the
+   stat grid in row 2 starts level with the headline rather than the eyebrow. */
+.context-split{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  column-gap:var(--space-60);row-gap:var(--space-24);align-items:start}
+.context-eyebrow{grid-column:1;grid-row:1}
+.context-copy{grid-column:1;grid-row:2}
+.context-stats{grid-column:2;grid-row:2}
+.context-copy{display:flex;flex-direction:column}
+.context-copy .sec-head{margin-bottom:0;max-width:none}
+.context-copy .measure{max-width:none}
+/* Emphasis carried by colour alone — the <em> stays for screen readers. */
+.context-copy em{font-style:normal;color:var(--brand)}
+.context-stats{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-24)}
+@media(max-width:900px){
+  .context-split{grid-template-columns:1fr;row-gap:var(--space-24)}
+  /* Stack in source order once there is only one column. */
+  .context-eyebrow,.context-copy,.context-stats{grid-column:1;grid-row:auto}
+  .context-stats{margin-top:var(--space-24)}
+}
+@media(max-width:520px){.context-stats{grid-template-columns:1fr}}
+
+/* ---------- Quote ---------- */
+.quote{position:relative;margin-top:var(--space-48);max-width:var(--measure)}
+/* Pull quote set in a serif, mark included, and stepped up well above body
+   size so it reads as a voice rather than another paragraph. The mark hangs in
+   the margin rather than sitting in the flow, so the quote text starts on the
+   same left edge as the heading and body copy above it. */
+/* The mark opens the quote on the same line as its first words, and the text
+   wraps under it. line-height:0 keeps the oversized glyph from stretching that
+   first line, and the negative left margin cancels its side bearing so its ink
+   — not its box — lands on the section's alignment line. */
+.quote p::before{content:"\201C";font-family:var(--serif);font-style:italic;
+  font-size:clamp(72px,7vw,104px);line-height:0;font-weight:400;
+  color:var(--brand-deep);vertical-align:-.18em;
+  margin-left:-.19em;margin-right:.02em}
+.quote-body{display:flex;flex-direction:column;gap:var(--space-12)}
+.quote p{font-family:var(--serif);font-style:italic;font-size:clamp(28px,3.1vw,42px);
+  line-height:1.22;font-weight:400;letter-spacing:-.01em;color:#000}
+.quote cite{font-style:normal;font-size:12px;line-height:1.5;color:var(--ink-3)}
+
+
+/* ---------- Dark bands ---------- */
+/* Full-bleed dark band — nutshell, core insight, product strategy */
+.band-full{background:var(--band);color:var(--band-ink)}
+.band-full .overline{color:var(--band-accent)}
+.band-full .sec-head{margin-bottom:var(--space-48)}
+/* Scoped to the section header only — an unscoped `.band-full h3` ties with
+   `.card h3` on specificity and turns headings inside white cards invisible. */
+.band-full>.wrap>.sec-head p,.band-full>.wrap>.sec-head .body-large{color:var(--band-ink)}
+.band-full>.wrap>.sec-head h2,.band-full>.wrap>.sec-head h3{color:var(--band-ink)}
+.band-full .stat{background:var(--band-card);box-shadow:none}
+.band-full .stat .v,.band-full .stat .k{color:var(--band-ink)}
+.band-full{--glare:rgba(255,255,255,.10)}
+@media(max-width:720px){.band>.wrap{padding:var(--space-24);border-radius:var(--radius-8)}}
+
+/* Core insight is a full-bleed band, like product strategy. Its header is the
+   whole section, so drop the trailing gap a sec-head normally leaves for the
+   content beneath it. */
+.band-full>.wrap>.sec-head:only-child{margin-bottom:0}
+#insight{position:relative;overflow:hidden}
+#insight::before{content:"";position:absolute;right:-160px;top:-180px;width:520px;height:520px;
+  border-radius:50%;background:radial-gradient(circle,rgba(185,165,240,.20),transparent 68%);
+  pointer-events:none}
+
+/* ---------- Horizontal scrollers ---------- */
+.hs{display:flex;flex-direction:column;gap:var(--space-24)}
+.hs-bar{display:flex;align-items:center;gap:var(--space-16);
+  background:var(--brand-wash);border-radius:var(--radius-12);padding:var(--space-12)}
+/* These control bars sit directly on the section, no tinted container. */
+#workflow .hs-bar,
+#legacy .hs-bar,
+#final .hs-bar,
+#final-details .hs-bar,
+#timeout .hs-bar{background:transparent;border-radius:0;padding:0}
+.hs-legend{display:flex;gap:var(--space-12);flex-wrap:wrap;margin-right:auto;
+  font-size:12px;line-height:1.4;color:#000}
+.hs-legend i{display:inline-flex;align-items:center;gap:var(--space-8);font-style:normal;
+  background:#fff;border-radius:var(--radius-6);padding:var(--space-8);font-weight:600;
+  letter-spacing:-.132px;box-shadow:var(--shadow-2)}
+.dot{width:16px;height:16px;border-radius:2px;flex:none}
+.dot-act{background:var(--brand-mid)}.dot-fric{background:var(--friction-dot)}
+.hs-nav{display:flex;gap:var(--space-12)}
+.hs-btn{width:44px;height:44px;border-radius:var(--radius-full);border:0;
+  background:#fff;color:var(--ink);cursor:pointer;display:grid;place-items:center;
+  box-shadow:0 4px 4px rgba(0,0,0,.25);
+  transition:opacity var(--duration-base) var(--ease),transform var(--duration-base) var(--ease)}
+.hs-btn:hover:not(:disabled){transform:translateY(-1px);color:var(--brand)}
+.hs-btn:active:not(:disabled){transform:none;transition-duration:var(--duration-fast)}
+.hs-btn:disabled{opacity:.32;cursor:default}
+.hs-btn svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.hs-rail{display:flex;gap:6px;align-items:center;margin-right:var(--space-12)}
+.hs-rail b{display:block;width:18px;height:3px;border-radius:2px;background:var(--brand-mid);
+  transition:background var(--duration-base) var(--ease),width var(--duration-base) var(--ease)}
+.hs-rail b.on{background:var(--brand);width:28px}
+/* Narrow screens: the controls take the first line on their own and the key
+   drops underneath them, with its two chips sharing that line rather than
+   stacking one per row. */
+@media(max-width:720px){
+  #workflow .hs-bar{flex-wrap:wrap;justify-content:flex-end}
+  #workflow .hs-legend{order:2;width:100%;margin-right:0;flex-wrap:nowrap}
+  #workflow .hs-legend i{flex:1 1 0;min-width:0}
+}
+.hs-view{position:relative}
+.hs-view::before,.hs-view::after{content:"";position:absolute;top:0;bottom:0;width:var(--space-60);
+  pointer-events:none;z-index:3;opacity:0;transition:opacity var(--duration-slow) var(--ease)}
+.hs-view::before{left:0;background:linear-gradient(90deg,var(--ground) 12%,transparent)}
+.hs-view::after{right:0;background:linear-gradient(270deg,var(--ground) 12%,transparent)}
+.alt .hs-view::before{background:linear-gradient(90deg,var(--sunken) 12%,transparent)}
+.alt .hs-view::after{background:linear-gradient(270deg,var(--sunken) 12%,transparent)}
+.band-full .hs-view::before{background:linear-gradient(90deg,var(--band) 12%,transparent)}
+.band-full .hs-view::after{background:linear-gradient(270deg,var(--band) 12%,transparent)}
+.hs-view[data-at-start="false"]::before{opacity:1}
+.hs-view[data-at-end="false"]::after{opacity:1}
+/* Slides snap flush to the view's edge, so an edge fade lands on the card
+   being read rather than on a neighbour. The rail and arrows already say
+   there is more; slide carousels go without the fades. */
+.hs-view:has(>.slides)::before,.hs-view:has(>.slides)::after{display:none}
+.hs-track{display:flex;gap:var(--space-24);overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;
+  scrollbar-width:none;-ms-overflow-style:none;padding-bottom:var(--space-4);cursor:grab}
+.hs-track::-webkit-scrollbar{display:none}
+.hs-track.dragging{cursor:grabbing;scroll-behavior:auto;scroll-snap-type:none;user-select:none}
+.hs-track:focus-visible{outline:2px solid var(--brand);outline-offset:var(--space-4);border-radius:var(--radius-12)}
+.hs-track>*{scroll-snap-align:start;flex:none}
+/* Snap points sit at multiples of the card pitch, which rarely coincides with
+   the container's maximum scroll — so with mandatory snapping the track can
+   never rest at the very end. Aligning the last card to `end` puts a snap
+   point exactly at max scroll, making the end reachable. */
+.hs-track>*:last-child{scroll-snap-align:end}
+.hs-track.slides{align-items:flex-start}
+
+/* Workflow step — the diagram already carries its own title, copy, friction
+   group, card background and border, so the wrapper adds no chrome of its own. */
+.step{width:min(560px,88vw);display:block}
+/* The six exports are all 908px tall but 1040–1060 wide, so left to their own
+   aspect they render at slightly different heights and the card drawn inside
+   each PNG ends at a different point. Pinning the frame to the widest ratio
+   makes every image fit by height, so all six cards match exactly. */
+.step .shot{border:0;background:transparent;border-radius:var(--radius-12);
+  aspect-ratio:1060/908;display:flex;align-items:center;justify-content:center}
+.step .shot img{width:100%;height:100%;object-fit:contain;background:transparent}
+
+/* ---------- Large presentation slides ---------- */
+/* Narrower than the view by enough to show a sliver of the next card, so a
+   phone never clips the card in front. */
+.slide{width:min(1060px,calc(100vw - 2 * var(--gutter) - 40px));background:var(--surface);
+  border:var(--border) solid var(--brand-mid);border-radius:var(--radius-12);
+  overflow:hidden;display:flex;flex-direction:column}
+.slide>.shot{border:0;border-radius:0;background:var(--surface);aspect-ratio:auto}
+.slide>.shot img{width:100%;height:auto;object-fit:contain;background:var(--surface)}
+/* Legacy steps: the three exports are all 1206 tall but 2134-2342 wide, so left
+   to their own aspect the narrowest one renders ~50px taller than the others.
+   Same fix as the workflow steps — pin the frame to the widest ratio and fit
+   each image by height, so all three cards match. The spare width shows as
+   white either side of step 3, invisible against the white card. */
+/* Each export already draws its own rounded frame in --brand-mid (that colour is
+   literally the edge pixel), so the card must not draw a second one around it.
+   They only ever looked like one frame because the artwork used to fill the card
+   exactly; once the images are fitted by height, the two frames separate. */
+
+.slide-head{padding:var(--space-24) var(--space-24) 0;display:flex;flex-direction:column;gap:var(--space-12)}
+.slide-head .lbl{font-size:12px;line-height:1.4;font-weight:700;text-transform:uppercase;
+  letter-spacing:.02em;color:#000}
+.slide-head h3{font-size:24px;line-height:1.3;letter-spacing:-.264px;font-weight:700;color:#000;max-width:40ch}
+.slide-split{display:grid;grid-template-columns:minmax(280px,315px) 1fr;align-items:stretch;
+  gap:var(--space-48);padding:var(--space-24)}
+.slide-copy{display:flex;flex-direction:column;justify-content:center;gap:var(--space-24)}
+/* No inset: body copy aligns with the label and headline above it. */
+.slide-copy p{font-size:18px;line-height:1.55;color:#000}
+.slide-copy ul{list-style:none;display:flex;flex-direction:column;gap:var(--space-4)}
+.slide-copy li{position:relative;padding-left:var(--space-16);font-size:18px;line-height:1.55;color:#000}
+.slide-copy li::before{content:"•";position:absolute;left:0}
+.slide-art{display:flex;min-width:0;align-items:center}
+.slide-art .shot{border:0;border-radius:var(--radius-8);aspect-ratio:auto;display:flex;align-items:center;
+  background:var(--surface);outline:1px solid var(--brand-wash)}
+/* Opt out of that hairline where the artwork is a crop that already reads as a
+   self-contained object and the outline just boxes it in. */
+.slide-art .shot-flush{outline:0}
+.slide-art .shot img,.slide-art .shot video{width:100%;height:auto;object-fit:contain;background:transparent}
+/* The cards in each 07 carousel read as one set, so they share one height: the
+   tallest card sets it and the rest match, with their copy and artwork centred
+   in the extra room rather than pinned to the top. */
+#legacy .hs-track,#final .hs-track,#final-details .hs-track,#timeout .hs-track{align-items:stretch}
+#legacy .slide-split,#final .slide-split,#final-details .slide-split,#timeout .slide-split{flex:1}
+/* Purple callout, as in the deck */
+.callout{background:var(--brand);border-radius:var(--radius-12);padding:var(--space-12);
+  display:flex;flex-direction:column;gap:var(--space-12)}
+.callout b{font-size:16px;line-height:1.4;font-weight:700;color:#fff}
+.callout ul{list-style:none;display:flex;flex-direction:column;gap:var(--space-4);padding:0}
+.callout li{position:relative;padding-left:var(--space-16);font-size:18px;line-height:1.55;color:#fff}
+.callout li::before{content:"•";position:absolute;left:0;color:rgba(255,255,255,.8)}
+/* The two 07 carousels carry more copy per card than the slides elsewhere, so
+   their body text sits one step down at 16px. Headings and the callout label
+   keep their own sizes. */
+#legacy .slide-copy p,#legacy .slide-copy li,#legacy .callout li,
+#final .slide-copy p,#final .slide-copy li,#final .callout li,
+#final-details .slide-copy p,#final-details .slide-copy li,#final-details .callout li,
+#timeout .slide-copy p,#timeout .slide-copy li,#timeout .callout li,#timeout .callout p{font-size:16px}
+@media(max-width:900px){
+  .slide-split{grid-template-columns:1fr;gap:var(--space-24)}
+}
+
+/* ---------- Session timeouts ---------- */
+/* The callouts here carry a sentence rather than a list. */
+.callout p{color:#fff;line-height:1.55}
+.callout em{font-style:italic;opacity:.85}
+/* Engineering constraints: what counts as activity against what doesn't.
+   The imbalance (two against four) is the finding, so the columns aren't
+   padded to match. The headings carry the meaning; colour only backs it up. */
+.slide-split.slide-full{grid-template-columns:1fr}
+.st-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-16);width:100%;align-items:start}
+.st-col{border-radius:var(--radius-12);padding:var(--space-24);display:flex;flex-direction:column;gap:var(--space-16)}
+.st-col-yes{background:var(--brand-wash);--st-ink:var(--stat-ink)}
+.st-col-no{background:color-mix(in srgb,var(--friction-rule) 35%,#fff);--st-ink:var(--friction)}
+.st-col-head{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--st-ink);
+  display:flex;align-items:center;gap:var(--space-8)}
+.st-col-head::before{font-size:15px;letter-spacing:0}
+.st-col-yes .st-col-head::before{content:"✓"}
+.st-col-no .st-col-head::before{content:"✕"}
+.st-list{list-style:none;display:flex;flex-direction:column;gap:var(--space-8)}
+.st-list li{display:flex;align-items:center;gap:var(--space-12);background:var(--surface);
+  border-radius:var(--radius-8);padding:var(--space-12) var(--space-16)}
+.st-list b{display:block;font-size:16px;line-height:1.35;font-weight:600;color:var(--ink)}
+.st-list small{display:block;font-size:13px;line-height:1.4;color:var(--ink-3)}
+.st-ico{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:var(--radius-full);
+  background:color-mix(in srgb,var(--st-ink) 10%,#fff)}
+.st-ico svg{width:18px;height:18px;fill:none;stroke:var(--st-ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:720px){.st-compare{grid-template-columns:1fr}.st-col{padding:var(--space-16)}}
+/* The failure and expiry states side by side. The thumbnails are the modals
+   cropped out of their screens (the lightbox still opens the full screen), so
+   each sits as a floating card rather than inside a framed screenshot. */
+/* Columns in proportion to each modal (1016×714, 852×652) so both render at
+   the same height and fill their column edge to edge. */
+.state-grid{display:grid;grid-template-columns:minmax(0,1.423fr) minmax(0,1.307fr);gap:var(--space-16);width:100%}
+.state-grid figure{display:flex;flex-direction:column;gap:var(--space-8);min-width:0}
+.state-grid .shot{background:transparent;outline:0;border-radius:var(--radius-8);overflow:visible}
+.state-grid .shot img{border-radius:var(--radius-8);
+  box-shadow:var(--shadow-1),0 8px 24px -8px rgba(16,24,40,.18)}
+/* Bottom-right would sit on the modal's own buttons. */
+.state-grid .expand{top:var(--space-8);right:var(--space-8);bottom:auto}
+.state-grid figcaption{font-size:13px;line-height:1.4;color:var(--ink-3)}
+.state-grid figcaption b{display:block;color:var(--ink);font-weight:600}
+@media(max-width:720px){.state-grid{grid-template-columns:1fr}}
+/* The notification in this mockup sits bottom-right, where the expand button
+   normally goes; lift the button to the top corner so it doesn't cover it. */
+.shot-expand-top .expand{top:var(--space-12);bottom:auto}
+/* Beta result: a single full-width tile. */
+.timeout-result{display:grid}
+.timeout-result .stat{align-items:center;text-align:center}
+.timeout-result .stat .v{justify-content:center;color:var(--stat-ink)}
+.timeout-result .stat .v small{color:var(--stat-ink)}
+.timeout-result .stat .k{color:var(--stat-ink)}
+.timeout-result .stat-note{margin-top:calc(var(--space-12) * -1);font-size:14px;line-height:1.5;color:var(--stat-ink);opacity:.75}
+
+/* Inset dark panel used inside a light section (attention patterns) */
+.inset-band{background:var(--band);color:var(--band-ink);border-radius:var(--radius-12);
+  padding:var(--space-48);display:flex;flex-direction:column;gap:var(--space-48);
+  margin-top:var(--space-60);--glare:rgba(255,255,255,.10)}
+.inset-band .overline{color:#fff}
+.inset-band .sec-head{margin-bottom:0;max-width:none;gap:var(--space-16)}
+.inset-band .sec-head h2{color:var(--band-ink)}
+.inset-band .sec-head p{color:var(--band-ink)}
+@media(max-width:720px){.inset-band{padding:var(--space-24);gap:var(--space-24)}}
+
+/* ---------- Heat maps ----------
+   Caption reads as a header bar above its map, as in the deck. */
+.heat{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:var(--space-24)}
+.heat figure{display:flex;flex-direction:column;gap:var(--space-12);min-width:0}
+/* Caption sits directly on the band: no chip, white text. */
+.heat figcaption{display:flex;align-items:center;justify-content:space-between;
+  gap:var(--space-12);background:transparent;padding:0}
+.heat figcaption h3{font-size:12px;font-weight:600;letter-spacing:-.132px;color:#fff}
+.heat figcaption p{font-size:12px;letter-spacing:-.132px;color:#fff;text-align:right}
+.heat .shot{background:transparent;border:0;aspect-ratio:auto;border-radius:var(--radius-8);overflow:hidden}
+.heat .shot img{width:100%;height:auto;object-fit:contain;background:transparent}
+@media(max-width:520px){
+  .heat figcaption{flex-direction:column;align-items:flex-start;gap:var(--space-4)}
+  .heat figcaption p{text-align:left}
+}
+
+/* ---------- Impact band ---------- */
+.impact-band{background:var(--impact-bg)}
+.impact-rule{display:flex;align-items:center;gap:var(--space-12);margin-block:var(--space-48) var(--space-24)}
+/* Same brand purple as the section overline above them. */
+.impact-rule span{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--brand)}
+.impact-rule i{flex:1;height:1px;background:var(--impact-rule)}
+/* Pre-launch tiles — per the supplied card frames: lavender fill, deeper
+   purple ink throughout, figure over label over description, all centred. */
+.impact-band .stat{background:var(--brand-wash);border:0;border-radius:var(--radius-12);
+  box-shadow:var(--shadow-2);padding:var(--space-48) var(--space-24);
+  gap:var(--space-24);text-align:center;align-items:center;justify-content:flex-start;
+  color:var(--stat-ink)}
+.impact-band .stat .v{justify-content:center;align-items:baseline;gap:6px;
+  font-size:48px;line-height:1.1;font-weight:700;color:var(--stat-ink)}
+.impact-band .stat .v small{font-size:24px;font-weight:600;line-height:1.1;color:var(--stat-ink)}
+.impact-band .stat .k{width:100%;font-size:16px;font-weight:400;line-height:1.45;
+  color:var(--stat-ink)}
+.impact-band .stat .k b{display:block;font-size:18px;font-weight:700;
+  margin-bottom:var(--space-16);color:var(--stat-ink)}
+/* The tile shadow above outranks .tilt.live, so restate the hover lift here
+   to match the post-launch cards. */
+.impact-band .stat.tilt.live{box-shadow:0 18px 32px -12px rgba(111,79,211,.35)}
+/* Post-launch solid cards */
+.biz{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:var(--space-24)}
+.biz-card{display:flex;align-items:center;gap:var(--space-24);background:var(--brand);
+  border-radius:var(--radius-12);padding:var(--space-36)}
+.biz-v{display:flex;align-items:center;gap:var(--space-4);flex:none}
+.biz-v i{font-style:normal;font-size:30px;font-weight:700;line-height:1;color:var(--brand-mid)}
+.biz-v b{font-size:52px;font-weight:700;line-height:1;letter-spacing:-1.5px;color:#fff;
+  font-variant-numeric:tabular-nums}
+.biz-text{display:flex;flex-direction:column;gap:6px}
+.biz-text strong{font-size:18px;font-weight:600;line-height:1.55;color:#fff}
+.biz-text span{font-size:16px;line-height:1.45;color:var(--impact-rule)}
+@media(max-width:720px){.biz-v b{font-size:40px}.biz-card{padding:var(--space-24)}}
+
+/* ---------- Reflection ---------- */
+/* Centred dark band — shared by Core insight and Reflection so the two read
+   as the same kind of moment in the page. Backgrounds stay distinct. */
+.reflect{background:var(--band-alt);color:var(--band-ink)}
+.band-center>.wrap{display:flex;flex-direction:column;align-items:center;text-align:center;
+  gap:var(--space-48)}
+.band-center .overline{color:var(--band-accent)}
+/* Type comes from .heading-1; this only sets what is specific to the band. */
+.band-center h2{max-width:820px;color:#fff}
+.band-center .body-large{max-width:680px;color:var(--band-ink-2)}
+.band-head{display:flex;flex-direction:column;align-items:center;gap:var(--space-24);max-width:900px}
+/* Takeaway cards reuse the solid brand card from "What we learned" — the grid
+   just has to opt back out of the centred band's text alignment. */
+.takes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:var(--space-24);width:100%;max-width:1000px;text-align:left}
+
+.sub{margin-top:var(--space-60);margin-bottom:var(--space-36);display:flex;
+  flex-direction:column;gap:var(--space-12);max-width:none}
+.sub p{font-size:18px;line-height:1.55;color:var(--ink-2);max-width:var(--measure)}
+.sub .overline{color:#000}
+footer{padding-block:var(--space-48) var(--space-96);border-top:var(--border) solid var(--rule);color:var(--ink-3)}
+footer .src{font:500 11.5px/1.5 var(--mono);opacity:.8;margin-top:var(--space-4)}
+
+/* ---------- Reduced motion ---------- */
+@media(prefers-reduced-motion:reduce){
+  html,.hs-track{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+  .reveal{opacity:1;transform:none}
+  .px{transform:none!important}
+  .tilt{transform:none!important}
+  .tilt::after{display:none}
+}
+
+/* ---------- Site header: shared with the portfolio home page, themed per case study ---------- */
+.nav{background:var(--band);border-bottom:1px solid rgba(241,238,230,.12);box-shadow:none;
+  backdrop-filter:none;-webkit-backdrop-filter:none}
+.nav-in{gap:var(--space-24);padding-block:14px}
+.nav .brand{display:inline-flex;align-items:center;gap:11px;text-decoration:none;color:#f1eee6;flex:none}
+.nav .brand-logo{display:block;width:34px;height:34px;border-radius:7px;flex:none;transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.nav .brand:hover .brand-logo{transform:rotate(-8deg)}
+.nav .brand-name{font:600 21px/1 "Barlow Condensed",ui-sans-serif,system-ui,sans-serif;letter-spacing:.06em;
+  text-transform:uppercase;color:#f1eee6;white-space:nowrap}
+.nav-items,.nav-site{font-family:"Barlow Condensed",ui-sans-serif,system-ui,sans-serif;font-weight:600;
+  text-transform:uppercase;letter-spacing:.04em}
+.nav-items{gap:22px}
+.nav-items a,.nav-site a{position:relative;color:rgba(241,238,230,.72);background:none;border-radius:0;
+  padding:4px 0;font-size:17px;line-height:1.2;text-decoration:none;transition:color .3s ease}
+.nav-site a{color:#f1eee6}
+.nav-items a::after,.nav-site a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;
+  background:var(--band-accent);transform:scaleX(0);transform-origin:right;transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.nav-items a:hover,.nav-items a[aria-current="true"]{color:#f1eee6;background:none}
+.nav-items a:hover::after,.nav-items a[aria-current="true"]::after,.nav-site a:hover::after,.nav-site a.is-here::after{
+  transform:scaleX(1);transform-origin:left}
+.nav-site{display:flex;gap:22px;padding-left:22px;border-left:1px solid rgba(241,238,230,.22)}
+.nav a:focus-visible{outline:2px solid var(--band-accent);outline-offset:4px}
+.progress i{background:var(--band-accent)}
+@media(max-width:1000px){.nav-site{margin-left:auto;padding-left:0;border-left:0}}
+@media(max-width:720px){.nav .brand-name{font-size:19px}.nav .brand-logo{width:30px;height:30px;border-radius:6px}
+  .nav-site{gap:18px}.nav-site a:not(.keep){display:none}}
+
+/* ---------- Case study sections bar: sits under the site header ---------- */
+.topbars{position:sticky;top:0;z-index:50}
+.nav-site{margin-left:auto;padding-left:0;border-left:0}
+.topbars .nav{position:relative;top:auto}
+.subnav{position:relative;background:rgba(255,255,255,.94);backdrop-filter:saturate(1.6) blur(14px);
+  -webkit-backdrop-filter:saturate(1.6) blur(14px);border-bottom:var(--border) solid var(--rule);box-shadow:0 4px 4px rgba(0,0,0,.04)}
+.subnav-in{max-width:var(--container);margin-inline:auto;padding:0 var(--gutter);display:flex;align-items:center;gap:var(--space-24)}
+.subnav-label{flex:none;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+  padding-right:var(--space-24);border-right:var(--border) solid var(--rule);line-height:1}
+.subnav-items{display:flex;gap:var(--space-24);overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.subnav-items::-webkit-scrollbar{display:none}
+.subnav-items a{position:relative;flex:none;padding:13px 0 12px;font-size:14px;font-weight:500;line-height:1.3;
+  color:var(--ink-3);text-decoration:none;transition:color var(--duration-base) var(--ease)}
+.subnav-items a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:2px;
+  background:var(--brand);transform:scaleX(0);transition:transform .3s var(--ease)}
+.subnav-items a:hover{color:var(--ink)}
+.subnav-items a[aria-current="true"]{color:var(--brand);font-weight:600}
+.subnav-items a[aria-current="true"]::after{transform:scaleX(1)}
+.subnav-items a:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:2px}
+.topbars .progress{position:absolute;top:auto;bottom:-1px;left:0;height:2px;z-index:1}
+.topbars .progress i{background:var(--brand);opacity:.35}
+@media(max-width:720px){.subnav-label{display:none}.subnav-in{gap:0}}
+
+/* ---------- Match the home page header: full width, same edge spacing and sizes ---------- */
+:root{--site-edge:calc(12px + clamp(20px, 3vw, 44px))}
+.nav-in,.subnav-in{max-width:none;padding-inline:var(--site-edge)}
+.nav .brand-logo{width:36px;height:36px}
+.nav .brand-name{font-size:22px}
+.nav-site{gap:26px}
+.nav-site a{font-size:20px}
+@media(max-width:720px){.nav .brand-name{font-size:19px}.nav .brand-logo{width:30px;height:30px}.nav-site{gap:18px}}
+
+
+/* ---------- Subheader: back button left, sections menu right ---------- */
+.subnav-in{justify-content:space-between}
+.subnav-back{display:inline-flex;align-items:center;gap:8px;flex:none;padding:13px 0 12px;font-size:14px;font-weight:600;
+  line-height:1.3;color:var(--ink-2);text-decoration:none;transition:color var(--duration-base) var(--ease)}
+.subnav-back svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform .3s var(--ease)}
+.subnav-back:hover{color:var(--brand)}
+.subnav-back:hover svg{transform:translateX(-3px)}
+.subnav-back:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:2px}
+.subnav-items{margin-left:auto;min-width:0}
+@media(max-width:720px){.subnav-back-more{display:none}.subnav-in{gap:var(--space-16)}}
+</style>
+</head>
+<body>
+
+<div class="topbars">
+
+<nav class="nav" aria-label="Site">
+  <div class="nav-in">
+    <a class="brand" href="../index.html" aria-label="Sambit Mohanty, home">
+      <img class="brand-logo" src="../assets/logo.svg" alt="" width="34" height="34">
+      <span class="brand-name">Sambit Mohanty</span>
+    </a>
+    <div class="nav-site">
+      <a href="../index.html#hello">About</a>
+      <a href="../index.html#work" class="is-here">Work</a>
+      <a href="../index.html#contact" class="keep">Contact</a>
+    </div>
+  </div>
+</nav>
+<div class="subnav">
+  <div class="subnav-in">
+    <a class="subnav-back" href="../index.html#work">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+      <span>Back<span class="subnav-back-more"> to work</span></span>
+    </a>
+    <nav class="subnav-items" data-navlinks aria-label="Case study sections">
+      <a href="#context">Context</a><a href="#research">Research</a>
+      <a href="#workflow">Workflow</a><a href="#legacy">Legacy</a>
+      <a href="#final">Final</a><a href="#impact">Impact</a>
+    </nav>
+  </div>
+  <div class="progress" aria-hidden="true"><i data-progress></i></div>
+</div>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap hero-in">
+    <span class="badge reveal">Enterprise regulatory web app</span>
+    <h1 class="display-1 reveal" style="--i:1">From data entry<br>to <em class="accent">risk judgment</em></h1>
+    <p class="body-large reveal" style="--i:2">Modernizing a fragmented regulatory review process.<br>I redesigned how state regulators review financial-professional applications: bringing <em class="accent">critical evidence</em>, <em class="accent">actions</em>, <em class="accent">collaboration</em>, and <em class="accent">audit history</em> into one task-based experience.</p>
+    <div class="actions reveal" style="--i:3">
+      <a class="btn btn-primary" href="#nutshell">Read the 60-second version</a>
+      <a class="btn btn-secondary" href="#final">Jump to final designs</a>
+    </div>
+    <dl class="meta reveal" style="--i:4">
+      <div><dt>Role</dt><dd>Product designer</dd></div>
+      <span class="sep" aria-hidden="true"></span>
+      <div><dt>Duration</dt><dd>6 months</dd></div>
+      <span class="sep" aria-hidden="true"></span>
+      <div><dt>Domain</dt><dd>Fintech/RegTech</dd></div>
+      <span class="sep" aria-hidden="true"></span>
+      <div><dt>User</dt><dd>State regulators/SEC</dd></div>
+    </dl>
+
+    <div class="compare-wrap reveal" style="--i:5">
+      <div class="mock" data-px data-px-strength="-24">
+        <div class="mock-bar" aria-hidden="true">
+          <span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span>
+        </div>
+      <div class="compare" data-compare
+           role="group" aria-label="Comparison: legacy Web CRD versus the redesign">
+        <img class="cmp-after" src="case-study%20sections/01-hero/Tasklist_new.png"
+             alt="Redesigned FINRA regulator task list" width="3574" height="2261"
+             decoding="async" fetchpriority="high">
+        <img class="cmp-before" data-cmp-clip src="case-study%20sections/01-hero/Tasklist_legacy.png"
+             alt="Legacy Web CRD task list" width="3692" height="2048" decoding="async">
+        <span class="cmp-tag cmp-tag-a" data-cmp-label="0" aria-hidden="true">Legacy</span>
+        <span class="cmp-tag cmp-tag-b" data-cmp-label="1" aria-hidden="true">Redesign</span>
+        <div class="cmp-divider" data-cmp-divider>
+          <span class="cmp-grip" aria-hidden="true">
+            <svg viewBox="0 0 18 14"><path d="M6 1L1 7l5 6"/><path d="M12 1l5 6-5 6"/></svg>
+          </span>
+        </div>
+        <input class="cmp-range" type="range" min="0" max="100" value="50" step="0.1"
+               role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"
+               aria-valuetext="50% Legacy"
+               aria-label="Reveal divider, Legacy to Redesign" data-cmp-range>
+      </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ IN A NUTSHELL ============ -->
+<section class="band-full" id="nutshell">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">In a nutshell</span>
+      <h2 class="heading-1 reveal" style="--i:1">The 60-second version</h2>
+      <p class="body-large measure reveal" style="--i:2">For recruiters, hiring managers, design and product leaders, and anyone reading between meetings.</p>
+    </div>
+    <div class="grid g5">
+      <article class="card tilt reveal" data-tilt><span class="lbl">01 · The user</span><h3 class="heading-4">State regulators (who work for the government)</h3><p>They check applications from people who want to work in finance (e.g. financial advisors), then approve or reject them.</p></article>
+      <article class="card tilt reveal" data-tilt style="--i:1"><span class="lbl">02 · The problem</span><h3 class="heading-4">One case. Information everywhere.</h3><p>Regulators jumped across 5–7 pages and external documents just to understand one application.</p></article>
+      <article class="card tilt reveal" data-tilt style="--i:2"><span class="lbl">03 · My role</span><h3 class="heading-4">Redesigned the end-to-end workflow (0–1)</h3><p>I led the research, strategy, stakeholder alignment, interaction design, prototyping, and testing.</p></article>
+      <article class="card tilt reveal" data-tilt style="--i:3"><span class="lbl">04 · Key move</span><h3 class="heading-4">One decision. One workspace.</h3><p>I brought context, actions, comments, rationale, and history together in one task-based view.</p></article>
+      <article class="card tilt reveal" data-tilt style="--i:4"><span class="lbl">05 · The outcome</span><h3 class="heading-4">~28% faster decisions. Fewer errors.</h3><p>Navigation dropped from 5–7 tabs to 2–3, and errors fell below 10% during testing.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTEXT ============ -->
+<section id="context">
+  <div class="wrap context-split">
+    <span class="overline reveal context-eyebrow">01. Context</span>
+    <div class="context-copy">
+      <div class="sec-head">
+        <h2 class="heading-1 reveal" style="--i:1">Accuracy mattered more than speed, but the system made both difficult.</h2>
+        <p class="body-large measure reveal" style="--i:2">State regulators review financial-professional applications under fixed deadlines. <em>During the Q4–Q1 renewal season, application volume increases by roughly 1.5×.</em></p>
+      </div>
+      <blockquote class="quote reveal">
+        <div class="quote-body">
+          <p>Regulators are audited. They would rather be slow than wrong.</p>
+          <cite>State Regulator</cite>
+        </div>
+      </blockquote>
+    </div>
+    <div class="context-stats">
+      <div class="stat stat-center tilt reveal" data-tilt><div class="v"><span data-count="30">30</span> <small>days</small></div><div class="k">processing deadline</div></div>
+      <div class="stat stat-center tilt reveal" data-tilt style="--i:1"><div class="v"><span data-count="10">10</span>K<small>+</small></div><div class="k">regulators</div></div>
+      <div class="stat stat-center tilt reveal" data-tilt style="--i:2"><div class="v"><span data-count="30">30</span> <small>cases</small></div><div class="k">one regulator / day</div></div>
+      <div class="stat stat-center tilt reveal" data-tilt style="--i:3"><div class="v"><span data-count="1.5" data-decimals="1">1.5</span><small>×</small></div><div class="k">application increase</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESEARCH ============ -->
+<section class="alt" id="research">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">02. Research &amp; baseline</span>
+      <h2 class="heading-1 reveal" style="--i:1">The system documented activity. Regulators needed help making decisions.</h2>
+      <p class="body-large measure reveal" style="--i:2">I observed 12 state regulators during moderated, task-based sessions: 7 newer regulators and 5 veterans. That mix separated genuine usability problems from shortcuts experts had learned over time.</p>
+    </div>
+    <div class="grid g4">
+      <div class="stat stat-center tilt reveal" data-tilt><div class="v">45–<span data-count="50">50</span> <small>min</small></div><div class="k">per manual review</div></div>
+      <div class="stat stat-center tilt reveal" data-tilt style="--i:1"><div class="v"><span data-count="20">20</span>+ <small>min</small></div><div class="k">just to gather context</div></div>
+      <div class="stat stat-center tilt reveal" data-tilt style="--i:2"><div class="v">~<span data-count="18">18</span><small>%</small></div><div class="k">decision error rate</div></div>
+      <div class="stat stat-center tilt reveal" data-tilt style="--i:3"><div class="v">~<span data-count="40">40</span><small>%</small></div><div class="k">mid-task assistance</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CORE INSIGHT ============ -->
+<section class="band-full band-center" id="insight">
+  <div class="wrap">
+    <div class="band-head">
+      <span class="overline reveal">Core insight</span>
+      <h2 class="heading-1 reveal" style="--i:1">The problem wasn't how much data existed. It was how poorly that data was organized around a decision.</h2>
+      <p class="body-large reveal" style="--i:2">It was like keeping the spices in the bedroom and the vegetables in the garage. Everything was technically available, just never where the cooking happened.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORKFLOW ============ -->
+<section class="alt" id="workflow">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">03. Mapping the workflow</span>
+      <h2 class="heading-1 reveal" style="--i:1">The happy path hid a lot of unhappy work.</h2>
+      <p class="body-large measure reveal" style="--i:2">With the PM and engineering lead, I mapped the system-generated path alongside manual-review edge cases, identifying the intended flow and the touch points where a straightforward review turns into a scavenger hunt.</p>
+    </div>
+    <div class="hs reveal" data-hs>
+      <div class="hs-bar">
+        <div class="hs-legend">
+          <i><span class="dot dot-act"></span> Regulator action</i>
+          <i><span class="dot dot-fric"></span> Workflow friction</i>
+        </div>
+        <div class="hs-rail" data-rail aria-hidden="true"></div>
+        <div class="hs-nav">
+          <button class="hs-btn" data-prev aria-label="Previous steps"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="hs-btn" data-next aria-label="Next steps"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+      <div class="hs-view" data-view>
+        <div class="hs-track" data-track tabindex="0" role="region" aria-label="Six-step regulator workflow, horizontally scrollable">
+
+          <article class="step">
+            <figure class="shot" data-slot="Step 1 · Entry"
+              data-full="case-study%20sections/06-mapping-the-workflow/1.Entry.svg"
+              data-title="Workflow · Step 1 · Entry"
+             >
+              <img src="case-study%20sections/06-mapping-the-workflow/1.Entry.svg"
+                   width="520" height="454" loading="lazy" decoding="async"
+                   alt="Step 1: Entry. Regulators enter through a personalized queue built around their assigned work. Flow: the regulator logs into the FINRA regulator workspace, lands on a personalized task dashboard, then sees queue counts by status and priority. No major friction recorded at this step."></figure>
+          </article>
+
+          <article class="step">
+            <figure class="shot" data-slot="Step 2 · Discover"
+              data-full="case-study%20sections/06-mapping-the-workflow/2.Discover.svg"
+              data-title="Workflow · Step 2 · Discover"
+             >
+              <img src="case-study%20sections/06-mapping-the-workflow/2.Discover.svg"
+                   width="520" height="454" loading="lazy" decoding="async"
+                   alt="Step 2: Discover. Filters surface higher-risk filings and the first moments that require interpretation. Flow: filters the queue by date, status or risk signal, scans the task list for high-risk indicators, then selects a filing to review. Friction: risk signals need interpretation. flags an anomalous disclosure count; a rule code or status appears unfamiliar; the filing shows conflicting information; a required disclosure is missing or unclear."></figure>
+          </article>
+
+          <article class="step">
+            <figure class="shot" data-slot="Step 3 · Gather evidence"
+              data-full="case-study%20sections/06-mapping-the-workflow/3.Gather.svg"
+              data-title="Workflow · Step 3 · Gather evidence"
+             >
+              <img src="case-study%20sections/06-mapping-the-workflow/3.Gather.svg"
+                   width="520" height="454" loading="lazy" decoding="async"
+                   alt="Step 3: Gather evidence. Case context comes together, but important history still sends regulators elsewhere. Friction: context is split across pages and documents, so history, prior actions and filings have to be pieced together from separate places."></figure>
+          </article>
+
+          <article class="step">
+            <figure class="shot" data-slot="Step 4 · Interpret risk"
+              data-full="case-study%20sections/06-mapping-the-workflow/4.Interpret.svg"
+              data-title="Workflow · Step 4 · Interpret risk"
+             >
+              <img src="case-study%20sections/06-mapping-the-workflow/4.Interpret.svg"
+                   width="530" height="454" loading="lazy" decoding="async"
+                   alt="Step 4: Interpret risk. Regulators decode rule language, missing information, and the next action to take. Friction: the system doesn't explain enough, leaving the regulator to interpret terminology and next steps unaided."></figure>
+          </article>
+
+          <article class="step">
+            <figure class="shot" data-slot="Step 5 · Investigate deeper"
+              data-full="case-study%20sections/06-mapping-the-workflow/5.Investigate.svg"
+              data-title="Workflow · Step 5 · Investigate deeper"
+             >
+              <img src="case-study%20sections/06-mapping-the-workflow/5.Investigate.svg"
+                   width="521" height="454" loading="lazy" decoding="async"
+                   alt="Step 5: Investigate deeper. Related filings and cases demand another round of cross-checking. Friction: related work is hard to verify across records."></figure>
+          </article>
+
+          <article class="step">
+            <figure class="shot" data-slot="Step 6 · Decide"
+              data-full="case-study%20sections/06-mapping-the-workflow/6.Decide.svg"
+              data-title="Workflow · Step 6 · Decide"
+             >
+              <img src="case-study%20sections/06-mapping-the-workflow/6.Decide.svg"
+                   width="528" height="454" loading="lazy" decoding="async"
+                   alt="Step 6: Decide. The final outcome, rationale, and comments are recorded, sometimes in another system, so the reasoning ends up outside the secure environment."></figure>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LEGACY ============ -->
+<section id="legacy">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">04. Diagnosing the legacy experience</span>
+      <h2 class="heading-1 reveal" style="--i:1">Three screens. Three different kinds of friction.</h2>
+      <p class="body-large measure reveal" style="--i:2">Instead of treating the legacy flow as one vague usability problem, I separated navigation friction, missing decision context, and gaps in the audit trail.</p>
+    </div>
+    <div class="hs reveal" data-hs>
+      <div class="hs-bar pill">
+        <div class="hs-legend"></div>
+        <div class="hs-rail" data-rail aria-hidden="true"></div>
+        <div class="hs-nav">
+          <button class="hs-btn" data-prev aria-label="Previous screen"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="hs-btn" data-next aria-label="Next screen"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+      <div class="hs-view" data-view>
+        <div class="hs-track slides" data-track tabindex="0" role="region" aria-label="Three legacy screens, horizontally scrollable">
+
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Step 1: Entry</span>
+              <h3 class="heading-3">Familiar for experts, difficult for new users</h3>
+            </div>
+            <div class="slide-split">
+              <div class="slide-copy">
+                <ul>
+                  <li>Experienced regulators relied on memory to navigate.</li>
+                  <li>High-risk queues were easy to miss.</li>
+                  <li>New regulators needed time to learn the layout.</li>
+                </ul>
+                <div class="callout"><b>The strategic decision to descope</b>
+                  <ul>
+                    <li>Most users spent only 6–8 seconds here</li>
+                    <li>High engineering risk (downstream dependencies)</li>
+                    <li>Focused on higher-impact parts of the workflow</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="slide-art">
+                <figure class="shot" data-slot="Legacy · Entry"
+                  data-full="case-study%20sections/07-legacy-experience/On%20click%20expand/legacy%20step1_entry_expand.png"
+                  data-title="Legacy · Step 1 · Entry (Web CRD site map)"
+                  data-cap="The legacy Web CRD site map at full size.">
+                  <img src="case-study%20sections/07-legacy-experience/Legacy%20page%20step%201_art.png"
+                       width="1532" height="942" loading="lazy" decoding="async"
+                       alt="The legacy Web CRD site map: seven columns of links under CRD Main, Forms, Individual, Organization, Notifications and Reports, with Manual Approval buried in the Jurisdiction Acceptance Queues list."></figure>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Step 2: Task list</span>
+              <h3 class="heading-3">Task list showed the task, but not the context</h3>
+            </div>
+            <div class="slide-split">
+              <div class="slide-copy">
+                <ul>
+                  <li>Critical context missing</li>
+                  <li>Manual cross-checking required</li>
+                  <li>No inline assignment of task</li>
+                  <li>Forced users to the profile details page</li>
+                </ul>
+                <div class="callout"><b>Why it broke</b>
+                  <ul>
+                    <li>Key risk signals were separated from the task.</li>
+                    <li>Task assignment created a separate workflow break.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="slide-art">
+                <figure class="shot" data-slot="Legacy · Task list"
+                  data-full="case-study%20sections/07-legacy-experience/On%20click%20expand/legacy%20step2_Tasklist_expand.png"
+                  data-title="Legacy · Step 2 · Manual Approval Queue"
+                  data-cap="The legacy Manual Approval Queue at full size.">
+                  <img src="case-study%20sections/07-legacy-experience/Legacy%20page%20step%202_art.png"
+                       width="1523" height="756" loading="lazy" decoding="async"
+                       alt="The legacy Manual Approval Queue: a dense grey table of three rows with columns for assign, individual, firm, jurisdiction dates, disclosure counts and a status dropdown."></figure>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Step 3: Task details</span>
+              <h3 class="heading-3">It recorded the outcome, but not the reasoning</h3>
+            </div>
+            <div class="slide-split">
+              <div class="slide-copy">
+                <ul>
+                  <li>The system captured status changes.</li>
+                  <li>Comments and rationale lived in spreadsheets, documents or email.</li>
+                  <li>Important context could be lost between regulators.</li>
+                </ul>
+                <div class="callout"><b>Why it broke</b>
+                  <ul>
+                    <li>‘What’ changed was stored, but ‘why’ it changed was not.</li>
+                    <li>“Source of Truth” lived outside the secure environment (separate spreadsheets &amp; docs)</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="slide-art">
+                <figure class="shot" data-slot="Legacy · Task details"
+                  data-full="case-study%20sections/07-legacy-experience/On%20click%20expand/legacy%20step3_Taskdetails_expand.png"
+                  data-title="Legacy · Step 3 · Task details"
+                  data-cap="The legacy task details screen at full size.">
+                  <img src="case-study%20sections/07-legacy-experience/Legacy%20page%20step%203_art.png"
+                       width="1320" height="940" loading="lazy" decoding="async"
+                       alt="The legacy Composite Information screen: stacked rows of legal name, employment, affiliation, addresses and disclosure counts in a plain bordered table."></figure>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STRATEGY ============ -->
+<section class="band-full" id="strategy">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">05. Product strategy</span>
+      <h2 class="heading-1 reveal" style="--i:1">Design around the decision, not the database.</h2>
+      <p class="body-large measure reveal" style="--i:2">I translated the research into four measurable KPIs. Each connected an interface choice to a behavior the product needed to change.</p>
+    </div>
+    <div class="grid g4">
+      <article class="card card-kpi tilt reveal" data-tilt><span class="num">KPI 01</span><h3>Time to<br>decision</h3><p>Put related evidence inside one task view.</p></article>
+      <article class="card card-kpi tilt reveal" data-tilt style="--i:1"><span class="num">KPI 02</span><h3>Decision<br>accuracy</h3><p>Surface history, prior actions &amp; risk signals where decisions happen.</p></article>
+      <article class="card card-kpi tilt reveal" data-tilt style="--i:2"><span class="num">KPI 03</span><h3>Navigation<br>depth</h3><p>Replace page-based detours with a task-based structure.</p></article>
+      <article class="card card-kpi tilt reveal" data-tilt style="--i:3"><span class="num">KPI 04</span><h3>Mid-task assistance</h3><p>Make terminology and next steps clearer without slowing experts.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ITERATION ============ -->
+<section id="iteration">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">06. Iteration and trade-offs</span>
+      <h2 class="heading-1 reveal" style="--i:1">Keep expert speed. Add novice confidence.</h2>
+      <p class="body-large measure reveal" style="--i:2">An earlier iteration split task information into two rows. Veteran regulators lost their familiar left-to-right scan, while newer users found the dense context and error states unclear. Eye-tracking told us why.</p>
+    </div>
+
+    <!-- Reveal and parallax sit on separate elements: both drive transform,
+         so sharing one element would leave them fighting (as in the hero). -->
+    <div class="reveal">
+      <div class="mock" data-px data-px-strength="-18">
+        <div class="mock-bar" aria-hidden="true">
+          <span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span>
+        </div>
+        <figure class="shot" data-slot="Earlier iteration · two-row layout (rejected)"
+          data-full="case-study%20sections/09-iteration-and-trade-offs/Earlier%20iteration/Earlier%20iteration.png?v=2"
+          data-title="Rejected iteration · two-row task layout" data-cap="Splitting each task across two rows broke the left-to-right scan veterans depended on.">
+          <img src="case-study%20sections/09-iteration-and-trade-offs/Earlier%20iteration/Earlier%20iteration.png?v=2" alt="Rejected two-row task layout" width="1676" height="966" loading="lazy" decoding="async">
+        </figure>
+      </div>
+    </div>
+
+    <div class="inset-band reveal">
+      <div class="sec-head">
+        <span class="overline">Attention patterns</span>
+        <h2 class="heading-1">Same screen. Two different ways of looking for an answer.</h2>
+        <p class="body-large">Newer regulators searched broadly for orientation. Veterans focused on a smaller set of decision-critical fields. The design needed to support both without making either group slow down.</p>
+      </div>
+      <div class="heat">
+        <figure class="reveal">
+          <div class="shot r-4-3" data-slot="Heat map · novice regulators"
+            data-full="case-study%20sections/09-iteration-and-trade-offs/Earlier%20iteration_Heatmap/FINRA-heatmap-novice-regulators.png"
+            data-title="Eye-tracking heat map · novice regulators" data-cap="Broad, exploratory scanning across the whole screen.">
+            <img src="case-study%20sections/09-iteration-and-trade-offs/Earlier%20iteration_Heatmap/FINRA-heatmap-novice-regulators.png" alt="Heat map showing broad scanning by novice regulators" width="1651" height="953" loading="lazy" decoding="async"></div>
+          <figcaption><h3>Novice regulators</h3><p>Broad, exploratory scanning</p></figcaption>
+        </figure>
+        <figure class="reveal" style="--i:1">
+          <div class="shot r-4-3" data-slot="Heat map · veteran regulators"
+            data-full="case-study%20sections/09-iteration-and-trade-offs/Earlier%20iteration_Heatmap/FINRA-heatmap-veteran-regulators.png"
+            data-title="Eye-tracking heat map · veteran regulators" data-cap="Selective fixation on a small set of decision-critical fields.">
+            <img src="case-study%20sections/09-iteration-and-trade-offs/Earlier%20iteration_Heatmap/FINRA-heatmap-veteran-regulators.png" alt="Heat map showing selective scanning by veteran regulators" width="1652" height="952" loading="lazy" decoding="async"></div>
+          <figcaption><h3>Veteran regulators</h3><p>Selective, decision-focused scanning</p></figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="sub reveal">
+      <span class="overline">What we learned</span>
+      <h2 class="heading-1">The information was there. Scanning it was hard.</h2>
+    </div>
+    <div class="grid g3">
+      <article class="card card-solid tilt reveal" data-tilt><span class="lbl">01</span><h3 class="heading-3">Familiar pattern broken</h3><p>Two rows interrupted the scan pattern experienced users relied on.</p></article>
+      <article class="card card-solid tilt reveal" data-tilt style="--i:1"><span class="lbl">02</span><h3 class="heading-3">Important details buried</h3><p>Too much information competed for attention.</p></article>
+      <article class="card card-solid tilt reveal" data-tilt style="--i:2"><span class="lbl">03</span><h3 class="heading-3">Errors lacked direction</h3><p>Users couldn't tell what went wrong or what to do next.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL EXPERIENCE ============ -->
+<section id="final">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">07. Final experience · Task list</span>
+      <h2 class="heading-1 reveal" style="--i:1">Start the day knowing what needs you next.</h2>
+      <p class="body-large measure reveal" style="--i:2">The queue had to carry urgency, context, and ownership in a single scan: quick enough for a veteran, legible enough for someone in their first month.</p>
+    </div>
+    <div class="hs reveal" data-hs>
+      <div class="hs-bar pill">
+        <div class="hs-legend"></div>
+        <div class="hs-rail" data-rail aria-hidden="true"></div>
+        <div class="hs-nav">
+          <button class="hs-btn" data-prev aria-label="Previous design"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="hs-btn" data-next aria-label="Next design"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+      <div class="hs-view" data-view>
+        <div class="hs-track slides" data-track tabindex="0" role="region" aria-label="Two task list designs, horizontally scrollable">
+
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Final designs: task list (Queues) page</span>
+              <h3 class="heading-3">A decision-ready task list</h3>
+            </div>
+            <div class="slide-split">
+              <div class="slide-copy">
+                <p>The queue surfaced urgency, task context, and ownership in one scan. Experts could move quickly; newer regulators could stay oriented.</p>
+                <div class="callout"><b>Core outcome</b>
+                  <ul>
+                    <li>Colour-coded urgency without relying on colour alone</li>
+                    <li>Inline assignment instead of a dispatch detour</li>
+                    <li>Hover guidance for unfamiliar statuses</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="slide-art">
+                <figure class="shot" data-slot="Task list (Queues) page"
+                  data-full="case-study%20sections/10-final-experience/Final%20design%20horizontal%20scroll%20pages/Final%20design%20tasklist.gif"
+                  data-gif="case-study%20sections/10-final-experience/Final%20design%20horizontal%20scroll%20pages/Final%20design%20tasklist.gif"
+                  data-poster="case-study%20sections/10-final-experience/Final%20design%20horizontal%20scroll%20pages/Final%20design%20tasklist_poster.png"
+                  data-media-label="task list walkthrough"
+                  data-title="Final · Task list (Queues) page"
+                  data-cap="The redesigned queue in motion, with hover guidance and inline assignment.">
+                  <img src="case-study%20sections/10-final-experience/Final%20design%20horizontal%20scroll%20pages/Final%20design%20tasklist_poster.png"
+                       width="2940" height="1846" loading="lazy" decoding="async"
+                       alt="Animated walkthrough of the redesigned Manual Approval Queues task list: colour-coded urgency badges, inline assignment, and hover guidance on unfamiliar statuses."></figure>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Final designs: task list card</span>
+              <h3 class="heading-3">In line context</h3>
+            </div>
+            <div class="slide-split">
+              <div class="slide-copy">
+                <p><b>Cognitive support</b> — balancing experts and novices:</p>
+                <ul>
+                  <li>Preserved expert scan pattern</li>
+                  <li>Added colour-coded urgency</li>
+                  <li>Inline hover guidance</li>
+                </ul>
+                <div class="callout"><b>Operational efficiency</b>
+                  <ul>
+                    <li>Inline “Assign” action</li>
+                    <li>No separate dispatch view</li>
+                    <li>Reduced workflow breaks</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="slide-art">
+                <figure class="shot shot-flush" data-slot="Task list · in-line context"
+                  data-full="case-study%20sections/10-final-experience/Final%20design%20horizontal%20scroll%20pages/2Final%20designs_Tasklist_card_art.png"
+                  data-title="Final · Task list · in-line context"
+                  data-cap="The card-level crop at full resolution.">
+                  <img src="case-study%20sections/10-final-experience/Final%20design%20horizontal%20scroll%20pages/2Final%20designs_Tasklist_card_art.png"
+                       width="1667" height="432" loading="lazy" decoding="async"
+                       alt="A single task row from the redesigned queue, with a hover tooltip explaining the No Exam for RA Position reason and an inline Assign To panel listing colleagues to hand the task to."></figure>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL EXPERIENCE · TASK DETAILS ============ -->
+<section id="final-details">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">07. Final experience · Task details</span>
+      <h2 class="heading-1 reveal" style="--i:1">One workspace for context, action, collaboration, and audit.</h2>
+      <p class="body-large measure reveal" style="--i:2">Once a regulator opened a task, everything needed to decide, and to defend that decision in an audit later, had to sit in one place.</p>
+    </div>
+    <div class="hs reveal" data-hs>
+      <div class="hs-bar pill">
+        <div class="hs-legend"></div>
+        <div class="hs-rail" data-rail aria-hidden="true"></div>
+        <div class="hs-nav">
+          <button class="hs-btn" data-prev aria-label="Previous design"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="hs-btn" data-next aria-label="Next design"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+      <div class="hs-view" data-view>
+        <div class="hs-track slides" data-track tabindex="0" role="region" aria-label="Three task details designs, horizontally scrollable">
+
+          <!-- Built from the same parts as the other two cards rather than from a
+               single composed export, so the copy sits in the layout (and centres
+               with it) instead of being baked into the artwork. -->
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Task details page: profile, risk &amp; context</span>
+              <h3 class="heading-3">See the person first. Then understand the risk.</h3>
+            </div>
+            <div class="slide-split">
+              <div class="slide-copy">
+                <ul>
+                  <li>Key details came first.</li>
+                  <li>Disclosures were grouped clearly.</li>
+                  <li>Risk signals stood out.</li>
+                  <li>Context stayed visible.</li>
+                </ul>
+                <div class="callout"><b>Core outcome</b>
+                  <ul><li>Faster, more confident reviews.</li></ul>
+                </div>
+              </div>
+              <div class="slide-art">
+                <figure class="shot" data-slot="Task details · Profile, Risk &amp; Context"
+                  data-full="case-study%20sections/10-final-experience/On%20click%20expand/IRW_Task%20Details%20page.png"
+                  data-tall="1"
+                  data-title="Final · Task details · Profile, Risk &amp; Context"
+                  data-cap="The full Individual Review Worksheet. Scroll inside the frame to read the whole page.">
+                  <img src="case-study%20sections/10-final-experience/1Taskdetails%20fina_art.png"
+                       width="1533" height="1073" loading="lazy" decoding="async"
+                       alt="Individual Review Worksheet: the applicant's identifiers, address history and firm association on the left, a disclosures table in the middle, and rep details, filings and actions in a right-hand rail."></figure>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Task details page: unified task space</span>
+              <h3 class="heading-3">The decision happened where the evidence lived.</h3>
+            </div>
+            <div class="slide-split">
+              <div class="slide-copy">
+                <ul>
+                  <li>Decisions happened in context.</li>
+                  <li>Comments stayed with the task.</li>
+                  <li>Every change was recorded.</li>
+                  <li>Related tasks appeared together.</li>
+                </ul>
+                <div class="callout"><b>Core outcome</b>
+                  <ul><li>Fewer errors and less repeated work</li></ul>
+                </div>
+              </div>
+              <div class="slide-art">
+                <figure class="shot" data-slot="Task details · Unified task space"
+                  data-full="case-study%20sections/10-final-experience/Taskbox/Replace%20this%20video%20in%20Task%20details%20page%20unified%20task%20space.mp4.mp4"
+                  data-tabs='[{"label":"Actions","src":"case-study%20sections/10-final-experience/Taskbox/Taskbox%20tabs/Task%20box-Status%20dropdown.png","alt":"Actions tab of the task box: review status checkboxes, an Other free-text field, and the registration status update with Save and Submit."},{"label":"Comments","src":"case-study%20sections/10-final-experience/Taskbox/Taskbox%20tabs/Task%20box-Comments-click%20history%20tab.png","alt":"Comments tab of the task box: previous comments from Ralph Edwards with dates, beside a box for posting a new comment."},{"label":"History","src":"case-study%20sections/10-final-experience/Taskbox/Taskbox%20tabs/Task%20box-Task%20History.png","alt":"History tab of the task box: a dated audit trail of comments added, checklist updates, reassignment and task creation."}]'
+                  data-cap="Actions, Comments and History — switch tabs to step through the task box."
+                  data-video="case-study%20sections/10-final-experience/Taskbox/Replace%20this%20video%20in%20Task%20details%20page%20unified%20task%20space.mp4.mp4"
+                  data-poster="case-study%20sections/10-final-experience/Taskbox/unified-task-space_poster.png"
+                  data-media-label="unified task space walkthrough"
+                  data-title="Final · Unified task space">
+                  <video width="1170" height="786" muted loop playsinline preload="none"
+                         poster="case-study%20sections/10-final-experience/Taskbox/unified-task-space_poster.png"
+                         aria-label="Walkthrough of the unified task space: a regulator sets review statuses, writes an 'Other' note, updates registration status to Approved, and submits, all without leaving the task.">
+                    <source src="case-study%20sections/10-final-experience/Taskbox/Replace%20this%20video%20in%20Task%20details%20page%20unified%20task%20space.mp4.mp4" type="video/mp4">
+                  </video></figure>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Task details page: Task aggregation &amp; Batch processing</span>
+              <h3 class="heading-3">All open tasks related to that profile, surfaced together.</h3>
+            </div>
+            <div class="slide-split">
+              <div class="slide-copy">
+                <ul>
+                  <li>All open tasks surfaced together</li>
+                  <li>Profile reviewed once</li>
+                  <li>Batch adjudication enabled</li>
+                </ul>
+                <div class="callout"><b>Core outcome</b>
+                  <ul>
+                    <li>Absorb context once.</li>
+                    <li>Resolve multiple decisions.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="slide-art">
+                <figure class="shot" data-slot="Task details · Task aggregation &amp; batch processing"
+                  data-full="case-study%20sections/10-final-experience/Taskbox/Other%20open%20tasks.png"
+                  data-title="Final · Task aggregation &amp; batch processing"
+                  data-cap="All open tasks surfaced together.">
+                  <img src="case-study%20sections/10-final-experience/Taskbox/Other%20open%20tasks.png"
+                       width="2430" height="1728" loading="lazy" decoding="async"
+                       alt="Task details page showing an open Manual Approval task with its review statuses and registration status, and beneath it a list of the other open tasks for the same individual, so related tasks can be adjudicated together."></figure>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL EXPERIENCE · SESSION TIMEOUTS ============ -->
+<section class="alt" id="timeout">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">07. Final experience · Session timeouts</span>
+      <h2 class="heading-1 reveal" style="--i:1">Preventing surprise session timeouts.</h2>
+      <p class="body-large measure reveal" style="--i:2">The redesign brought each decision into one task view. Keeping regulators in that view meant designing the whole workflow around it, including the moment a session is about to end. FINRA’s 30-minute inactivity rule stayed exactly as it was; what changed was what the interface told regulators before it applied.</p>
+    </div>
+    <div class="hs reveal" data-hs>
+      <div class="hs-bar pill">
+        <div class="hs-legend"></div>
+        <div class="hs-rail" data-rail aria-hidden="true"></div>
+        <div class="hs-nav">
+          <button class="hs-btn" data-prev aria-label="Previous slide"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="hs-btn" data-next aria-label="Next slide"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+      <div class="hs-view" data-view>
+        <div class="hs-track slides" data-track tabindex="0" role="region" aria-label="Session timeout story in five slides, horizontally scrollable">
+
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Before · the existing timeout</span>
+              <h3 class="heading-3">No warning before the logout</h3>
+            </div>
+            <div class="slide-split">
+              <div class="slide-copy">
+                <p>Idle sessions already ended at 30 minutes, with no sign of the time left. Regulators came back from a PDF or an email to a login screen and MFA.</p>
+                <div class="callout"><b>The real gap</b>
+                  <p>The rule was in place. Timely feedback wasn’t.</p>
+                </div>
+              </div>
+              <div class="slide-art">
+                <figure class="shot" data-slot="Session timeout · old login screen"
+                  data-full="case-study%20sections/Session%20timeout/Old%20time%20out%20modal.png"
+                  data-title="Before · Session timed out"
+                  data-cap="No advance warning; regulators discovered the timeout after it happened.">
+                  <img src="case-study%20sections/Session%20timeout/Old%20time%20out%20modal.png"
+                       width="3368" height="2236" loading="lazy" decoding="async"
+                       alt="The CRD login screen with a small pink 'Session timed-out' banner in the corner. It is the first sign the session has ended; nothing warned the regulator beforehand."></figure>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Engineering constraints</span>
+              <h3 class="heading-3">What keeps a session active, and what doesn’t</h3>
+            </div>
+            <div class="slide-split slide-full">
+              <div class="slide-art">
+                <div class="st-compare">
+                  <div class="st-col st-col-yes">
+                    <h4 class="st-col-head">Keeps the session active</h4>
+                    <ul class="st-list">
+                      <li><span class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></svg></span><span><b>Another tab, same app</b></span></li>
+                      <li><span class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v5h-5"/></svg></span><span><b>Continue session</b><small>Once the server confirms</small></span></li>
+                    </ul>
+                  </div>
+                  <div class="st-col st-col-no">
+                    <h4 class="st-col-head">Doesn’t count; the clock keeps running</h4>
+                    <ul class="st-list">
+                      <li><span class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span><span><b>Opening or reading a PDF</b></span></li>
+                      <li><span class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span><b>Another FINRA app</b><small>Same login</small></span></li>
+                      <li><span class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M16 14.2A5 5 0 0 1 21.5 19"/></svg></span><span><b>Same app, different login</b></span></li>
+                      <li><span class="st-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><span><b>Email or other apps</b><small>Outside FINRA</small></span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">After · in-app warning</span>
+              <h3 class="heading-3">One warning, three minutes out</h3>
+            </div>
+            <div class="slide-split">
+              <div class="slide-copy">
+                <p>At three minutes left, a modal explains why, counts down, and offers <b>Continue session</b> or <b>Log out now</b>.</p>
+                <div class="callout"><b>Optional opt-in</b>
+                  <p>The desktop notification checkbox. Implementation status unverified.</p>
+                </div>
+              </div>
+              <div class="slide-art">
+                <figure class="shot" data-slot="Session timeout · three-minute warning"
+                  data-full="case-study%20sections/Session%20timeout/new%20timeout%20modal%20in%20app.gif"
+                  data-gif="case-study%20sections/Session%20timeout/new%20timeout%20modal%20in%20app.gif"
+                  data-poster="case-study%20sections/Session%20timeout/new%20timeout%20modal%20in%20app_poster.png"
+                  data-media-label="session timeout warning"
+                  data-title="After · Three-minute warning"
+                  data-cap="The warning over the Manual Approval Queues, with its countdown and two actions.">
+                  <img src="case-study%20sections/Session%20timeout/new%20timeout%20modal%20in%20app_poster.png"
+                       width="2940" height="1846" loading="lazy" decoding="async"
+                       alt="The Manual Approval Queues page dimmed behind a modal reading 'You will be logged out soon', explaining the 30-minute inactivity rule, with a 02:59 countdown, an Enable desktop notification checkbox, and Log out now and Continue session buttons."></figure>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Desktop notification</span>
+              <h3 class="heading-3">A nudge at three minutes, and again at one</h3>
+            </div>
+            <div class="slide-split">
+              <div class="slide-copy">
+                <p>For regulators working in another app, a desktop notification appears at <b>3 minutes</b> and again at <b>1 minute</b> remaining.</p>
+                <div class="callout"><b>Browser support</b>
+                  <p>We started by making sure it worked in Chrome, Safari and Internet Explorer, the browsers about 90% of regulators used.</p>
+                </div>
+              </div>
+              <div class="slide-art">
+                <figure class="shot shot-expand-top" data-slot="Session timeout · desktop notification concept"
+                  data-full="case-study%20sections/Session%20timeout/time%20out%20modal%20desktop%20notification.png"
+                  data-title="Desktop notification"
+                  data-cap="An opt-in notification while the regulator works in Outlook, sent at 3 minutes and again at 1 minute remaining.">
+                  <img src="case-study%20sections/Session%20timeout/time%20out%20modal%20desktop%20notification.png"
+                       width="3990" height="2236" loading="lazy" decoding="async"
+                       alt="Concept mockup of Outlook on Windows with a notification in the corner from Regulator Workspace via Chrome: 'Your session ends in 3 minutes. Return to Regulator Workspace to continue.'"></figure>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Failure and expiry states</span>
+              <h3 class="heading-3">No renewal until the server confirms</h3>
+            </div>
+            <div class="slide-split">
+              <div class="slide-copy">
+                <p>Every path waits for the server. A failed renewal can be retried while time remains; a late one routes to sign-in.</p>
+              </div>
+              <div class="slide-art">
+                <div class="state-grid">
+                  <figure>
+                    <div class="shot" data-slot="Renewal failed"
+                      data-full="case-study%20sections/Session%20timeout/Renewal%20failed%20with%20time%20remaining.png"
+                      data-title="State · Renewal failed, time remaining"
+                      data-cap="The extension couldn’t be confirmed, but time remains, so the regulator can try again.">
+                      <img src="case-study%20sections/Session%20timeout/Renewal%20failed%20with%20time%20remaining_modal.png"
+                           width="1016" height="714" loading="lazy" decoding="async"
+                           alt="Modal reading 'We couldn't confirm your session extension. Check your connection and try again.' with the 02:59 countdown still running and Log out now and Continue session buttons."></div>
+                    <figcaption><b>Renewal failed</b>Time remains; try again</figcaption>
+                  </figure>
+                  <figure>
+                    <div class="shot" data-slot="Session expired"
+                      data-full="case-study%20sections/Session%20timeout/Session%20already%20expired.png"
+                      data-title="State · Session expired"
+                      data-cap="The request arrived too late, so the modal says the session ended and routes to sign-in.">
+                      <img src="case-study%20sections/Session%20timeout/Session%20already%20expired_modal.png"
+                           width="852" height="652" loading="lazy" decoding="async"
+                           alt="Modal over the login screen reading 'Your session has ended', explaining the 30-minute inactivity rule, with a single Log in to continue button."></div>
+                    <figcaption><b>Session expired</b>Route to sign in</figcaption>
+                  </figure>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="impact-rule reveal"><span>Timeout warning · one-day beta</span><i></i></div>
+    <div class="timeout-result">
+      <div class="stat tilt reveal" data-tilt><div class="v"><span data-count="11">11</span><small>of 12</small></div><div class="k">regulators renewed their session before the inactivity timeout</div><p class="stat-note">Moderated testing with the same 12 regulators, then a one-day beta. A small sample, not a product-wide rate.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ IMPACT ============ -->
+<section class="impact-band" id="impact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">08. Impact</span>
+      <h2 class="heading-1 reveal" style="--i:1">Better decisions and fewer operational workarounds.</h2>
+      <p class="body-large measure reveal" style="--i:2">Pre-launch results came from moderated testing with the same 12 regulators. After launch, the team monitored the first renewal season to understand the business effect.</p>
+    </div>
+
+    <div class="impact-rule reveal"><span>Pre-launch · moderated testing</span><i></i></div>
+    <div class="grid g4">
+      <div class="stat tilt reveal" data-tilt><div class="v"><span data-count="28">28</span><small>%</small></div><div class="k"><b>Faster decisions</b>Put related evidence inside one task view.</div></div>
+      <div class="stat tilt reveal" data-tilt style="--i:1"><div class="v"><small>&lt;</small><span data-count="10">10</span><small>%</small></div><div class="k"><b>Decision errors</b>Down from the ~18% baseline.</div></div>
+      <div class="stat tilt reveal" data-tilt style="--i:2"><div class="v">2–<span data-count="3">3</span><small>tabs</small></div><div class="k"><b>Tabs per review</b>Reduced from 5–7 tabs.</div></div>
+      <div class="stat tilt reveal" data-tilt style="--i:3"><div class="v"><span data-count="25">25</span><small>%</small></div><div class="k"><b>Mid-task assistance</b>Down from ~40% for newer regulators.</div></div>
+    </div>
+
+    <div class="impact-rule reveal"><span>Post-launch · business impact, year 1</span><i></i></div>
+    <div class="biz">
+      <div class="biz-card tilt reveal" data-tilt>
+        <div class="biz-v"><i>↓</i><b><span data-count="30">30</span>%</b></div>
+        <div class="biz-text"><strong>Drop in support tickets</strong><span>More guidance inside the workflow meant fewer “How do I do this?” requests.</span></div>
+      </div>
+      <div class="biz-card tilt reveal" data-tilt style="--i:1">
+        <div class="biz-v"><i>↓</i><b><span data-count="37">37</span>%</b></div>
+        <div class="biz-text"><strong>Lower audit kickback rate</strong><span>Putting evidence beside the action reduced errors in live filings.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REFLECTION ============ -->
+<section class="reflect band-center" id="reflection">
+  <div class="wrap">
+    <div class="band-head">
+      <span class="overline reveal">09. Reflection</span>
+      <h2 class="heading-1 reveal" style="--i:1">The biggest win wasn't showing more information. It was making the right evidence impossible to miss.</h2>
+      <p class="body-large reveal" style="--i:2">Enterprise modernization is not a visual-cleanup exercise. It is a prioritization problem: understand where decisions break down, choose the highest-leverage surface, and connect every change to an observable outcome.</p>
+    </div>
+    <div class="takes">
+      <article class="card card-solid tilt reveal" data-tilt>
+        <span class="lbl">01</span>
+        <h3 class="heading-3">Auditability is UX</h3>
+        <p>Capture rationale where the work actually happens.</p>
+      </article>
+      <article class="card card-solid tilt reveal" data-tilt style="--i:1">
+        <span class="lbl">02</span>
+        <h3 class="heading-3">Experts and novices coexist</h3>
+        <p>Preserve scan speed; layer guidance on top.</p>
+      </article>
+      <article class="card card-solid tilt reveal" data-tilt style="--i:2">
+        <span class="lbl">03</span>
+        <h3 class="heading-3">De-scoping is design work</h3>
+        <p>The right “not now” protected the outcome.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>Sambit Mohanty · Product designer</div>
+    <div class="src">Figma gkXtayVa6IRN21dAMcP0Hz · node 479:4211 · Design System v3</div>
+  </div>
+</footer>
+
+<!-- ============ LIGHTBOX ============ -->
+<dialog class="lb" data-lb aria-label="Expanded screen">
+  <div class="lb-in">
+    <div class="lb-bar">
+      <div>
+        <div class="lb-title" data-lb-title></div>
+        <div class="lb-sub" data-lb-cap></div>
+      </div>
+      <button class="lb-close" data-lb-close aria-label="Close expanded view">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="lb-tabs" data-lb-tabs role="tablist" aria-label="Task box tabs" hidden></div>
+    <div class="lb-stage" data-lb-stage data-kind="image">
+      <img data-lb-img alt="">
+      <video data-lb-video controls loop muted playsinline preload="metadata"></video>
+    </div>
+    <div class="lb-hint">Press <b>Esc</b> or click outside the image to close</div>
+  </div>
+</dialog>
+
+<script>
+(function(){
+'use strict';
+var mqReduce = matchMedia('(prefers-reduced-motion: reduce)');
+var reduce   = mqReduce.matches;
+mqReduce.addEventListener('change', function(e){ reduce = e.matches; });
+var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+/* ---------------------------------------------------------
+   1. Broken-image fallback — keeps a labeled slot visible
+   --------------------------------------------------------- */
+document.querySelectorAll('.shot img, .compare img').forEach(function(img){
+  function fail(){
+    var s = img.closest('.shot');
+    if (s) s.classList.add('missing');
+    else img.style.visibility = 'hidden';
+  }
+  img.addEventListener('error', fail);
+  if (img.complete && img.naturalWidth === 0) fail();
+});
+
+/* ---------------------------------------------------------
+   2. Scroll progress
+   --------------------------------------------------------- */
+var bar = document.querySelector('[data-progress]');
+if (bar){
+  var ticking = false;
+  function drawProgress(){
+    var h = document.documentElement.scrollHeight - innerHeight;
+    var p = h > 0 ? Math.min(1, Math.max(0, scrollY / h)) : 0;
+    bar.style.transform = 'scaleX(' + p + ')';
+    ticking = false;
+  }
+  addEventListener('scroll', function(){
+    if (!ticking){ ticking = true; requestAnimationFrame(drawProgress); }
+  }, {passive:true});
+  drawProgress();
+}
+
+/* ---------------------------------------------------------
+   3. Reveal on scroll — one-shot, IntersectionObserver
+   --------------------------------------------------------- */
+var reveals = document.querySelectorAll('.reveal');
+if (!('IntersectionObserver' in window) || reduce){
+  reveals.forEach(function(el){ el.classList.add('in'); });
+} else {
+  var ro = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting){ en.target.classList.add('in'); ro.unobserve(en.target); }
+    });
+  }, {rootMargin:'0px 0px -12% 0px', threshold:.08});
+  reveals.forEach(function(el){ ro.observe(el); });
+}
+
+/* ---------------------------------------------------------
+   4. Parallax — transform only, small offsets, desktop only
+   Best practice: never move text the reader is tracking,
+   never hijack scroll, always disable for reduced motion.
+   --------------------------------------------------------- */
+var pxEls = [].slice.call(document.querySelectorAll('[data-px]'));
+if (pxEls.length && fine && !reduce){
+  var visible = [], raf = 0;
+  var pxo = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      var i = visible.indexOf(en.target);
+      if (en.isIntersecting && i === -1) visible.push(en.target);
+      else if (!en.isIntersecting && i > -1){
+        visible.splice(i,1);
+        en.target.style.setProperty('--py','0px');
+      }
+    });
+    schedule();
+  }, {rootMargin:'20% 0px 20% 0px'});
+  pxEls.forEach(function(el){ el.classList.add('px'); pxo.observe(el); });
+
+  function paint(){
+    raf = 0;
+    var vh = innerHeight;
+    for (var i=0;i<visible.length;i++){
+      var el = visible[i];
+      var r  = el.getBoundingClientRect();
+      /* -1 (below viewport) .. 0 (centered) .. 1 (above) */
+      var mid = (r.top + r.height/2 - vh/2) / (vh/2 + r.height/2);
+      mid = Math.max(-1, Math.min(1, mid));
+      var strength = parseFloat(el.dataset.pxStrength || '-20');
+      var py = Math.round(mid * strength);
+      el.style.setProperty('--py', py + 'px');
+      el.classList.toggle('px-live', py !== 0);
+    }
+  }
+  function schedule(){ if (!raf) raf = requestAnimationFrame(paint); }
+  addEventListener('scroll', schedule, {passive:true});
+  addEventListener('resize', schedule, {passive:true});
+  schedule();
+}
+
+/* ---------------------------------------------------------
+   5. Stat counters — animate the numeral, keep the format
+   --------------------------------------------------------- */
+var counters = document.querySelectorAll('[data-count]');
+if (counters.length){
+  if (reduce || !('IntersectionObserver' in window)){
+    /* leave the authored value in place */
+  } else {
+    var co = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        var el = en.target; co.unobserve(el);
+        var to = parseFloat(el.dataset.count);
+        var dec = parseInt(el.dataset.decimals || '0', 10);
+        if (isNaN(to)) return;
+        var dur = 900, t0 = 0;
+        function tick(ts){
+          if (!t0) t0 = ts;
+          var p = Math.min(1, (ts - t0) / dur);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = (to * eased).toFixed(dec);
+          if (p < 1) requestAnimationFrame(tick);
+          else el.textContent = to.toFixed(dec);
+        }
+        el.textContent = (0).toFixed(dec);
+        requestAnimationFrame(tick);
+      });
+    }, {threshold:.6});
+    counters.forEach(function(el){ co.observe(el); });
+  }
+}
+
+/* ---------------------------------------------------------
+   6. Tilt + glare — decorative only, pointer devices only
+   Spec: components/ui/interactive-data-card.tsx
+   --------------------------------------------------------- */
+if (fine){
+  document.querySelectorAll('[data-tilt]').forEach(function(card){
+    var rect = null;
+    function enter(){ rect = card.getBoundingClientRect(); card.classList.add('live'); }
+    function move(e){
+      if (reduce) return;
+      if (!rect) rect = card.getBoundingClientRect();
+      var x = (e.clientX - rect.left) / rect.width;
+      var y = (e.clientY - rect.top) / rect.height;
+      var rx = (0.5 - y) * 7, ry = (x - 0.5) * 7;
+      card.style.transform = 'perspective(900px) rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg) translateZ(0)';
+      card.style.setProperty('--gx', (x*100).toFixed(1) + '%');
+      card.style.setProperty('--gy', (y*100).toFixed(1) + '%');
+    }
+    function leave(){ card.classList.remove('live'); card.style.transform = ''; rect = null; }
+    card.addEventListener('pointerenter', enter);
+    card.addEventListener('pointermove', move);
+    card.addEventListener('pointerleave', leave);
+  });
+}
+
+/* ---------------------------------------------------------
+   7. Before / after compare — spring-driven reveal
+   Ported from Motiq's CompareReveal (MIT). The divider chases the pointer
+   through a spring, so the lag reads as elastic resistance and the release as
+   a soft snap. On first view it demonstrates itself once (50 -> 96 -> 4 -> 50
+   over 2.6s) and re-arms if that sweep was interrupted. Double-click snaps
+   home. The native range input carries the keyboard and AT story.
+   --------------------------------------------------------- */
+var SPRING_K = 140, SPRING_C = 18;
+var SWEEP_SECONDS = 2.6, KEY_STEP = 2, KEY_STEP_LARGE = 10;
+/* A pill is only worth showing while both screens are in play. Below MIN its own
+   side is too narrow to sit on; above MAX that side has taken over the frame and
+   the label would just cover the screen someone moved the divider to read. RAMP
+   is how many percent the fade is spread over, so it tracks the drag. */
+var LABEL_MIN = 14, LABEL_MAX = 70, LABEL_RAMP = 9;
+
+function cmpClamp(v,lo,hi){ return v<lo?lo:(v>hi?hi:v); }
+function cmpLerp(a,b,t){ return a+(b-a)*t; }
+function easeInOutCubic(t){ return t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+function sweepAt(u){
+  if (u < .38) return cmpLerp(50,96,easeInOutCubic(u/.38));
+  if (u < .78) return cmpLerp(96, 4,easeInOutCubic((u-.38)/.40));
+  return cmpLerp(4,50,easeInOutCubic((u-.78)/.22));
+}
+
+document.querySelectorAll('[data-compare]').forEach(function(cmp){
+  var range   = cmp.querySelector('[data-cmp-range]');
+  var clip    = cmp.querySelector('[data-cmp-clip]');
+  var divider = cmp.querySelector('[data-cmp-divider]');
+  var labels  = cmp.querySelectorAll('[data-cmp-label]');
+  if (!range || !clip || !divider) return;
+
+  var sim = {x:50, v:0, target:50, dragging:false, pid:null,
+             introActive:false, introDone:false, introStart:0};
+  var raf = 0, onScreen = false, tabVisible = true;
+
+  function paint(){
+    var x = cmpClamp(sim.x, 0, 100);
+    clip.style.clipPath = 'inset(0 ' + (100 - x).toFixed(3) + '% 0 0)';
+    divider.style.left  = x.toFixed(3) + '%';
+    var shown = Math.round(x);
+    range.setAttribute('aria-valuenow', String(shown));
+    range.setAttribute('aria-valuetext', shown + '% Legacy');
+    if (labels[0]) labels[0].style.opacity = labelOpacity(x).toFixed(3);
+    if (labels[1]) labels[1].style.opacity = labelOpacity(100 - x).toFixed(3);
+  }
+
+  /* share = how much of the frame this pill's own screen currently occupies. */
+  function labelOpacity(share){
+    return Math.min(cmpClamp((share - LABEL_MIN) / LABEL_RAMP, 0, 1),
+                    cmpClamp((LABEL_MAX - share) / LABEL_RAMP, 0, 1));
+  }
+
+  /* Any input commits through the range, and the spring follows it. */
+  function commit(next){
+    sim.introActive = false; sim.introDone = true;
+    var t = cmpClamp(next, 0, 100);
+    range.value = t;
+    sim.target = t;
+    if (reduce){ sim.x = t; sim.v = 0; paint(); }
+  }
+
+  function frame(ts){
+    var dt = Math.min(.05, Math.max(.001, (ts - frame.last) / 1000));
+    frame.last = ts;
+    if (sim.introActive){
+      var u = (ts/1000 - sim.introStart) / SWEEP_SECONDS;
+      if (u >= 1){ sim.introActive = false; sim.introDone = true; sim.target = parseFloat(range.value); }
+      else sim.target = sweepAt(u);
+    }
+    sim.v += ((sim.target - sim.x) * SPRING_K - sim.v * SPRING_C) * dt;
+    sim.x += sim.v * dt;
+    if (sim.x < 0){ sim.x = 0; sim.v = 0; }
+    if (sim.x > 100){ sim.x = 100; sim.v = 0; }
+    paint();
+    raf = requestAnimationFrame(frame);
+  }
+
+  function start(){
+    if (raf || reduce) return;
+    if (!sim.introDone){ sim.introActive = true; sim.introStart = performance.now()/1000; }
+    frame.last = performance.now();
+    raf = requestAnimationFrame(frame);
+  }
+  function stop(){
+    if (!raf) return;
+    cancelAnimationFrame(raf); raf = 0;
+    /* Leaving mid-sweep re-arms the demo for the next entry. */
+    if (sim.introActive){ sim.introActive = false; sim.introDone = false; sim.target = parseFloat(range.value); }
+  }
+  function sync(){ (onScreen && tabVisible) ? start() : stop(); }
+
+  /* Don't burn frames offscreen or in a background tab. */
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      onScreen = es.some(function(e){ return e.isIntersecting; }); sync();
+    }, {threshold:.2}).observe(cmp);
+  } else { onScreen = true; }
+  document.addEventListener('visibilitychange', function(){
+    tabVisible = document.visibilityState !== 'hidden'; sync();
+  });
+
+  range.addEventListener('input', function(){ commit(parseFloat(range.value)); });
+
+  /* Arrows 2%, Shift+arrows 10%, Home/End pin the ends. */
+  range.addEventListener('keydown', function(e){
+    var step = e.shiftKey ? KEY_STEP_LARGE : KEY_STEP, base = sim.target, next = base;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = base + step;
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = base - step;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = 100;
+    else return;
+    e.preventDefault(); commit(next);
+  });
+
+  function fromX(clientX){
+    var r = cmp.getBoundingClientRect();
+    commit(((clientX - r.left) / Math.max(1, r.width)) * 100);
+  }
+  cmp.addEventListener('pointerdown', function(e){
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    sim.dragging = true; sim.pid = e.pointerId;
+    try { cmp.setPointerCapture(e.pointerId); } catch(err){}
+    fromX(e.clientX);
+  });
+  cmp.addEventListener('pointermove', function(e){
+    if (!sim.dragging || e.pointerId !== sim.pid) return;
+    fromX(e.clientX);
+  });
+  ['pointerup','pointercancel'].forEach(function(ev){
+    cmp.addEventListener(ev, function(){ sim.dragging = false; sim.pid = null; });
+  });
+  cmp.addEventListener('dblclick', function(){ commit(50); });
+
+  /* Reduced motion: fully functional, just 1:1 with no spring and no sweep. */
+  if (reduce){ sim.introDone = true; sim.x = 50; sim.target = 50; }
+  paint();
+});
+
+/* ---------------------------------------------------------
+   8. Lightbox — expand any screen
+   --------------------------------------------------------- */
+var lb      = document.querySelector('[data-lb]');
+var lbImg   = lb && lb.querySelector('[data-lb-img]');
+var lbTitle = lb && lb.querySelector('[data-lb-title]');
+var lbCap   = lb && lb.querySelector('[data-lb-cap]');
+var lbStage = lb && lb.querySelector('[data-lb-stage]');
+var lbVid   = lb && lb.querySelector('[data-lb-video]');
+var lbClose = lb && lb.querySelector('[data-lb-close]');
+var lbTabs  = lb && lb.querySelector('[data-lb-tabs]');
+var lastFocus = null;
+var tabData = [];   /* screens for the shot currently open, if it declares any */
+
+var EXPAND_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';
+
+/* Give every shot that declares a full-size source an expand button. */
+document.querySelectorAll('.shot[data-full]').forEach(function(shot){
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'expand';
+  btn.innerHTML = EXPAND_SVG;
+  var label = shot.dataset.title || shot.dataset.slot || 'screen';
+  btn.setAttribute('aria-label', 'Expand ' + label);
+  btn.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    open(shot, btn);
+  });
+  shot.appendChild(btn);
+
+  /* Several of the exported diagrams have an expand icon drawn into the
+     artwork itself. Make the whole shot clickable so that icon works too —
+     ignoring the media controls, and letting a drag-end swallow its click. */
+  shot.classList.add('zoomable');
+  shot.addEventListener('click', function(e){
+    if (e.target.closest('button,a')) return;
+    open(shot, btn);
+  });
+});
+
+/* Make the whole panel a target, not just the artwork — clicking the headline,
+   the copy column or the callout expands the screen it belongs to. Guarded so
+   it never fights the controls, a link, or someone selecting the copy. */
+document.querySelectorAll('.slide,.step').forEach(function(card){
+  var shot = card.querySelector('.shot[data-full]');
+  if (!shot) return;
+  card.classList.add('zoom-card');
+  card.addEventListener('click', function(e){
+    if (shot.contains(e.target)) return;              // shot handles its own
+    if (e.target.closest('button,a,input,label')) return;
+    if (String(window.getSelection())) return;        // let the copy be selected
+    open(shot, shot.querySelector('.expand'));
+  });
+});
+
+function open(shot, trigger){
+  if (!lb) return;
+  /* A slot whose file hasn't been supplied yet has nothing to show. */
+  if (shot.classList.contains('missing')) return;
+  lastFocus = trigger || document.activeElement;
+  var img = shot.querySelector('img');
+  var srcVid = shot.dataset.video;
+  /* Don't auto-start an animation for someone who asked for reduced motion —
+     show them the still instead. Video is the exception: it carries native
+     controls, so they can start it themselves. */
+  var full = shot.dataset.full || (img && img.src) || '';
+  if (reduce && shot.dataset.gif && shot.dataset.poster) full = shot.dataset.poster;
+
+  /* A shot can declare several screens instead of one. They take precedence
+     over an inline video: the card keeps playing the walkthrough, while the
+     expanded view lets someone step through the tabs at their own pace. */
+  tabData = [];
+  if (shot.dataset.tabs){
+    try { tabData = JSON.parse(shot.dataset.tabs) || []; } catch(err){ tabData = []; }
+  }
+
+  lbStage.dataset.kind = (srcVid && !tabData.length) ? 'video' : 'image';
+  if (tabData.length){
+    buildTabs();
+  } else if (srcVid){
+    var sv = shot.querySelector('video');
+    var vw = sv && +sv.getAttribute('width'), vh = sv && +sv.getAttribute('height');
+    lbStage.style.setProperty('--lb-ar', (vw && vh) ? vw + '/' + vh : '16/9');
+    if (lbVid.src !== srcVid) lbVid.src = srcVid;
+    if (shot.dataset.poster) lbVid.poster = shot.dataset.poster;
+    lbVid.currentTime = 0;
+    if (!reduce){
+      var pp = lbVid.play();
+      if (pp && pp.catch) pp.catch(function(){});
+    }
+  } else {
+    lbImg.src = full;
+  }
+  if (!tabData.length) clearTabs();
+  if (!tabData.length) lbImg.alt = (img && img.alt) || shot.dataset.title || '';
+  lbTitle.textContent = shot.dataset.title || shot.dataset.slot || '';
+  lbCap.textContent   = shot.dataset.cap || '';
+  lbStage.classList.toggle('tall', shot.dataset.tall === '1');
+  lbStage.scrollTop = 0;
+
+  if (typeof lb.showModal === 'function') lb.showModal();
+  else lb.setAttribute('open','');
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(function(){ lb.classList.add('ready'); });
+  lbClose.focus();
+}
+
+function clearTabs(){
+  if (!lbTabs) return;
+  lbTabs.innerHTML = '';
+  lbTabs.hidden = true;
+}
+
+function buildTabs(){
+  if (!lbTabs) return;
+  lbTabs.innerHTML = '';
+  tabData.forEach(function(t, i){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'lb-tab';
+    b.setAttribute('role', 'tab');
+    b.textContent = t.label;
+    b.addEventListener('click', function(){ selectTab(i); });
+    lbTabs.appendChild(b);
+    /* Warm the cache so switching tabs is instant rather than a white flash. */
+    if (i) { var pre = new Image(); pre.src = t.src; }
+  });
+  lbTabs.hidden = false;
+  selectTab(0);
+}
+
+/* Standard tablist keyboard behaviour: arrows move, Home/End jump. */
+if (lbTabs){
+  lbTabs.addEventListener('keydown', function(e){
+    if (!tabData.length) return;
+    var cur = [].indexOf.call(lbTabs.children, document.activeElement), to = -1;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') to = (cur + 1) % tabData.length;
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') to = (cur - 1 + tabData.length) % tabData.length;
+    else if (e.key === 'Home') to = 0;
+    else if (e.key === 'End') to = tabData.length - 1;
+    if (to < 0) return;
+    e.preventDefault();
+    selectTab(to);
+    lbTabs.children[to].focus();
+  });
+}
+
+function selectTab(i){
+  var t = tabData[i];
+  if (!t) return;
+  [].forEach.call(lbTabs.children, function(b, n){
+    var on = n === i;
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+    b.tabIndex = on ? 0 : -1;
+  });
+  lbImg.src = t.src;
+  lbImg.alt = t.alt || t.label;
+  lbStage.scrollTop = 0;
+}
+
+function close(){
+  if (!lb) return;
+  lb.classList.remove('ready');
+  var done = function(){
+    if (typeof lb.close === 'function' && lb.open) lb.close();
+    else lb.removeAttribute('open');
+    /* Stop playback on close so audio-less video doesn't keep decoding. */
+    if (lbVid){ lbVid.pause(); }
+    lbImg.removeAttribute('src');
+    clearTabs();
+    tabData = [];
+    document.body.style.overflow = '';
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  };
+  if (reduce) done();
+  else setTimeout(done, 160);
+}
+
+if (lb){
+  lbClose.addEventListener('click', close);
+  lb.addEventListener('cancel', function(e){ e.preventDefault(); close(); });
+  /* Click outside the image (scrim or padding) closes. */
+  lb.addEventListener('click', function(e){
+    if (e.target === lb || e.target === lbStage) close();
+  });
+}
+
+/* ---------------------------------------------------------
+   9. Horizontal scrollers — arrows, keyboard, wheel, drag
+   --------------------------------------------------------- */
+document.querySelectorAll('[data-hs]').forEach(function(hs){
+  var track = hs.querySelector('[data-track]'),
+      view  = hs.querySelector('[data-view]'),
+      prev  = hs.querySelector('[data-prev]'),
+      next  = hs.querySelector('[data-next]'),
+      rail  = hs.querySelector('[data-rail]');
+  if (!track) return;
+
+  var count = track.children.length;
+  if (rail){
+    for (var i=0;i<count;i++) rail.appendChild(document.createElement('b'));
+  }
+
+  function step(){
+    var f = track.firstElementChild; if (!f) return 320;
+    var cs = getComputedStyle(track), gap = parseFloat(cs.columnGap || cs.gap) || 16;
+    return f.getBoundingClientRect().width + gap;
+  }
+  function update(){
+    var max = track.scrollWidth - track.clientWidth, x = track.scrollLeft;
+    var atStart = x <= 1;
+    /* "At the end" means the last card is fully in view — not that scrollLeft
+       hit its maximum. Scroll snapping lands on multiples of the card pitch,
+       which can stop a few pixels short of max and leave Next looking live
+       when there is nothing further to reveal. */
+    var last = track.lastElementChild, atEnd;
+    if (max <= 1) atEnd = true;
+    else atEnd = (x >= max - 1) ||
+                 (!!last && last.getBoundingClientRect().right <= track.getBoundingClientRect().right + 2);
+    view.dataset.atStart = atStart;
+    view.dataset.atEnd   = atEnd;
+    if (prev) prev.disabled = atStart;
+    if (next) next.disabled = atEnd;
+    if (rail){
+      /* Map scroll *progress* onto the pips rather than dividing by card
+         width: the final card is already fully visible before scrollLeft
+         reaches a whole extra card, so dividing would never light the last
+         pip even though the Next button is correctly disabled. */
+      var n = rail.children.length;
+      var idx = (max <= 1) ? 0 : Math.round((x / max) * (n - 1));
+      /* Keep the rail and the Next button telling the same story. */
+      if (atEnd) idx = n - 1;
+      if (atStart) idx = 0;
+      for (var i=0;i<n;i++)
+        rail.children[i].classList.toggle('on', i === idx);
+    }
+  }
+  function go(d){ track.scrollBy({left: d*step(), behavior: reduce ? 'auto' : 'smooth'}); }
+
+  prev && prev.addEventListener('click', function(){ go(-1); });
+  next && next.addEventListener('click', function(){ go(1); });
+  track.addEventListener('scroll', function(){ requestAnimationFrame(update); }, {passive:true});
+  track.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight'){ e.preventDefault(); go(1); }
+    else if (e.key === 'ArrowLeft'){ e.preventDefault(); go(-1); }
+    else if (e.key === 'Home'){ e.preventDefault(); track.scrollTo({left:0, behavior:'smooth'}); }
+    else if (e.key === 'End'){ e.preventDefault(); track.scrollTo({left:track.scrollWidth, behavior:'smooth'}); }
+  });
+  /* Deliberately no wheel handler. Vertical wheel belongs to the page: mapping
+     it onto the row hijacks the primary scroll axis and traps the reader
+     whenever the pointer happens to be over a carousel. Horizontal intent is
+     already handled natively by the overflow container — trackpad swipe,
+     shift+wheel, and horizontal wheel tilt all scroll the row on their own —
+     and overscroll-behavior-x:contain stops that chaining into a back gesture.
+     Arrows, keyboard, and drag cover everything else. */
+
+  /* Drag to scroll. Pointer capture is taken only once the pointer has
+     actually moved past a threshold — capturing on pointerdown retargets the
+     following mouseup to the track, so the browser then fires `click` on the
+     track instead of on the card under the cursor, and nothing inside the row
+     is clickable except elements skipped below (buttons). */
+  var DRAG_THRESHOLD = 6;
+  var down=false, dragging=false, startX=0, startLeft=0, moved=0, pid=null;
+
+  track.addEventListener('pointerdown', function(e){
+    if (e.pointerType === 'touch') return;      // native touch scrolling
+    if (e.target.closest('a,button')) return;
+    down=true; dragging=false; moved=0; pid=e.pointerId;
+    startX=e.clientX; startLeft=track.scrollLeft;
+  });
+  track.addEventListener('pointermove', function(e){
+    if (!down) return;
+    var dx = e.clientX - startX;
+    moved = Math.max(moved, Math.abs(dx));
+    if (!dragging && moved > DRAG_THRESHOLD){
+      dragging = true;
+      track.classList.add('dragging');
+      try { track.setPointerCapture(pid); } catch(err){}
+    }
+    if (dragging) track.scrollLeft = startLeft - dx;
+  });
+  ['pointerup','pointercancel'].forEach(function(ev){
+    track.addEventListener(ev, function(){
+      if (!down) return;
+      down = false;
+      if (dragging){
+        track.classList.remove('dragging');
+        try { track.releasePointerCapture(pid); } catch(err){}
+        var s = step();
+        track.scrollTo({left: Math.round(track.scrollLeft/s)*s, behavior: reduce ? 'auto' : 'smooth'});
+      }
+      dragging = false; pid = null;
+    });
+  });
+  /* Swallow the click that ends a drag so it never opens the lightbox. */
+  track.addEventListener('click', function(e){
+    if (moved > DRAG_THRESHOLD){ e.preventDefault(); e.stopPropagation(); }
+  }, true);
+
+  /* Safety net: if a browser still retargets the click to the track itself,
+     resolve the panel under the cursor so clicking a card always expands. */
+  track.addEventListener('click', function(e){
+    if (moved > DRAG_THRESHOLD || e.target !== track) return;
+    var el = document.elementFromPoint(e.clientX, e.clientY);
+    var card = el && el.closest && el.closest('.slide,.step');
+    if (!card || !track.contains(card)) return;
+    var shot = card.querySelector('.shot[data-full]');
+    if (shot) open(shot, shot.querySelector('.expand'));
+  });
+
+  new ResizeObserver(update).observe(track);
+  update();
+});
+
+/* ---------------------------------------------------------
+   11. Animated shots — play/pause, reduced-motion aware
+   A GIF cannot be paused and ignores prefers-reduced-motion, so we swap
+   between a poster still and the animation ourselves. The heavy GIF is only
+   fetched when it actually plays.
+   --------------------------------------------------------- */
+var PLAY_SVG  = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>';
+var PAUSE_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>';
+
+document.querySelectorAll('.shot[data-gif],.shot[data-video]').forEach(function(shot){
+  var img    = shot.querySelector('img');
+  var vid    = shot.querySelector('video');
+  var gif    = shot.dataset.gif;
+  var poster = shot.dataset.poster;
+  var label  = shot.dataset.mediaLabel || 'animation';
+  if (!vid && (!img || !gif)) return;
+
+  var playing = false;
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'media-btn';
+
+  function render(){
+    btn.innerHTML = (playing ? PAUSE_SVG : PLAY_SVG) + '<span>' + (playing ? 'Pause' : 'Play') + '</span>';
+    btn.setAttribute('aria-label', (playing ? 'Pause ' : 'Play ') + label);
+    btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    shot.dataset.playing = playing ? 'true' : 'false';
+  }
+  function play(){
+    if (playing) return;
+    playing = true;
+    if (vid){
+      var p = vid.play();
+      /* Autoplay can still be refused; reflect reality rather than assume. */
+      if (p && p.catch) p.catch(function(){ playing = false; render(); });
+    } else {
+      /* Cache-bust so a re-play restarts the loop from frame one. */
+      img.src = gif + (gif.indexOf('?') > -1 ? '&' : '?') + 'r=' + Date.now();
+    }
+    render();
+  }
+  function pause(){
+    if (!playing) return;
+    playing = false;
+    if (vid) vid.pause();
+    else img.src = poster;
+    render();
+  }
+  btn.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    playing ? pause() : play();
+  });
+  shot.appendChild(btn);
+  render();
+
+  /* Start on entering view — unless the visitor asked for reduced motion,
+     in which case it stays a still until they press play. */
+  if (!reduce && 'IntersectionObserver' in window){
+    var mo = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){ play(); mo.disconnect(); }
+      });
+    }, {rootMargin:'0px 0px -10% 0px', threshold:.25});
+    mo.observe(shot);
+  }
+});
+
+/* ---------------------------------------------------------
+   10. Nav — highlight the section currently in view
+   --------------------------------------------------------- */
+var links = [].slice.call(document.querySelectorAll('[data-navlinks] a'));
+if (links.length && 'IntersectionObserver' in window){
+  var map = {};
+  links.forEach(function(a){
+    var el = document.querySelector(a.getAttribute('href'));
+    if (el) map[el.id] = a;
+  });
+  var no = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      var a = map[en.target.id]; if (!a) return;
+      if (en.isIntersecting){
+        links.forEach(function(l){ l.removeAttribute('aria-current'); });
+        a.setAttribute('aria-current','true');
+      }
+    });
+  }, {rootMargin:'-45% 0px -50% 0px'});
+  Object.keys(map).forEach(function(id){ no.observe(document.getElementById(id)); });
+}
+})();
+</script>
+</body>
+</html>

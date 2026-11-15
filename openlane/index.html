@@ -1,0 +1,2178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OPENLANE Powersports Self-Inspect · Sambit Mohanty</title>
+<meta name="description" content="Redesigning OPENLANE's powersports inspection so dealers can list motorcycles, ATVs and snowmobiles with the speed and confidence of passenger cars.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   OPENLANE Powersports Self-Inspect — Case Study
+   Same system as the FINRA case study (Inter, spacing, motion,
+   components), recoloured from purple to OPENLANE blue.
+   ============================================================ */
+:root{
+  color-scheme:light;
+  --space-4:4px; --space-8:8px; --space-12:12px; --space-16:16px;
+  --space-24:24px; --space-36:36px; --space-48:48px; --space-60:60px;
+  --space-96:96px; --space-120:120px;
+  --container:1440px; --content:1280px; --measure:60ch; --hero-measure:760px;
+  --gutter:80px; --section-y:var(--space-120); --header-gap:var(--space-48);
+  --radius-6:6px; --radius-8:8px; --radius-12:12px; --radius-16:16px;
+  --radius-20:20px; --radius-full:999px; --border:1px;
+  --duration-fast:80ms; --duration-base:150ms; --duration-slow:250ms;
+  --duration-reveal:620ms;
+  --ease:cubic-bezier(.2,.6,.3,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
+  --serif:'Times New Roman',Times,'Liberation Serif',Georgia,serif;
+
+  /* Brand — OPENLANE blue */
+  --brand:#2563eb; --brand-deep:#1d4ed8; --stat-ink:#1e40af;
+  --brand-wash:#eef3fe; --brand-mid:#c7d7fd; --brand-stroke:#bcd0fb;
+  --brand-rgb:37,99,235;
+
+  /* Neutrals */
+  --ground:#ffffff; --surface:#ffffff; --sunken:#f9fafb;
+  --rule:#eaecf0; --rule-2:#c7d7fd;
+  --ink:#101828; --ink-2:#344054; --ink-3:#667085;
+  --on-brand:#ffffff;
+
+  /* Dark bands — deep navy */
+  --band:#0b1b3f; --band-alt:#0e1630; --band-card:#15284f;
+  --band-rule:#22365f; --band-ink:#ffffff; --band-ink-2:#c2cde4;
+  --band-accent:#93b4ff;
+
+  /* Impact band */
+  --impact-bg:#f3f7ff; --impact-rule:#dfe8fb;
+
+  /* Semantic */
+  --friction:#b42318; --friction-rule:#f4c7c3; --friction-wash:#fef3f2;
+  --caution:#9a6200; --caution-rule:#f5e3c3; --caution-wash:#fef6e9;
+  --success:#15703f; --success-rule:#cdead9; --success-wash:#f1f8f4;
+  --ph:#eef3fe; --ph-line:#c7d7fd; --ph-ink:#667085;
+  --glare:rgba(255,255,255,.55);
+
+  --shadow-1:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.06);
+  --shadow-2:0 4px 4px rgba(0,0,0,.10);
+  --shadow-3:0 32px 64px -12px rgba(16,24,40,.22);
+}
+/* Tablet: half the desktop gutter, so content isn't squeezed into the middle. */
+@media(max-width:1024px){:root{--gutter:var(--space-48)}}
+@media(max-width:720px){
+  :root{--section-y:var(--space-60);--header-gap:var(--space-24);--gutter:var(--space-24)}
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:128px}
+body{background:var(--ground);color:var(--ink);
+  font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;overflow-wrap:break-word}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:var(--radius-6)}
+img{max-width:100%}
+a{color:var(--brand)}
+strong{font-weight:600;color:var(--ink)}
+
+/* ---------- Type ---------- */
+.display-1{font-size:56px;line-height:1.14;letter-spacing:-1.12px;font-weight:700;text-wrap:balance}
+.accent{font-style:italic;color:var(--brand)}
+.display-1 .accent{font-family:var(--serif);font-weight:400;letter-spacing:0;font-size:1.04em}
+.heading-1{font-size:38px;line-height:1.15;letter-spacing:-1px;font-weight:700;text-wrap:balance}
+.heading-3{font-size:24px;line-height:1.3;letter-spacing:-.264px;font-weight:700}
+.heading-4{font-size:18px;line-height:1.4;letter-spacing:-.1px;font-weight:700}
+.body-large{font-size:18px;font-weight:400;line-height:1.7}
+.overline{font-size:12px;line-height:1.2;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:700;color:var(--brand)}
+@media(max-width:720px){
+  .display-1{font-size:34px;letter-spacing:-.6px;line-height:1.15}
+  .heading-1{font-size:26px;letter-spacing:-.4px}.heading-3{font-size:20px}
+}
+.display-1,.heading-1,.heading-3,.heading-4,.slide-head h3,.card h3{text-wrap:balance}
+p,li,dd,figcaption,blockquote,.stat .k,.lb-sub{text-wrap:pretty}
+.measure{max-width:var(--measure)}
+.wrap{max-width:var(--content);margin-inline:auto;padding-inline:var(--gutter)}
+section{padding-block:var(--section-y);position:relative}
+.alt{background:var(--sunken)}
+/* The three final-experience sections sit on white back to back, so each
+   facing edge takes half the padding and they read as one chapter. */
+#final{padding-bottom:calc(var(--section-y) / 2)}
+#final-capture{padding-block:calc(var(--section-y) / 2)}
+#final-review{padding-top:calc(var(--section-y) / 2)}
+.sec-head{margin-bottom:var(--header-gap);display:flex;flex-direction:column;gap:var(--space-24);
+  max-width:var(--head-measure,960px)}
+.sec-head p{color:var(--ink-2)}
+.sec-head .measure{max-width:none}
+.sec-head .overline+*{margin-top:var(--space-12)}
+.sec-head em{font-style:normal;color:var(--brand)}
+
+/* ---------- Scroll progress ---------- */
+.progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:60;background:transparent;pointer-events:none}
+.progress i{display:block;height:100%;width:100%;background:var(--brand);transform:scaleX(0);
+  transform-origin:0 50%;transition:transform 60ms linear}
+
+/* ---------- Nav ---------- */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);
+  backdrop-filter:saturate(1.6) blur(14px);-webkit-backdrop-filter:saturate(1.6) blur(14px);
+  box-shadow:0 4px 4px rgba(0,0,0,.04);border-bottom:var(--border) solid var(--rule)}
+.nav-in{max-width:var(--container);margin-inline:auto;padding:var(--space-16) var(--gutter);
+  display:flex;align-items:center;gap:var(--space-24)}
+.brand{display:flex;align-items:center;gap:var(--space-16)}
+.brand-mark{width:40px;height:40px;border-radius:var(--radius-8);background:var(--brand-wash);
+  border:var(--border) solid var(--brand-stroke);display:grid;place-items:center;
+  font:700 14px/1 var(--sans);color:var(--brand);flex:none}
+.brand-name{font-size:16px;font-weight:700;line-height:1.4;color:var(--ink-2)}
+.brand-role{font-size:13px;line-height:1.4;color:var(--ink-3)}
+.nav-items{margin-left:auto;display:flex;gap:var(--space-8)}
+.nav-items a{position:relative;color:var(--ink-2);text-decoration:none;font-size:14px;font-weight:600;
+  padding:var(--space-8) var(--space-12);border-radius:var(--radius-8);
+  transition:color var(--duration-base) var(--ease),background var(--duration-base) var(--ease)}
+.nav-items a:hover{color:var(--brand);background:var(--brand-wash)}
+.nav-items a[aria-current="true"]{color:var(--brand);background:var(--brand-wash)}
+@media(max-width:1000px){.nav-items{display:none}}
+
+/* ---------- Reveal ---------- */
+.reveal{opacity:0;transform:translate3d(0,16px,0);
+  transition:opacity var(--duration-reveal) var(--ease-out),transform var(--duration-reveal) var(--ease-out);
+  transition-delay:calc(var(--i,0) * 70ms)}
+.reveal.in{opacity:1;transform:none}
+.px{transform:translate3d(0,var(--py,0px),0)}
+.px.px-live{will-change:transform}
+
+/* ---------- Hero ---------- */
+.hero{padding-block:var(--space-96) var(--section-y);overflow:hidden}
+.hero-in{display:flex;flex-direction:column;align-items:center;gap:var(--space-24);text-align:center}
+.badge{font-size:12px;font-weight:500;padding:var(--space-4) var(--space-8);
+  border-radius:var(--radius-12);background:var(--surface);color:var(--brand);
+  border:var(--border) solid var(--brand-stroke)}
+.hero h1{max-width:960px;color:var(--ink-2)}
+.hero .body-large{color:var(--ink-3);max-width:var(--hero-measure)}
+.actions{display:flex;gap:var(--space-12);flex-wrap:wrap;justify-content:center;margin-top:var(--space-12)}
+@media(max-width:720px){
+  .actions{display:grid;grid-template-columns:1fr 1fr;width:100%;max-width:540px;margin-inline:auto}
+  .actions .btn{justify-content:center}
+}
+@media(max-width:600px){.actions{grid-template-columns:1fr}}
+.btn{font:600 15px/1 var(--sans);padding:var(--space-12) var(--space-24);border-radius:var(--radius-8);
+  border:var(--border) solid transparent;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;
+  transition:filter var(--duration-base) var(--ease),transform var(--duration-base) var(--ease),box-shadow var(--duration-base) var(--ease)}
+.btn-primary{background:var(--brand);color:var(--on-brand);box-shadow:var(--shadow-2)}
+.btn-secondary{background:var(--surface);color:var(--ink-2);border-color:var(--rule-2)}
+.btn:hover{filter:brightness(1.06);transform:translateY(-1px);box-shadow:0 8px 16px rgba(var(--brand-rgb),.20)}
+.btn:active{filter:brightness(.96);transform:none;transition-duration:var(--duration-fast)}
+
+.meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:var(--space-24);margin-top:var(--space-24);max-width:1120px}
+.meta>div{display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-4);text-align:left}
+.meta dt{font-size:12px;line-height:1.55;font-weight:700;color:var(--ink-3)}
+.meta dd{font-size:12px;line-height:1.55;font-weight:600;color:#000;white-space:nowrap}
+.meta .sep{width:2px;height:2px;border-radius:1px;background:var(--brand-mid);flex:none;align-self:center}
+@media(max-width:900px){
+  .meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;
+    gap:var(--space-16) var(--space-24);width:100%;max-width:340px;margin-inline:auto}
+  .meta .sep{display:none}
+  .meta dd{white-space:normal}
+}
+
+/* Hero visual breaks out of the reading column into the gutters. */
+.hero-visual{margin-top:var(--space-48);
+  width:calc(100% + var(--gutter) * 2);
+  max-width:calc(100vw - var(--space-24) * 2);
+  margin-inline:calc(var(--gutter) * -1)}
+@media(max-width:720px){.hero-visual{width:100%;margin-inline:0}}
+
+/* Minimal screen mockup — the frame owns border, radius and shadow. */
+.mock{width:100%;border-radius:var(--radius-16);overflow:hidden;background:var(--surface);
+  border:var(--border) solid var(--brand-mid);box-shadow:var(--shadow-2)}
+.mock-bar{display:flex;align-items:center;gap:7px;height:34px;flex:none;
+  padding-inline:var(--space-16);background:var(--sunken);
+  border-bottom:var(--border) solid var(--rule)}
+.mock-dot{width:10px;height:10px;border-radius:var(--radius-full);flex:none;
+  background:color-mix(in srgb,var(--ink-3) 28%,transparent)}
+.mock .shot{border:0;border-radius:0;background:transparent;aspect-ratio:auto}
+.mock .shot img{width:100%;height:auto;object-fit:contain;background:#fff}
+.mock .hero-reel video{display:block;width:100%;height:auto;background:#fff}
+@media(max-width:720px){.br-wide{display:none}}
+.mock .phone-vid{max-width:none;margin:0}
+.mock .hero-reel .vid-bar{margin:0;padding:10px var(--space-16);border-top:1px solid var(--rule);background:#fff}
+.phone-vid.is-full.hero-reel .vid-bar{width:min(720px,100%);border-top:0}
+@media(max-width:720px){.mock-bar{height:28px;padding-inline:var(--space-12)}
+  .mock-dot{width:8px;height:8px}}
+.mock-cap{margin-top:var(--space-12);font-size:14px;line-height:1.5;color:var(--ink-3);max-width:var(--measure)}
+.mock-cap b{color:var(--ink);font-weight:600}
+
+/* ---------- Shots ---------- */
+.shot{position:relative;width:100%;display:block;border-radius:var(--radius-8);overflow:hidden;
+  background:var(--brand-wash);border:var(--border) solid var(--brand-wash)}
+.shot img{width:100%;height:100%;object-fit:contain;display:block;background:#fff}
+.shot.missing{background:
+    repeating-linear-gradient(135deg,transparent 0 11px,color-mix(in srgb,var(--ph-line) 40%,transparent) 11px 12px),var(--ph);
+  border:var(--border) dashed var(--ph-line);display:grid;place-content:center;text-align:center;
+  padding:var(--space-24);gap:var(--space-4);aspect-ratio:16/9}
+.shot.missing img,.shot.missing .expand{display:none}
+.shot.missing::after{content:attr(data-slot);font:500 12px/1.6 var(--mono);color:var(--ink-2)}
+
+.shot.zoomable,.zoom-card{cursor:zoom-in}
+.zoom-card p,.zoom-card li,.zoom-card h3,.zoom-card .lbl,.zoom-card b{cursor:text}
+.expand{position:absolute;bottom:var(--space-12);right:var(--space-12);z-index:2;
+  width:36px;height:36px;border-radius:var(--radius-full);cursor:pointer;
+  border:0;background:#fff;color:var(--ink);box-shadow:0 4px 4px rgba(0,0,0,.25);
+  display:grid;place-items:center;opacity:.92;
+  transition:opacity var(--duration-slow) var(--ease),transform var(--duration-base) var(--ease)}
+.expand svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.shot:hover .expand,.expand:focus-visible{opacity:1;transform:scale(1.06)}
+.expand:active{transform:scale(.94);transition-duration:var(--duration-fast)}
+
+/* ---------- Lightbox ---------- */
+.lb{position:fixed;inset:0;z-index:100;display:none;padding:var(--space-24);
+  width:100%;height:100%;max-width:none;max-height:none;
+  background:transparent;border:0;color:#fff;overflow:hidden}
+.lb[open]{display:block}
+.lb::backdrop{background:rgba(8,15,35,.88);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.lb-in{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;gap:var(--space-12);
+  max-width:1400px;margin-inline:auto;
+  opacity:0;transform:scale(.985) translateY(6px);
+  transition:opacity var(--duration-slow) var(--ease-out),transform var(--duration-slow) var(--ease-out)}
+.lb.ready .lb-in{opacity:1;transform:none}
+.lb-bar{display:flex;align-items:flex-start;gap:var(--space-16);color:#fff;flex:none}
+.lb-title{font-size:15px;font-weight:700;line-height:1.4}
+.lb-sub{font-size:13px;line-height:1.5;color:var(--band-ink-2);margin-top:2px;max-width:110ch}
+.lb-close{margin-left:auto;flex:none;width:40px;height:40px;border-radius:var(--radius-8);cursor:pointer;
+  border:var(--border) solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#fff;
+  display:grid;place-items:center;transition:background var(--duration-base) var(--ease)}
+.lb-close:hover{background:var(--brand)}
+.lb-close svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round}
+.lb-view{position:relative;flex:1;min-height:0;display:flex}
+.lb-stage{flex:1;min-height:0;overflow:auto;border-radius:var(--radius-12);background:transparent;
+  overscroll-behavior:contain;display:flex}
+.lb-nav{position:absolute;top:50%;z-index:2;width:48px;height:48px;margin-top:-24px;cursor:pointer;
+  border-radius:var(--radius-full);border:var(--border) solid rgba(255,255,255,.22);
+  background:rgba(8,15,35,.55);color:#fff;display:grid;place-items:center;
+  transition:background var(--duration-base) var(--ease)}
+.lb-nav[hidden]{display:none}
+.lb-view,.lb-nav{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.lb-stage img{-webkit-user-drag:none}
+/* Phone screens with transparent corners: no white box behind them. */
+.lb-stage img.bare{background:transparent;border-radius:0}
+.lb-nav:hover{background:var(--brand)}
+.lb-nav:disabled{opacity:.3;cursor:default;background:rgba(8,15,35,.55)}
+.lb-nav svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.lb-prev{left:var(--space-12)}
+.lb-next{right:var(--space-12)}
+.lb-count{color:#fff;font-weight:600;margin-right:var(--space-12)}
+.lb-count:empty{display:none}
+@media(max-width:720px){.lb-nav{width:40px;height:40px;margin-top:-20px}
+  .lb-prev{left:var(--space-4)}.lb-next{right:var(--space-4)}}
+.lb-stage img{max-width:100%;max-height:100%;width:auto;height:auto;margin:auto;display:block;
+  background:#fff;border-radius:var(--radius-12)}
+.lb-hint{flex:none;font-size:12px;line-height:1.5;color:rgba(255,255,255,.55);text-align:center}
+
+/* ---------- Grids / cards ---------- */
+.grid{display:grid;gap:var(--space-24)}
+/* Column counts are set per breakpoint rather than left to auto-fit, which
+   strands the last card on its own row at tablet widths (3 → 2+1, 4 → 3+1,
+   5 → 2+2+1). Each grid only ever splits into full rows. */
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:720px){.g2{grid-template-columns:1fr}}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:900px){.g3{grid-template-columns:1fr}}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1100px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.g4{grid-template-columns:1fr}}
+/* Five cards: one row on desktop; 3 + 2 on tablet (a six-column grid, the
+   last two cards taking half each); 2 + 2 + 1 on large phones with the last
+   card full width; one column on small phones. */
+.g5{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:1100px){
+  .g5{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .g5>*{grid-column:span 2}
+  .g5>:nth-last-child(-n+2){grid-column:span 3}
+}
+@media(max-width:720px){
+  .g5{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g5>*,.g5>:nth-last-child(-n+2){grid-column:auto}
+  .g5>:last-child{grid-column:1/-1}
+}
+@media(max-width:480px){.g5{grid-template-columns:1fr}.g5>:last-child{grid-column:auto}}
+.card{background:var(--surface);border:var(--border) solid var(--brand);border-radius:var(--radius-12);
+  padding:var(--space-36);display:flex;flex-direction:column;gap:var(--space-24)}
+.card .lbl{font-size:12px;line-height:1.4;font-weight:600;color:var(--brand)}
+.card h3,.card h4{color:#000}
+.card p{font-size:16px;line-height:1.55;color:#000}
+.card-solid{background:var(--brand);border-color:var(--brand)}
+.card-solid .lbl,.card-solid h3,.card-solid h4,.card-solid p,.card-solid strong{color:#fff}
+.solid-bullets{margin:0;padding:0;list-style:none;display:grid;gap:var(--space-8)}
+.solid-bullets li{position:relative;padding-left:16px;font-size:16px;line-height:1.55;color:#fff}
+.solid-bullets li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.7)}
+.card .num{font-size:12px;font-weight:600;color:#000}
+.card-kpi h3{color:var(--brand);font-size:24px;line-height:1.3;font-weight:700}
+.card-kpi p{font-size:16px}
+@media(max-width:720px){.card{padding:var(--space-24)}}
+
+/* Nutshell tiles: each card subgrids three rows so label, heading and body align. */
+@media(min-width:1101px){#nutshell .g5{gap:var(--space-12)}#nutshell .g5 .card{padding:var(--space-24)}}
+.nut-bullets{margin:0;padding:0;list-style:none;display:grid;gap:var(--space-8);align-content:start}
+.nut-bullets li{position:relative;padding-left:16px;font-size:16px;line-height:1.5;color:#000;transition:color var(--duration-slow) var(--ease)}
+.nut-bullets li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--brand);
+  transition:background-color var(--duration-slow) var(--ease)}
+@supports (grid-template-rows:subgrid){
+  #nutshell .card{display:grid;grid-row:span 3;grid-template-rows:subgrid}
+}
+
+
+/* Stat tiles */
+.stat{background:var(--brand-wash);border:0;border-radius:var(--radius-12);
+  box-shadow:var(--shadow-2);padding:var(--space-36);
+  display:flex;flex-direction:column;justify-content:center;gap:var(--space-16)}
+.stat .v{font-size:48px;line-height:1.1;font-weight:700;color:var(--stat-ink);
+  font-variant-numeric:tabular-nums;display:flex;align-items:baseline;gap:var(--space-4)}
+.stat .v small{font-size:24px;font-weight:500;line-height:1.2;color:inherit}
+.stat .k{font-size:16px;line-height:1.45;color:var(--stat-ink)}
+.stat .k b{display:block;font-weight:700;font-size:18px;margin-bottom:var(--space-4)}
+.stat-center{align-items:center;text-align:center}
+.stat-center .v{justify-content:center}
+.stat-neutral{background:var(--surface);box-shadow:var(--shadow-1);border:var(--border) solid var(--rule)}
+.stat-neutral .v{color:var(--ink-2);font-size:36px}
+.stat-neutral .k{color:var(--ink-2)}
+.stat-neutral sup{color:var(--brand);font-weight:700}
+@media(max-width:720px){.stat .v{font-size:36px}.stat{padding:var(--space-24)}}
+
+/* Tilt + glare */
+.tilt{position:relative;transform-style:preserve-3d;
+  transition:transform 420ms var(--ease-out),box-shadow var(--duration-slow) var(--ease),border-color var(--duration-slow) var(--ease)}
+.tilt::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  opacity:0;transition:opacity var(--duration-slow) var(--ease);
+  background:radial-gradient(180px circle at var(--gx,50%) var(--gy,50%),var(--glare),transparent 62%)}
+.tilt.live{transition:transform 90ms linear,box-shadow var(--duration-slow) var(--ease),border-color var(--duration-slow) var(--ease)}
+.tilt.live::after{opacity:1}
+.tilt.live{box-shadow:0 18px 32px -12px rgba(var(--brand-rgb),.35)}
+.stat.tilt.live{box-shadow:0 18px 32px -12px rgba(var(--brand-rgb),.35)}
+
+/* ---------- Quote ---------- */
+.quote{position:relative;max-width:var(--measure)}
+.quote p::before{content:"\201C";font-family:var(--serif);font-style:italic;
+  font-size:clamp(72px,7vw,104px);line-height:0;font-weight:400;
+  color:var(--brand-deep);vertical-align:-.18em;
+  margin-left:-.19em;margin-right:.02em}
+.quote p{font-family:var(--serif);font-style:italic;font-size:clamp(26px,2.8vw,38px);
+  line-height:1.25;font-weight:400;letter-spacing:-.01em;color:#000}
+.quote .accent{font-family:inherit}
+
+/* ---------- Problem storyboard ---------- */
+.story-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--space-16)}
+/* Below desktop the five panels stay in reading order as a swipeable strip,
+   bleeding to the screen edge, rather than reflowing into uneven rows. */
+@media(max-width:1100px){
+  .story-grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:min(280px,78%);
+    overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
+    margin-inline:calc(var(--gutter) * -1);padding:0 var(--gutter) var(--space-12);
+    scroll-padding-inline:var(--gutter);scrollbar-width:thin}
+  .story-panel{scroll-snap-align:start}
+}
+.story-panel{display:flex;flex-direction:column;gap:var(--space-12)}
+.story-panel .shot{aspect-ratio:4/3;background:var(--surface);border:var(--border) solid var(--brand-mid);
+  border-radius:var(--radius-12);box-shadow:var(--shadow-1)}
+.story-panel .shot img{object-fit:cover}
+/* The panels are small enough that a resting expand button covers the
+   drawing, so it only appears on hover or keyboard focus. */
+@media(hover:hover) and (pointer:fine){.story-panel .expand{opacity:0}}
+.story-panel figcaption{display:flex;gap:var(--space-8);align-items:flex-start;font-size:14px;line-height:1.45;color:var(--ink-3)}
+.story-panel figcaption b{color:var(--ink);font-weight:600}
+.story-n{flex:none;width:22px;height:22px;border-radius:var(--radius-full);display:grid;place-items:center;
+  background:var(--brand-wash);color:var(--brand);font-size:12px;font-weight:700;margin-top:-1px}
+.story-grid+.mock-cap{margin-top:var(--space-24)}
+
+/* ---------- Term tooltip ----------
+   An info button beside an industry term; its bubble opens on hover, focus
+   or tap. JS nudges the bubble back inside the viewport on narrow screens. */
+.term{position:relative;white-space:nowrap}
+.info{position:relative;display:inline-grid;place-items:center;width:1.35em;height:1.35em;margin:0 -.08em 0 .1em;padding:0;
+  vertical-align:-.2em;line-height:0;border:0;background:none;color:inherit;cursor:help;border-radius:var(--radius-full);
+  transition:background-color var(--duration-base) var(--ease);-webkit-tap-highlight-color:transparent}
+/* Invisible 44x44 hit area (Apple HIG / WCAG 2.5.5) around the small icon. */
+.info::before{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
+/* A soft disc in the text's own colour, so it works on white and on blue. */
+.term[data-open] .info{background:color-mix(in srgb,currentColor 12%,transparent)}
+@media(hover:hover) and (pointer:fine){.info:hover{background:color-mix(in srgb,currentColor 12%,transparent)}}
+.info:focus-visible{outline:2px solid currentColor;outline-offset:1px}
+/* Sized in em and stroked to the weight of the surrounding text, so the icon
+   reads as part of the word: regular body copy gets a regular line, the
+   semibold card heading a heavier one. */
+.info svg{display:block;width:1.2em;height:1.2em;fill:none;stroke:currentColor;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round}
+strong .info svg,b .info svg{stroke-width:2.1}
+.tip{position:absolute;bottom:calc(100% + 10px);left:50%;z-index:20;width:max-content;max-width:260px;
+  transform:translateX(calc(-50% + var(--tip-shift,0px))) translateY(4px);
+  padding:var(--space-12) var(--space-16);border-radius:var(--radius-8);
+  background:var(--ink);color:#fff;box-shadow:var(--shadow-3);
+  font:400 14px/1.5 var(--sans);letter-spacing:0;text-transform:none;text-align:left;white-space:normal;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity var(--duration-slow) var(--ease),transform var(--duration-slow) var(--ease),visibility var(--duration-slow)}
+.tip::after{content:"";position:absolute;top:100%;left:calc(50% - var(--tip-shift,0px));margin-left:-6px;
+  border:6px solid transparent;border-top-color:var(--ink)}
+.term.below .tip{bottom:auto;top:calc(100% + 10px)}
+.term.below .tip::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--ink)}
+/* The bubble follows the open state everywhere. Hover adds to that only on
+   a mouse, and keyboard focus only when it is visible focus — on a touch
+   screen a tapped button keeps focus, which used to stop a second tap from
+   closing the bubble. */
+.term[data-open] .tip,.term:has(.info:focus-visible) .tip{opacity:1;visibility:visible;
+  transform:translateX(calc(-50% + var(--tip-shift,0px)))}
+@media(hover:hover) and (pointer:fine){
+  .term:hover .tip{opacity:1;visibility:visible;transform:translateX(calc(-50% + var(--tip-shift,0px)))}
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* ---------- Notes ---------- */
+.note{background:var(--brand-wash);border-radius:var(--radius-12);padding:var(--space-24);
+  display:flex;flex-direction:column;gap:var(--space-12)}
+.note .tag{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--stat-ink)}
+.note p{font-size:16px;line-height:1.6;color:var(--ink-2)}
+.note em{font-style:italic}
+.note-influence em{color:var(--brand)}
+.note-amber{background:var(--caution-wash)}
+.note-amber .tag{color:var(--caution)}
+.notes{margin-top:var(--space-48)}
+
+/* Rejected vs chosen */
+.choice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-12)}
+.choice>div{border-radius:var(--radius-12);padding:var(--space-16);display:flex;flex-direction:column;gap:var(--space-8)}
+.choice .rej{background:var(--friction-wash)}
+.choice .cho{background:var(--success-wash)}
+.choice h4{font-size:15px;line-height:1.35;font-weight:700;display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-8)}
+.choice .rej h4{color:var(--friction)}.choice .cho h4{color:var(--success)}
+.choice p{font-size:14px;line-height:1.5;color:var(--ink-2)}
+.pill{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 9px;border-radius:var(--radius-full)}
+.rej .pill{background:var(--friction-rule)}.cho .pill{background:var(--success-rule)}
+@media(max-width:560px){.choice{grid-template-columns:1fr}}
+
+/* ---------- Dark bands ---------- */
+.band-full{background:var(--band);color:var(--band-ink);--glare:rgba(255,255,255,.10)}
+.band-full .overline{color:var(--band-accent)}
+.band-full .sec-head{margin-bottom:var(--space-48)}
+.band-full>.wrap>.sec-head p,.band-full>.wrap>.sec-head .body-large{color:var(--band-ink)}
+.band-full>.wrap>.sec-head h2{color:var(--band-ink)}
+#insight{overflow:hidden}
+#insight::before{content:"";position:absolute;right:-160px;top:-180px;width:520px;height:520px;
+  border-radius:50%;background:radial-gradient(circle,rgba(147,180,255,.20),transparent 68%);
+  pointer-events:none}
+.band-note{background:var(--band-card);border:var(--border) solid var(--band-rule);border-radius:var(--radius-12);
+  padding:var(--space-24);display:flex;flex-direction:column;gap:var(--space-12);text-align:left;
+  width:100%;max-width:1000px}
+.band-note .tag{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--band-accent)}
+.band-note p{font-size:16px;line-height:1.6;color:var(--band-ink-2)}
+.band-note em{color:#fff}
+.band-full .quote p,.reflect .quote p{color:#fff}
+.band-full .quote .accent{color:var(--band-accent)}
+.band-full .quote p::before{color:var(--band-accent)}
+
+/* ---------- Horizontal scrollers ---------- */
+.hs{display:flex;flex-direction:column;gap:var(--space-24)}
+.hs-bar{display:flex;align-items:center;gap:var(--space-16)}
+.hs-legend{margin-right:auto}
+.hs-nav{display:flex;gap:var(--space-12)}
+.hs-btn{width:44px;height:44px;border-radius:var(--radius-full);border:0;
+  background:#fff;color:var(--ink);cursor:pointer;display:grid;place-items:center;
+  box-shadow:0 4px 4px rgba(0,0,0,.25);
+  transition:opacity var(--duration-base) var(--ease),transform var(--duration-base) var(--ease)}
+.hs-btn:hover:not(:disabled){transform:translateY(-1px);color:var(--brand)}
+.hs-btn:active:not(:disabled){transform:none;transition-duration:var(--duration-fast)}
+.hs-btn:disabled{opacity:.32;cursor:default}
+.hs-btn svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.hs-rail{display:flex;gap:6px;align-items:center;margin-right:var(--space-12)}
+.hs-rail b{display:block;width:18px;height:3px;border-radius:2px;background:var(--brand-mid);
+  transition:background var(--duration-base) var(--ease),width var(--duration-base) var(--ease)}
+.hs-rail b.on{background:var(--brand);width:28px}
+.hs-view{position:relative}
+.hs-track{display:flex;gap:var(--space-24);overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;
+  scrollbar-width:none;-ms-overflow-style:none;padding-bottom:var(--space-4);cursor:grab;
+  align-items:stretch}
+.hs-track::-webkit-scrollbar{display:none}
+.hs-track.dragging{cursor:grabbing;scroll-behavior:auto;scroll-snap-type:none;user-select:none}
+.hs-track:focus-visible{outline:2px solid var(--brand);outline-offset:var(--space-4);border-radius:var(--radius-12)}
+.hs-track>*{scroll-snap-align:start;flex:none}
+.hs-track>*:last-child{scroll-snap-align:end}
+
+/* ---------- Presentation slides ----------
+   Every OPENLANE screen is a 16:9 deck slide with its own type, so the
+   artwork runs the full width of the card under the copy, rather than in a
+   side column where it would shrink past legibility. */
+.slide{width:min(1060px,calc(100vw - 2 * var(--gutter) - 40px));background:var(--surface);
+  border:var(--border) solid var(--brand-mid);border-radius:var(--radius-12);
+  overflow:hidden;display:flex;flex-direction:column}
+.slide-head{padding:var(--space-24) var(--space-24) 0;display:flex;flex-direction:column;gap:var(--space-12)}
+.slide-head .lbl{font-size:12px;line-height:1.4;font-weight:700;text-transform:uppercase;
+  letter-spacing:.02em;color:#000}
+.slide-head h3{color:#000;max-width:40ch}
+.slide-stack{flex:1;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+  gap:var(--space-24) var(--space-36);padding:var(--space-24);align-content:start}
+.slide-stack.solo{grid-template-columns:1fr}
+.slide-stack>.shot,.slide-stack>.slide-cap{grid-column:1/-1}
+.slide-stack>.shot{align-self:end;border:0;border-radius:var(--radius-8);background:#fff;
+  outline:1px solid var(--rule);aspect-ratio:16/9}
+.slide-copy{display:flex;flex-direction:column;gap:var(--space-16)}
+.slide-copy p{font-size:16px;line-height:1.6;color:#000;max-width:var(--measure)}
+.slide-cap{font-size:14px;line-height:1.5;color:var(--ink-3)}
+.slide-cap b{color:var(--ink);font-weight:600}
+.callout{background:var(--brand);border-radius:var(--radius-12);padding:var(--space-16);
+  display:flex;flex-direction:column;gap:var(--space-8);align-self:start}
+.callout b{font-size:16px;line-height:1.4;font-weight:700;color:#fff}
+.callout p{font-size:15px;line-height:1.55;color:#fff}
+@media(max-width:900px){.slide-stack{grid-template-columns:1fr}}
+/* Entry steps: short copy beside a phone video, or above a row of screens.
+   Copy and phone sit together as one centred group, copy centred on the phone. */
+.slide-split{flex:1;display:grid;grid-template-columns:minmax(0,420px) 240px;gap:var(--space-60);
+  padding:var(--space-24) var(--space-24) var(--space-36);align-items:center;justify-content:center}
+.slide-split-wide{grid-template-columns:1fr;flex:none}
+.slide-split .nut-bullets li b{font-weight:600}
+/* A side note on a slide: light blue panel with a bulb. */
+.tip-note{display:flex;gap:var(--space-12);margin-top:var(--space-8);padding:var(--space-16);
+  background:var(--brand-wash);border-radius:var(--radius-12)}
+.tip-note svg{width:22px;height:22px;flex:none;margin-top:1px;stroke:#d99a00;stroke-width:1.8;fill:#ffe9a8;
+  stroke-linecap:round;stroke-linejoin:round}
+.tip-note div{display:flex;flex-direction:column;gap:var(--space-8)}
+.tip-note b{font-size:15px;font-weight:700;color:var(--ink)}
+.slide-copy .tip-note p{font-size:14px;line-height:1.55;color:var(--ink-2)}
+.type-grid{display:grid;grid-template-columns:repeat(4,minmax(0,200px));gap:var(--space-24);
+  justify-content:center;padding:0 var(--space-24) var(--space-24)}
+.type-grid figure{margin:0;display:flex;flex-direction:column;gap:var(--space-8)}
+.slide-split-wide .slide-copy p{max-width:none}
+.type-grid .shot{border:0;background:transparent;border-radius:0}
+.type-grid .shot img{height:auto;background:transparent}
+.type-grid figcaption{font-size:14px;font-weight:500;color:var(--ink-3);text-align:center}
+/* Step 4: the video and the screenshot share one phone size and line up at the top.
+   The screenshot (605×1293) is drawn at the video's shape (1942×4266), a 3% squeeze. */
+.slide-split-two{grid-template-columns:minmax(0,380px) 240px 240px;gap:var(--space-36)}
+.slide-split-two>.phone-vid,.slide-split-two>.slide-phone{align-self:start}
+.slide-phone{margin:0;display:flex;flex-direction:column;gap:var(--space-12)}
+.slide-phone .shot{border:0;background:transparent;border-radius:0}
+.slide-phone .shot img{height:auto;background:transparent}
+.slide-split-two .slide-phone .shot img{aspect-ratio:1942/4266;object-fit:fill}
+.slide-phone figcaption{font-size:14px;font-weight:500;color:var(--ink-3);text-align:center}
+@media(max-width:900px){.slide-split{grid-template-columns:1fr;gap:var(--space-24)}
+  .slide-split .phone-vid,.slide-phone{width:100%;max-width:260px;margin-inline:auto}}
+@media(max-width:720px){.type-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* 360° inspection: copy on the left, the guided capture video on a phone on the right.
+   The phone drops to line its top up with the heading, as in Context. */
+.capture-split{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:var(--space-60);align-items:start}
+.capture-split .sec-head{margin-bottom:0}
+.capture-split .phone-vid{margin-top:54px}
+/* 360° capture: a vertical stepper, the result as a callout, then per-vehicle shot lists. */
+.cap-body{display:flex;flex-direction:column;gap:var(--space-24);margin-top:var(--space-12);max-width:620px}
+.vflow{list-style:none;margin:0;padding:0}
+.vflow li{position:relative;display:grid;grid-template-columns:36px 1fr;column-gap:var(--space-16);padding-bottom:var(--space-24)}
+.vflow li:last-child{padding-bottom:0}
+.vflow li:not(:last-child)::before{content:"";position:absolute;left:17px;top:40px;bottom:4px;width:2px;
+  border-radius:2px;background:var(--brand-mid)}
+.vflow-n{width:36px;height:36px;border-radius:50%;background:var(--brand);color:#fff;
+  font-size:15px;font-weight:700;display:grid;place-items:center}
+.vflow li>div{display:flex;flex-direction:column;gap:2px;padding-top:6px}
+.vflow b{display:flex;align-items:center;gap:var(--space-8);font-size:17px;font-weight:700;line-height:1.35;color:var(--ink)}
+.vflow li>div>span{font-size:15px;line-height:1.5;color:var(--ink-3)}
+.vflow-tag{font-style:normal;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  padding:2px 8px;border-radius:var(--radius-full);background:#f2f4f7;color:var(--ink-3)}
+.cap-body .cap-result{padding:var(--space-12) var(--space-16);border-left:3px solid var(--brand);border-radius:0 var(--radius-8) var(--radius-8) 0;
+  background:var(--brand-wash);font-size:15px;line-height:1.5;font-weight:600;color:var(--ink)}
+.cap-veh-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--space-16)}
+.cap-veh{display:flex;flex-direction:column;gap:10px;padding:var(--space-16);
+  border:var(--border) solid var(--rule);border-radius:var(--radius-12)}
+.cap-veh b{font-size:15px;font-weight:600;color:var(--ink)}
+.cap-veh-path{margin-top:auto;padding-top:var(--space-8);border-top:var(--border) solid var(--rule);
+  font-size:13px;line-height:1.5;color:var(--ink-3)}
+.chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.chips li{padding:4px 10px;border-radius:var(--radius-full);background:var(--brand-wash);
+  font-size:13px;line-height:1.4;color:var(--stat-ink)}
+@media(max-width:1100px){.cap-veh-row{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:720px){.cap-veh-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.cap-veh-row{grid-template-columns:1fr}}
+@media(max-width:900px){.capture-split{grid-template-columns:1fr;gap:var(--space-36)}
+  .capture-split .phone-vid{margin-top:0}}
+
+/* Review & publish: screens in an iPhone 17 frame (402 × 874 pt viewport).
+   A screen taller than the viewport scrolls inside it; its top and bottom
+   bars are drawn again from the same image and pinned, like the real app. */
+/* Stage tabs: a segmented control, then that stage's phones side by side. */
+.stages{display:flex;flex-direction:column;gap:var(--space-24)}
+.stage-tabs{display:inline-flex;align-self:center;gap:2px;padding:3px;
+  border-radius:var(--radius-full);background:#f2f4f7;max-width:100%;overflow-x:auto}
+.stage-tab{display:flex;align-items:baseline;gap:6px;padding:8px 16px;border:0;border-radius:var(--radius-full);
+  background:transparent;color:var(--ink-3);font:inherit;cursor:pointer;white-space:nowrap;
+  transition:background-color var(--duration-base) var(--ease),color var(--duration-base) var(--ease),box-shadow var(--duration-base) var(--ease)}
+.stage-tab b{font-size:14px;font-weight:500}
+.stage-tab span{font-size:12px;color:#98a2b3}
+.stage-tab:hover{color:var(--ink)}
+.stage-tab[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(16,24,40,.08),0 1px 3px rgba(16,24,40,.06)}
+.stage-tab[aria-selected="true"] b{font-weight:600}
+.stage-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.stage-panel>.slide{width:100%}
+.stage-lead{font-size:16px;line-height:1.55;color:var(--ink-2);text-align:center}
+.iphone-row{margin-top:var(--space-24);display:grid;grid-template-columns:repeat(var(--n),minmax(0,240px));gap:var(--space-36);justify-content:center}
+.iphone-item{margin:0;display:flex;flex-direction:column;gap:var(--space-16)}
+@media(max-width:900px){.iphone-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-24)}}
+.iphone{padding:5px;border-radius:42px;background:#e4e7ec;box-shadow:0 12px 32px rgba(16,24,40,.10),inset 0 0 0 1px #d0d5dd}
+.iphone-in{position:relative;aspect-ratio:402/874;border-radius:37px;overflow:hidden;background:#fff}
+.iphone-screen{position:absolute;inset:0;overflow:hidden}
+.iphone-screen.is-long{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.iphone-screen.is-long::-webkit-scrollbar{display:none}
+.iphone-screen:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+.iphone-screen img{display:block;width:100%;height:auto}
+.iphone-top,.iphone-bot{position:absolute;left:0;right:0;aspect-ratio:590/var(--h);
+  background-size:100% auto;background-repeat:no-repeat;pointer-events:none}
+.iphone-top{top:0;background-position:top}
+.iphone-bot{bottom:0;background-position:bottom}
+/* A screen whose buttons have no bar of their own gets a hairline above them. */
+.iphone-bot-line{box-shadow:0 -1px 0 var(--rule)}
+.iphone-item figcaption{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  column-gap:var(--space-8);row-gap:2px;text-align:center}
+.iphone-n{width:20px;height:20px;border-radius:50%;background:#f2f4f7;color:var(--ink-3);
+  font-size:11px;font-weight:600;display:grid;place-items:center}
+.iphone-item figcaption b{font-size:15px;font-weight:600;color:var(--ink)}
+.iphone-hint{flex-basis:100%;font-size:12px;color:var(--ink-3)}
+
+/* ---------- Impact band ---------- */
+.impact-band{background:var(--impact-bg)}
+.impact-rule{display:flex;align-items:center;gap:var(--space-12);margin-block:var(--space-48) var(--space-24)}
+.impact-rule span{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--brand)}
+.impact-rule i{flex:1;height:1px;background:var(--impact-rule)}
+.sec-head+.impact-rule{margin-top:0}
+.biz{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-24)}
+@media(max-width:900px){.biz{grid-template-columns:1fr}}
+.biz-card{display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-16);background:var(--brand);
+  border-radius:var(--radius-12);padding:var(--space-36)}
+.biz-v{display:flex;align-items:center;gap:var(--space-4);flex:none}
+.biz-v i{font-style:normal;font-size:30px;font-weight:700;line-height:1;color:var(--brand-mid)}
+.biz-v b{font-size:52px;font-weight:700;line-height:1;letter-spacing:-1.5px;color:#fff;
+  font-variant-numeric:tabular-nums}
+.biz-text{display:flex;flex-direction:column;gap:6px}
+.biz-text strong{font-size:18px;font-weight:600;line-height:1.4;color:#fff}
+.biz-text>span{font-size:15px;line-height:1.45;color:var(--impact-rule)}
+@media(max-width:720px){.biz-v b{font-size:40px}.biz-card{padding:var(--space-24)}}
+
+/* ---------- Reflection / centred bands ---------- */
+.reflect{background:var(--band-alt);color:var(--band-ink)}
+.band-center>.wrap{display:flex;flex-direction:column;align-items:center;text-align:center;
+  gap:var(--space-48)}
+.band-center .overline{color:var(--band-accent)}
+.band-center h2{max-width:820px;color:#fff}
+.band-center .body-large{max-width:680px;color:var(--band-ink-2)}
+.band-head{display:flex;flex-direction:column;align-items:center;gap:var(--space-24);max-width:900px}
+.band-head em{font-style:italic;color:var(--band-accent)}
+.takes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:var(--space-24);width:100%;max-width:1000px;text-align:left}
+
+.sub{margin-top:var(--space-60);margin-bottom:var(--space-24);display:flex;
+  flex-direction:column;gap:var(--space-12);max-width:none}
+.sub p{font-size:18px;line-height:1.55;color:var(--ink-2);max-width:var(--measure)}
+.sub .overline{color:#000}
+/* The result: copy, stats and caption on the left, the old scan flow on a phone on the right. */
+.result-split{display:grid;grid-template-columns:minmax(0,1fr) 260px 180px;gap:var(--space-60);align-items:start}
+/* Same as Context: drop the phone so its top lines up with the section heading. */
+.result-split .sec-head{margin-bottom:0}
+.result-split .phone-vid{margin-top:54px}
+.phone-vid{position:relative}
+.phone-vid video{display:block;width:100%;height:auto;cursor:pointer}
+.vid-bar{display:flex;align-items:center;gap:var(--space-8);margin-top:var(--space-16)}
+.vid-btn{flex:none;width:32px;height:32px;border-radius:var(--radius-full);border:0;cursor:pointer;
+  background:#f2f4f7;color:var(--ink-3);display:grid;place-items:center;
+  transition:background-color var(--duration-base) var(--ease),transform var(--duration-base) var(--ease)}
+.vid-btn:hover{background:var(--brand-wash);color:var(--brand)}
+.vid-btn:active{transform:scale(.94)}
+.vid-btn:focus-visible,.vid-seek:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.vid-btn svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.vid-toggle .i-play,.vid-full .i-shrink{display:none}
+.vid-toggle.paused .i-play{display:block;fill:currentColor}
+.vid-toggle.paused .i-pause,.phone-vid.is-full .vid-full .i-expand{display:none}
+.phone-vid.is-full .vid-full .i-shrink{display:block}
+.vid-seek{flex:1;min-width:0;margin:0;height:4px;cursor:pointer;-webkit-appearance:none;appearance:none;border-radius:var(--radius-full);
+  background:linear-gradient(var(--brand-mid),var(--brand-mid)) 0/var(--p,0%) 100% no-repeat,#eef0f3}
+.vid-seek::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--brand-mid);border:2px solid #fff;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.vid-seek::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--brand-mid);border:2px solid #fff;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.vid-time{flex:none;font-size:12px;font-variant-numeric:tabular-nums;color:#98a2b3;min-width:3ch;text-align:right}
+/* Expanded: the phone and its controls fill the screen on white */
+.phone-vid.is-full{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:#fff;padding:var(--space-24);max-width:none;margin:0}
+.phone-vid.is-full video{width:auto;height:calc(100vh - 110px);max-width:100%}
+.phone-vid.is-full .vid-bar{width:min(480px,100%)}
+.vid-close{display:none}
+.phone-vid.is-full .vid-close{display:inline-flex;align-items:center;gap:var(--space-8);position:absolute;top:var(--space-24);right:var(--space-24);
+  height:40px;padding:0 var(--space-16) 0 var(--space-12);border:0;border-radius:var(--radius-full);cursor:pointer;
+  background:#f2f4f7;color:var(--ink);font:inherit;font-size:15px;font-weight:600;
+  transition:background-color var(--duration-base) var(--ease)}
+.phone-vid.is-full .vid-close:hover{background:#e4e7ec}
+.phone-vid.is-full .vid-close:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.vid-close svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round}
+@media(max-width:900px){
+  .result-split{grid-template-columns:1fr;gap:var(--space-36)}
+  .phone-vid{max-width:280px;margin-inline:auto}
+  .result-split .phone-vid{margin-top:0}
+}
+/* Context: copy and reasons on the left, the car scan on a phone, then short notes beside it. */
+.ctx-split{display:grid;grid-template-columns:minmax(0,1fr) 260px 180px;gap:var(--space-60);align-items:center}
+.ctx-split .sec-head{margin-bottom:0}
+/* Line the phone's top edge up with the heading: drop it by the overline's height plus the gaps above the heading (14.4 + 24 + 12) and the heading's top half-leading. */
+.ctx-split{align-items:start}
+.ctx-split .phone-vid{margin-top:54px}
+.ctx-notes{align-self:center}
+.ctx-sub{margin-top:var(--space-36);font-size:20px;line-height:1.4;font-weight:700;color:var(--ink)}
+.ctx-list{margin:var(--space-12) 0 0;padding:0;list-style:none;display:grid;gap:var(--space-8);max-width:var(--measure)}
+.ctx-list li{position:relative;padding-left:20px;font-size:18px;line-height:1.55;color:var(--ink-2)}
+.ctx-list li::before{content:"";position:absolute;left:4px;top:.68em;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+.ctx-notes{margin:0;padding:0 0 0 var(--space-16);list-style:none;border-left:2px solid #d0d5dd;display:grid;gap:var(--space-36)}
+.ctx-notes li{font-size:15px;line-height:1.45;color:var(--ink-3)}
+.ctx-notes b{display:block;font-weight:700;color:var(--ink);margin-bottom:var(--space-4)}
+@media(max-width:1100px){
+  .ctx-split,.result-split{grid-template-columns:minmax(0,1fr) 240px;gap:var(--space-48)}
+  .ctx-notes{grid-column:1/-1;grid-template-columns:repeat(3,minmax(0,1fr));border-left:0;padding-left:0;gap:var(--space-24)}
+  .ctx-notes li{border-left:2px solid #d0d5dd;padding-left:var(--space-16)}
+}
+@media(max-width:900px){
+  .ctx-split,.result-split{grid-template-columns:1fr;gap:var(--space-36)}
+  .ctx-split .phone-vid{max-width:280px;margin:0 auto}
+}
+@media(max-width:560px){.ctx-notes{grid-template-columns:1fr}}
+@media(max-width:1100px) and (min-width:561px){.result-split .ctx-notes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Optional deep-dive: collapsed by default so skimmers can pass it by. */
+.more{margin-top:var(--space-60);border:1px solid #e4e7ec;border-radius:var(--radius-12);background:#fff}
+.more summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:var(--space-24);
+  padding:var(--space-24);border-radius:inherit;transition:background-color var(--duration-base) var(--ease)}
+.more summary::-webkit-details-marker{display:none}
+.more summary:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.more-text{display:flex;flex-direction:column;gap:var(--space-8)}
+.more-text .overline{color:var(--ink-3)}
+.more-title{font-size:20px;line-height:1.35;font-weight:700;color:var(--ink)}
+.more-btn{flex:none;display:inline-flex;align-items:center;gap:var(--space-8);height:36px;padding:0 var(--space-12) 0 var(--space-16);
+  border-radius:var(--radius-full);background:var(--brand-wash);color:var(--brand);font-size:14px;font-weight:600}
+.more-btn{transition:background-color var(--duration-base) var(--ease),color var(--duration-base) var(--ease)}
+.more summary:hover .more-btn{background:var(--brand);color:#fff}
+.more summary:active .more-btn{transform:scale(.97)}
+.more-btn svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform var(--duration-base) var(--ease)}
+.more-hide,.more[open] .more-show{display:none}
+.more[open] .more-hide{display:inline}
+.more[open] .more-btn svg{transform:rotate(180deg)}
+.more-body{padding:0 var(--space-24) var(--space-24)}
+.more-body>p:first-child{font-size:18px;line-height:1.55;color:var(--ink-2);margin-bottom:var(--space-24)}
+.more[open] .more-body{animation:more-in var(--duration-slow) var(--ease)}
+@keyframes more-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.more[open] .more-body{animation:none}}
+@media(max-width:600px){.more summary{flex-direction:column;align-items:flex-start;gap:var(--space-16)}}
+.src{margin-top:var(--space-24);font-size:13px;line-height:1.65;color:var(--ink-3);max-width:90ch}
+.src sup{color:var(--brand);font-weight:700}
+
+/* ---------- Footer ---------- */
+footer{background:var(--band);color:var(--band-ink-2);padding-block:var(--space-96)}
+footer h2{color:#fff}
+footer .wrap{display:flex;flex-direction:column;gap:var(--space-24)}
+footer p{max-width:var(--measure);font-size:18px;line-height:1.6}
+.contact{display:flex;flex-wrap:wrap;gap:var(--space-24) var(--space-48);margin-top:var(--space-12)}
+.contact dt{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--band-accent);margin-bottom:var(--space-4)}
+.contact dd{font-size:15px;color:#fff}
+.contact a{color:#fff}
+
+/* ---------- Reduced motion ---------- */
+@media(prefers-reduced-motion:reduce){
+  html,.hs-track{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+  .reveal{opacity:1;transform:none}
+  .px{transform:none!important}
+  .tilt{transform:none!important}
+  .tilt::after{display:none}
+}
+
+/* All cards and stat tiles: light grey with black text at rest, brand blue with
+   white text on hover (pointer devices) or while touched (.touched, set in JS). */
+body :is(.card,.stat){background:#f9fafb;border:0;box-shadow:var(--shadow-2);
+  transition:transform 420ms var(--ease-out),box-shadow var(--duration-slow) var(--ease),background-color var(--duration-slow) var(--ease)}
+body :is(.card,.stat).live{transition:transform 90ms linear,box-shadow var(--duration-slow) var(--ease),background-color var(--duration-slow) var(--ease)}
+body :is(.card,.stat) :is(.lbl,.num,h3,h4,p,li,strong,b,em,.v,.k,small,.term){color:#000;transition:color var(--duration-slow) var(--ease)}
+body :is(.card,.stat) :is(sup,a){color:var(--brand);transition:color var(--duration-slow) var(--ease)}
+body :is(.card,.stat) li::before{background:var(--brand);transition:background-color var(--duration-slow) var(--ease)}
+body :is(.card,.stat).touched{background:var(--brand)}
+body :is(.card,.stat).touched :is(.lbl,.num,h3,h4,p,li,strong,b,em,.v,.k,small,.term,sup,a){color:#fff}
+body :is(.card,.stat).touched li::before{background:#fff}
+@media(hover:hover) and (pointer:fine){
+  body :is(.card,.stat):hover{background:var(--brand)}
+  body :is(.card,.stat):hover :is(.lbl,.num,h3,h4,p,li,strong,b,em,.v,.k,small,.term,sup,a){color:#fff}
+  body :is(.card,.stat):hover li::before{background:#fff}
+}
+/* Legacy failure stats keep the light red wash on hover/touch instead of blue. */
+body .stat.stat-bad.touched{background:var(--friction-wash)}
+body .stat.stat-bad.touched :is(.v,.k,b,small){color:var(--friction)}
+@media(hover:hover) and (pointer:fine){
+  body .stat.stat-bad:hover{background:var(--friction-wash)}
+  body .stat.stat-bad:hover :is(.v,.k,b,small){color:var(--friction)}
+}
+/* Research findings sit on the grey .alt band, so they rest on white. */
+body .card.card-white:not(:hover):not(.touched){background:#fff}
+
+/* ---------- Site header: shared with the portfolio home page, themed per case study ---------- */
+.nav{background:var(--band);border-bottom:1px solid rgba(241,238,230,.12);box-shadow:none;
+  backdrop-filter:none;-webkit-backdrop-filter:none}
+.nav-in{gap:var(--space-24);padding-block:14px}
+.nav .brand{display:inline-flex;align-items:center;gap:11px;text-decoration:none;color:#f1eee6;flex:none}
+.nav .brand-logo{display:block;width:34px;height:34px;border-radius:7px;flex:none;transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.nav .brand:hover .brand-logo{transform:rotate(-8deg)}
+.nav .brand-name{font:600 21px/1 "Barlow Condensed",ui-sans-serif,system-ui,sans-serif;letter-spacing:.06em;
+  text-transform:uppercase;color:#f1eee6;white-space:nowrap}
+.nav-items,.nav-site{font-family:"Barlow Condensed",ui-sans-serif,system-ui,sans-serif;font-weight:600;
+  text-transform:uppercase;letter-spacing:.04em}
+.nav-items{gap:22px}
+.nav-items a,.nav-site a{position:relative;color:rgba(241,238,230,.72);background:none;border-radius:0;
+  padding:4px 0;font-size:17px;line-height:1.2;text-decoration:none;transition:color .3s ease}
+.nav-site a{color:#f1eee6}
+.nav-items a::after,.nav-site a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;
+  background:var(--band-accent);transform:scaleX(0);transform-origin:right;transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.nav-items a:hover,.nav-items a[aria-current="true"]{color:#f1eee6;background:none}
+.nav-items a:hover::after,.nav-items a[aria-current="true"]::after,.nav-site a:hover::after,.nav-site a.is-here::after{
+  transform:scaleX(1);transform-origin:left}
+.nav-site{display:flex;gap:22px;padding-left:22px;border-left:1px solid rgba(241,238,230,.22)}
+.nav a:focus-visible{outline:2px solid var(--band-accent);outline-offset:4px}
+.progress i{background:var(--band-accent)}
+@media(max-width:1000px){.nav-site{margin-left:auto;padding-left:0;border-left:0}}
+@media(max-width:720px){.nav .brand-name{font-size:19px}.nav .brand-logo{width:30px;height:30px;border-radius:6px}
+  .nav-site{gap:18px}.nav-site a:not(.keep){display:none}}
+
+/* ---------- Case study sections bar: sits under the site header ---------- */
+.topbars{position:sticky;top:0;z-index:50}
+.nav-site{margin-left:auto;padding-left:0;border-left:0}
+.topbars .nav{position:relative;top:auto}
+.subnav{position:relative;background:rgba(255,255,255,.94);backdrop-filter:saturate(1.6) blur(14px);
+  -webkit-backdrop-filter:saturate(1.6) blur(14px);border-bottom:var(--border) solid var(--rule);box-shadow:0 4px 4px rgba(0,0,0,.04)}
+.subnav-in{max-width:var(--container);margin-inline:auto;padding:0 var(--gutter);display:flex;align-items:center;gap:var(--space-24)}
+.subnav-label{flex:none;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+  padding-right:var(--space-24);border-right:var(--border) solid var(--rule);line-height:1}
+.subnav-items{display:flex;gap:var(--space-24);overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.subnav-items::-webkit-scrollbar{display:none}
+.subnav-items a{position:relative;flex:none;padding:13px 0 12px;font-size:14px;font-weight:500;line-height:1.3;
+  color:var(--ink-3);text-decoration:none;transition:color var(--duration-base) var(--ease)}
+.subnav-items a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:2px;
+  background:var(--brand);transform:scaleX(0);transition:transform .3s var(--ease)}
+.subnav-items a:hover{color:var(--ink)}
+.subnav-items a[aria-current="true"]{color:var(--brand);font-weight:600}
+.subnav-items a[aria-current="true"]::after{transform:scaleX(1)}
+.subnav-items a:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:2px}
+.topbars .progress{position:absolute;top:auto;bottom:-1px;left:0;height:2px;z-index:1}
+.topbars .progress i{background:var(--brand);opacity:.35}
+@media(max-width:720px){.subnav-label{display:none}.subnav-in{gap:0}}
+
+/* ---------- Match the home page header: full width, same edge spacing and sizes ---------- */
+:root{--site-edge:calc(12px + clamp(20px, 3vw, 44px))}
+.nav-in,.subnav-in{max-width:none;padding-inline:var(--site-edge)}
+.nav .brand-logo{width:36px;height:36px}
+.nav .brand-name{font-size:22px}
+.nav-site{gap:26px}
+.nav-site a{font-size:20px}
+@media(max-width:720px){.nav .brand-name{font-size:19px}.nav .brand-logo{width:30px;height:30px}.nav-site{gap:18px}}
+
+
+/* ---------- Subheader: back button left, sections menu right ---------- */
+.subnav-in{justify-content:space-between}
+.subnav-back{display:inline-flex;align-items:center;gap:8px;flex:none;padding:13px 0 12px;font-size:14px;font-weight:600;
+  line-height:1.3;color:var(--ink-2);text-decoration:none;transition:color var(--duration-base) var(--ease)}
+.subnav-back svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform .3s var(--ease)}
+.subnav-back:hover{color:var(--brand)}
+.subnav-back:hover svg{transform:translateX(-3px)}
+.subnav-back:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:2px}
+.subnav-items{margin-left:auto;min-width:0}
+@media(max-width:720px){.subnav-back-more{display:none}.subnav-in{gap:var(--space-16)}}
+</style>
+</head>
+<body>
+
+<div class="topbars">
+
+<nav class="nav" aria-label="Site">
+  <div class="nav-in">
+    <a class="brand" href="../index.html" aria-label="Sambit Mohanty, home">
+      <img class="brand-logo" src="../assets/logo.svg" alt="" width="34" height="34">
+      <span class="brand-name">Sambit Mohanty</span>
+    </a>
+    <div class="nav-site">
+      <a href="../index.html#hello">About</a>
+      <a href="../index.html#work" class="is-here">Work</a>
+      <a href="../index.html#contact" class="keep">Contact</a>
+    </div>
+  </div>
+</nav>
+<div class="subnav">
+  <div class="subnav-in">
+    <a class="subnav-back" href="../index.html#work">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+      <span>Back<span class="subnav-back-more"> to work</span></span>
+    </a>
+    <nav class="subnav-items" data-navlinks aria-label="Case study sections">
+      <a href="#context">Context</a><a href="#problem">Problem</a><a href="#legacy">Legacy</a>
+      <a href="#insight">Insight</a><a href="#research">Research</a>
+      <a href="#strategy">Strategy</a><a href="#final">Final</a>
+      <a href="#impact">Impact</a>
+    </nav>
+  </div>
+  <div class="progress" aria-hidden="true"><i data-progress></i></div>
+</div>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap hero-in">
+    <span class="badge reveal">B2B marketplace iOS &amp; web app</span>
+    <h1 class="display-1 reveal" style="--i:1">Listing a motorbike is now<br class="br-wide"> <em class="accent">as easy as listing a car.</em></h1>
+    <p class="body-large reveal" style="--i:2">OPENLANE is a wholesale marketplace where dealers buy and sell used vehicles. Its listing app was <em class="accent">built for cars</em>, so it broke down when dealers tried to sell <em class="accent">motorbikes</em>, <em class="accent">ATVs</em> and <em class="accent">snowmobiles</em>. I led the redesign that lets 125K+ dealers list them as <em class="accent">quickly and confidently</em> as a car.</p>
+    <div class="actions reveal" style="--i:3">
+      <a class="btn btn-primary" href="#nutshell">Read the 30-second version</a>
+      <a class="btn btn-secondary" href="#final">Jump to final designs</a>
+    </div>
+    <dl class="meta reveal" style="--i:4">
+      <div><dt>Role</dt><dd>Lead product designer</dd></div>
+      <span class="sep" aria-hidden="true"></span>
+      <div><dt>Duration</dt><dd>5 months</dd></div>
+      <span class="sep" aria-hidden="true"></span>
+      <div><dt>Domain</dt><dd>Automotive/B2B marketplace</dd></div>
+      <span class="sep" aria-hidden="true"></span>
+      <div><dt>User</dt><dd>Wholesale vehicle dealers</dd></div>
+    </dl>
+
+    <div class="hero-visual reveal" style="--i:5">
+      <div class="mock" data-px data-px-strength="-24">
+        <div class="mock-bar" aria-hidden="true">
+          <span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span>
+        </div>
+        <figure class="shot hero-reel phone-vid">
+          <video src="case-study%20sections/01-hero/hero-video.mp4" poster="case-study%20sections/01-hero/hero-poster.jpg"
+                 width="1920" height="1080" autoplay muted loop playsinline preload="auto"
+                 aria-label="A 21-second overview: cars scan in seconds but powersports didn’t; one guided flow for every vehicle; help when a scan fails; guided 360° photos; review and publish; results of plus 20% faster inspections, minus 12% arbitration and plus 15% faster first bids"></video>
+          <div class="vid-bar">
+            <button type="button" class="vid-btn vid-toggle" aria-label="Pause video">
+              <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>
+              <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+            </button>
+            <input type="range" class="vid-seek" min="0" max="100" step="0.01" value="0" aria-label="Seek through the video">
+            <span class="vid-time" aria-hidden="true">0:00</span>
+            <button type="button" class="vid-btn vid-full" aria-label="Expand video">
+              <svg class="i-expand" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              <svg class="i-shrink" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
+            </button>
+          </div>
+
+        </figure>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ IN A NUTSHELL ============ -->
+<section class="band-full" id="nutshell">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">In a nutshell</span>
+      <h2 class="heading-1 reveal" style="--i:1">The 30-second version</h2>
+      <p class="body-large measure reveal" style="--i:2">For recruiters, hiring managers, design and product leaders, and anyone reading between meetings.</p>
+    </div>
+    <div class="grid g5">
+      <article class="card tilt reveal" data-tilt><span class="lbl">01 · The user</span><h3 class="heading-4">Dealers listing<br>on the lot.</h3><ul class="nut-bullets"><li>125K+ wholesale dealers</li><li>List motorcycles, ATVs and snowmobiles</li><li>Use the iOS and web apps</li></ul></article>
+      <article class="card tilt reveal" data-tilt style="--i:1"><span class="lbl">02 · The problem</span><h3 class="heading-4">The scanner failed<br>at step one.</h3><ul class="nut-bullets"><li>Powersports IDs are non-standard and hard to read</li><li>41% of scans failed</li><li>62% of dealers quit at the first step</li></ul></article>
+      <article class="card tilt reveal" data-tilt style="--i:2"><span class="lbl">03 · My role</span><h3 class="heading-4">Lead Product<br>Designer (0-1)</h3><ul class="nut-bullets"><li>Led the reframe, flows, interaction and UI</li><li>Worked with PM, engineering and wholesale dealers</li></ul></article>
+      <article class="card tilt reveal" data-tilt style="--i:3"><span class="lbl">04 · Key move</span><h3 class="heading-4">One flow that<br>never dead-ends.</h3><ul class="nut-bullets"><li>Split "scan" into capture, decode and match</li><li>A missing match is no longer an error</li></ul></article>
+      <article class="card tilt reveal" data-tilt style="--i:4"><span class="lbl">05 · The outcome</span><h3 class="heading-4">+20% faster<br>inspections.</h3><ul class="nut-bullets"><li><span class="term">Arbitration<button type="button" class="info" aria-label="What is arbitration?" aria-describedby="tip-arb-1" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5.5"/><path d="M12 7.6h.01"/></svg></button><span class="tip" role="tooltip" id="tip-arb-1">A dispute after the sale: the buyer says the vehicle isn't as described, and OPENLANE steps in to settle it. Fewer disputes means more accurate listings.</span></span> down 12%</li><li>Bids came in 15% faster</li></ul></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 CONTEXT ============ -->
+<section id="context">
+  <div class="wrap">
+    <div class="ctx-split">
+      <div class="ctx-main">
+        <div class="sec-head">
+          <span class="overline reveal">01. Context</span>
+          <h2 class="heading-1 reveal" style="--i:1">Why the car flow worked so well</h2>
+          <p class="body-large reveal" style="--i:2">OPENLANE is a wholesale marketplace where dealers buy and sell used vehicles. To list a car, the dealer scans the VIN in the app. The app then auto-populates the year, make, model and trim in seconds.</p>
+        </div>
+        <h3 class="ctx-sub reveal" style="--i:3">This works well for cars because:</h3>
+        <ul class="ctx-list reveal" style="--i:4">
+          <li>Standardized 17-character identifiers</li>
+          <li>Printed on labels or dashboards</li>
+          <li>Barcode scanning and OCR (text scan) decode and auto-populate accurately</li>
+        </ul>
+      </div>
+      <div class="phone-vid reveal" style="--i:1">
+        <video src="case-study%20sections/03-context/openlane%20car%20VIN.mp4" width="976" height="2124"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="The car app: the dealer starts an inspection, scans the VIN, and the vehicle details fill in automatically"></video>
+      <div class="vid-bar">
+        <button type="button" class="vid-btn vid-toggle" aria-label="Pause video">
+          <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>
+          <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+        </button>
+        <input type="range" class="vid-seek" min="0" max="100" step="0.01" value="0" aria-label="Seek through the video">
+        <span class="vid-time" aria-hidden="true">0:00</span>
+        <button type="button" class="vid-btn vid-full" aria-label="Expand video">
+          <svg class="i-expand" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          <svg class="i-shrink" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
+        </button>
+      </div>
+      </div>
+      <ul class="ctx-notes reveal" style="--i:2">
+        <li><b>Car VIN</b>Standard 17-character</li>
+        <li><b>Fixed place</b>Labels or dashboards</li>
+        <li><b>Barcode &amp; OCR are reliable</b>Accurate auto-population</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 THE PROBLEM ============ -->
+<section class="alt" id="problem">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">02. The problem</span>
+      <h2 class="heading-1 reveal" style="--i:1">Stand in the lot for a minute</h2>
+      <p class="body-large measure reveal" style="--i:2">Seven in the morning, early March in Ontario, −6°C (21°F). Powersports sales peak in summer, so the dealer needs eleven vehicles listed before then. The first is a dirt bike with mud dried hard on the frame.</p>
+      <p class="body-large measure reveal" style="--i:3">They tap to list it and the camera asks for the VIN. On a car, this step is already done. Here the number is stamped into the frame and half packed with dirt.</p>
+      <p class="body-large measure reveal" style="--i:4"><strong>Unable to scan.</strong> Another angle, then the flashlight. Nothing typed, no photos, no price. The phone goes back in the pocket, and the bike loses another day before summer.</p>
+    </div>
+    <div class="story-grid" data-lb-group>
+      <figure class="story-panel reveal" style="--i:0">
+        <div class="shot" data-slot="7:00am, −6°C." data-full="case-study%20sections/03a-the-problem/1.Cold%20Morning%20Bike%20Backlog-2.png" data-title="1 · 7:00am, −6°C." data-cap="Eleven vehicles to list before summer.">
+          <img src="case-study%20sections/03a-the-problem/1.Cold%20Morning%20Bike%20Backlog-2.jpg" width="1448" height="1086" loading="lazy" decoding="async" alt="Seven in the morning in March, −6°C, with eleven vehicles to list"></div>
+        <figcaption><span class="story-n">1</span><span><b>7:00am, −6°C.</b> Eleven vehicles to list before summer.</span></figcaption>
+      </figure>
+      <figure class="story-panel reveal" style="--i:1">
+        <div class="shot" data-slot="Mud on the frame." data-full="case-study%20sections/03a-the-problem/2.Mud%20obscures%20the%20dirt%20bike%20VIN-4.png" data-title="2 · Mud on the frame." data-cap="The VIN is stamped into the metal, half covered.">
+          <img src="case-study%20sections/03a-the-problem/2.Mud%20obscures%20the%20dirt%20bike%20VIN-4.jpg" width="1448" height="1086" loading="lazy" decoding="async" alt="Close-up of the frame: the VIN stamped into the metal, half covered in dried mud"></div>
+        <figcaption><span class="story-n">2</span><span><b>Mud on the frame.</b> The VIN is stamped into the metal, half covered.</span></figcaption>
+      </figure>
+      <figure class="story-panel reveal" style="--i:2">
+        <div class="shot" data-slot="Scan the VIN." data-full="case-study%20sections/03a-the-problem/3.Scanning%20the%20dirt%20bike%20VIN-3.png" data-title="3 · Scan the VIN." data-cap="The app opens the camera first.">
+          <img src="case-study%20sections/03a-the-problem/3.Scanning%20the%20dirt%20bike%20VIN-3.jpg" width="1448" height="1086" loading="lazy" decoding="async" alt="The app opens the camera and asks for the VIN over the muddy frame"></div>
+        <figcaption><span class="story-n">3</span><span><b>Scan the VIN.</b> The app opens the camera first.</span></figcaption>
+      </figure>
+      <figure class="story-panel reveal" style="--i:3">
+        <div class="shot" data-slot="Unable to scan." data-full="case-study%20sections/03a-the-problem/4.Smartphone%20flash%20lights%20motorcycle%20VIN%20area.png" data-title="4 · Unable to scan." data-cap="Another angle, the flashlight, three tries.">
+          <img src="case-study%20sections/03a-the-problem/4.Smartphone%20flash%20lights%20motorcycle%20VIN%20area.jpg" width="1448" height="1086" loading="lazy" decoding="async" alt="The scan fails three times, with a new angle and the flashlight on"></div>
+        <figcaption><span class="story-n">4</span><span><b>Unable to scan.</b> Another angle, the flashlight, three tries.</span></figcaption>
+      </figure>
+      <figure class="story-panel reveal" style="--i:4">
+        <div class="shot" data-slot="Back in the pocket." data-full="case-study%20sections/03a-the-problem/5.Frustrated%20Rider%20with%20Unsold%20Motorcycle.png" data-title="5 · Back in the pocket." data-cap="Not listed, and summer gets closer.">
+          <img src="case-study%20sections/03a-the-problem/5.Frustrated%20Rider%20with%20Unsold%20Motorcycle.jpg" width="1448" height="1086" loading="lazy" decoding="async" alt="The dealer walks away; the bike stays unlisted as summer approaches"></div>
+        <figcaption><span class="story-n">5</span><span><b>Back in the pocket.</b> Not listed, and summer gets closer.</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 LEGACY ============ -->
+<section id="legacy">
+  <div class="wrap">
+    <div class="result-split">
+      <div class="result-main">
+        <div class="sec-head">
+          <span class="overline reveal">03. Diagnosing the legacy experience</span>
+          <h2 class="heading-1 reveal" style="--i:1">Powersports breaks every assumption</h2>
+          <p class="body-large measure reveal" style="--i:2">OPENLANE reused the car flow for powersports, but motorcycles, ATVs and snowmobiles don't follow car rules. The app opened straight to the scanner, so dealers hit the problem on the very first screen, and many gave up.</p>
+        </div>
+        <h3 class="ctx-sub reveal">An error before they'd invested anything.</h3>
+        <ul class="ctx-list reveal">
+          <li>Units carry different IDs: VIN, <span class="term">HIN<button type="button" class="info" aria-label="What is a HIN?" aria-describedby="tip-hin-1" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5.5"/><path d="M12 7.6h.01"/></svg></button><span class="tip" role="tooltip" id="tip-hin-1">Hull Identification Number: the ID stamped on boats and personal watercraft.</span></span>, serial or maker code</li>
+          <li>Dealers can't tell which number the app wants</li>
+          <li>The number can be anywhere on the frame</li>
+          <li>Dirt, mud and corrosion make it unreadable to OCR</li>
+        </ul>
+      </div>
+      <div class="phone-vid reveal" style="--i:1">
+        <video src="case-study%20sections/04-legacy-experience/Old%20powersports%20VIN%20scan.mp4" width="1948" height="4256"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="The old powersports app: the camera opens on a muddy frame, the VIN can't be read, and the scan fails"></video>
+        <div class="vid-bar">
+          <button type="button" class="vid-btn vid-toggle" aria-label="Pause video">
+            <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>
+            <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+          </button>
+          <input type="range" class="vid-seek" min="0" max="100" step="0.01" value="0" aria-label="Seek through the video">
+          <span class="vid-time" aria-hidden="true">0:00</span>
+          <button type="button" class="vid-btn vid-full" aria-label="Expand video">
+            <svg class="i-expand" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            <svg class="i-shrink" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
+          </button>
+        </div>
+      </div>
+      <ul class="ctx-notes reveal" style="--i:2">
+        <li><b>Many identifiers</b>VIN, <span class="term">HIN<button type="button" class="info" aria-label="What is a HIN?" aria-describedby="tip-hin-2" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5.5"/><path d="M12 7.6h.01"/></svg></button><span class="tip" role="tooltip" id="tip-hin-2">Hull Identification Number: the ID stamped on boats and personal watercraft.</span></span>, serial or maker code</li>
+        <li><b>Unclear which one</b>The dealer is guessing</li>
+        <li><b>No fixed place</b>Anywhere on the frame</li>
+        <li><b>Dirt &amp; corrosion</b>Unreadable to OCR</li>
+      </ul>
+    </div>
+
+    <div class="impact-rule reveal"><span>Legacy entry step · internal data</span><i></i></div>
+    <div class="grid g3">
+      <div class="stat stat-center stat-bad tilt reveal" data-tilt><div class="v"><span data-count="62">62</span><small>%</small></div><div class="k"><b>Drop-off</b>Abandoned at the entry step</div></div>
+      <div class="stat stat-center stat-bad tilt reveal" data-tilt style="--i:1"><div class="v"><span data-count="41">41</span><small>%</small></div><div class="k"><b>Scan failure</b>Barcode/OCR couldn't read the identifier</div></div>
+      <div class="stat stat-center stat-bad tilt reveal" data-tilt style="--i:2"><div class="v"><span data-count="76">76</span><small>%</small></div><div class="k"><b>Low confidence</b>Read returned, but unreliable</div></div>
+    </div>
+    <p class="mock-cap reveal" style="max-width:none"><b>Entry-step failure caused by scan-first logic:</b> The data was unambiguous: the scanner was the funnel's leak, not its on-ramp.</p>
+
+    <details class="more reveal">
+      <summary>
+        <span class="more-text">
+          <span class="overline">Industry context</span>
+          <span class="more-title">The wider industry sees the same thing</span>
+        </span>
+        <span class="more-btn"><span class="more-show">Show data</span><span class="more-hide">Hide data</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+      </summary>
+      <div class="more-body">
+        <p style="max-width:none">These internal numbers aren't a one-off. Third-party sources describe the same structural problem — and a large, growing market sitting behind it.</p>
+        <div class="grid g3">
+          <div class="stat stat-center stat-neutral tilt reveal" data-tilt><div class="v">~<span data-count="10">10</span><small>-digit</small></div><div class="k"><b>Typical powersports VIN</b>Often partial or non-standard vs a car's 17 — so it can't self-decode<sup>1</sup></div></div>
+          <div class="stat stat-center stat-neutral tilt reveal" data-tilt style="--i:1"><div class="v">&gt;1<small>in 10</small></div><div class="k"><b>Decode-error red line</b>Above this, a data source isn't broad enough for multi-brand powersports<sup>2</sup></div></div>
+          <div class="stat stat-center stat-neutral tilt reveal" data-tilt style="--i:2"><div class="v">15–<span data-count="30">30</span><small>min</small></div><div class="k"><b>Manual entry per unit</b>vs ~60–90 sec when a decode works — failed scans cost real time<sup>2</sup></div></div>
+        </div>
+        <p class="src reveal" style="max-width:none"><strong>Market size:</strong> the US powersports market is projected to grow from <strong>$15.3B (2024) to $26.8B by 2034</strong><sup>1</sup> — a segment the car-first flow was quietly turning away.<br>
+        <sup>1</sup> PCMI, <a href="https://www.pcmicorp.com/2025/12/extended-warranties-in-powersports-overcoming-non-vin-challenges-for-tpas-dealerships-and-oems/">non-VIN powersports challenges</a> &nbsp;·&nbsp; <sup>2</sup> DealerClick, <a href="https://dealerclick.com/blog/powersports-inventory-intake-playbook">powersports intake playbook</a>.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ CORE INSIGHT ============ -->
+<section class="band-full band-center" id="insight">
+  <div class="wrap">
+    <div class="band-head">
+      <span class="overline reveal">Core insight</span>
+      <h2 class="heading-1 reveal" style="--i:1">"Scan" is three different jobs</h2>
+      <p class="body-large reveal" style="--i:2">A scan looks like one action, but it's really three separate steps: capture, decode and match. Each one can work or fail on its own. Seeing them separately changed the question from <em>"did the scan work?"</em> to <em>"what do we do when one step comes up empty?"</em> That question shaped the whole design.</p>
+    </div>
+    <div class="takes">
+      <article class="card card-solid tilt reveal" data-tilt><span class="lbl">1 · Capture</span><h3 class="heading-3">Read the<br>characters</h3><ul class="solid-bullets"><li>Turns the number into text</li><li>Always works once the dealer has the number</li></ul></article>
+      <article class="card card-solid tilt reveal" data-tilt style="--i:1"><span class="lbl">2 · Decode</span><h3 class="heading-3">Work out<br>the vehicle</h3><ul class="solid-bullets"><li>Gets year, make and model from the number itself</li><li>Only works for standard VINs</li></ul></article>
+      <article class="card card-solid tilt reveal" data-tilt style="--i:2"><span class="lbl">3 · Match</span><h3 class="heading-3">Look the<br>number up</h3><ul class="solid-bullets"><li>Searches a database for past records and value</li><li>Many powersports units aren't in it</li></ul></article>
+    </div>
+    <blockquote class="quote reveal" style="max-width:none">
+      <p>The old flow asked the dealer to succeed at the hardest task <span class="accent">first.</span><br>The redesign assumes that task will sometimes fail and makes failure a non-event.</p>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ============ 04 RESEARCH ============ -->
+<section class="alt" id="research">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">04. Research &amp; feasibility</span>
+      <h2 class="heading-1 reveal" style="--i:1">Pressure-testing what's actually possible</h2>
+      <p class="body-large measure reveal" style="--i:2">Before designing anything "smart", I worked with engineering to check what the backend could actually return. Two findings shaped the design.</p>
+    </div>
+    <div class="grid g2">
+      <article class="card card-white tilt reveal" data-tilt><span class="lbl">Finding 1 · Identifiers</span><h3 class="heading-3">Not every ID can be decoded</h3><ul class="nut-bullets"><li>Most motorcycles and ATVs have a 17-character VIN that decodes fully</li><li>Watercraft use a <span class="term">HIN<button type="button" class="info" aria-label="What is a HIN?" aria-describedby="tip-hin-3" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5.5"/><path d="M12 7.6h.01"/></svg></button><span class="tip" role="tooltip" id="tip-hin-3">Hull Identification Number: the ID stamped on boats and personal watercraft.</span></span>, which only gives the maker and build date</li><li>Snowmobiles and older units often have plain serials with nothing to decode</li></ul></article>
+      <article class="card card-white tilt reveal" data-tilt style="--i:1"><span class="lbl">Finding 2 · Valuation data</span><h3 class="heading-3">Many units won't find a match</h3><ul class="nut-bullets"><li>Pricing data for powersports is thinner than for cars</li><li>Watercraft are often missing altogether</li><li>So "no match" is common, not rare</li></ul></article>
+    </div>
+    <div class="note notes reveal">
+      <span class="tag">◆ The constraint that shaped the UI</span>
+      <p>Since most units won't match, I designed "nothing came back" as the <strong>calm, expected default</strong>, not an error. A clean decode or match is a bonus on top.</p>
+    </div>
+    <details class="more reveal">
+      <summary>
+        <span class="more-text">
+          <span class="overline">Industry context</span>
+          <span class="more-title">Identifier types and valuation sources</span>
+        </span>
+        <span class="more-btn"><span class="more-show">Show details</span><span class="more-hide">Hide details</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+      </summary>
+      <div class="more-body">
+        <div class="grid g2">
+          <article class="card"><span class="lbl">Identifiers</span><h3 class="heading-4">What each ID can tell you</h3><ul class="nut-bullets"><li><strong>Motorcycles and most ATVs:</strong> 17-character VIN, decodes fully</li><li><strong>Watercraft:</strong> <span class="term">HIN<button type="button" class="info" aria-label="What is a HIN?" aria-describedby="tip-hin-4" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5.5"/><path d="M12 7.6h.01"/></svg></button><span class="tip" role="tooltip" id="tip-hin-4">Hull Identification Number: the ID stamped on boats and personal watercraft.</span></span> (<a href="https://www.ecfr.gov/current/title-33/chapter-I/subchapter-S/part-181/subpart-C" target="_blank" rel="noopener">Coast Guard standard</a>), gives only the maker and build date</li><li><strong>Snowmobiles and older off-road units:</strong> plain serials, nothing to decode</li><li>So decoding depends on the ID, not the vehicle type</li></ul></article>
+          <article class="card"><span class="lbl">Valuation sources</span><h3 class="heading-4">Who prices powersports</h3><ul class="nut-bullets"><li><strong><a href="https://www.jdpower.com/business/powersports-connect/" target="_blank" rel="noopener">J.D. Power</a></strong> (formerly NADAguides): the main source for bikes, ATVs, snowmobiles and watercraft</li><li><strong><a href="https://www.blackbook.com/" target="_blank" rel="noopener">Black Book</a></strong>: powersports values, used by Canadian dealers</li><li><strong><a href="https://canadianbluebook.com/en-CA" target="_blank" rel="noopener">Canadian Blue Book</a></strong>: covers the Canadian market</li><li><strong><a href="https://www.kbb.com/motorcycles/" target="_blank" rel="noopener">KBB</a></strong>: values bikes and ATVs, but no longer watercraft</li></ul></article>
+        </div>
+        <p class="src" style="max-width:none">Sources: <a href="https://www.ecfr.gov/current/title-33/chapter-I/subchapter-S/part-181/subpart-C" target="_blank" rel="noopener">US Coast Guard HIN rules (33 CFR 181, Subpart C)</a> · <a href="https://www.jdpower.com/business/powersports-connect/" target="_blank" rel="noopener">J.D. Power Powersports</a> · <a href="https://www.blackbook.com/" target="_blank" rel="noopener">Black Book</a> · <a href="https://canadianbluebook.com/en-CA" target="_blank" rel="noopener">Canadian Blue Book</a> · <a href="https://www.kbb.com/motorcycles/" target="_blank" rel="noopener">Kelley Blue Book powersports values</a>.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ 05 STRATEGY ============ -->
+<section class="band-full" id="strategy">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">05. Product strategy</span>
+      <h2 class="heading-1 reveal" style="--i:1">Four rules I held the design to</h2>
+    </div>
+    <div class="grid g4">
+      <article class="card card-kpi tilt reveal" data-tilt><span class="num">Rule 01</span><h3>Never dead-end</h3><ul class="nut-bullets"><li>Every failure has a way forward</li><li>Manual entry is always one tap away</li></ul></article>
+      <article class="card card-kpi tilt reveal" data-tilt style="--i:1"><span class="num">Rule 02</span><h3>One flow,<br>shaped by type</h3><ul class="nut-bullets"><li>Where to find the VIN</li><li>Which photos to take (per vehicle type)</li></ul></article>
+      <article class="card card-kpi tilt reveal" data-tilt style="--i:2"><span class="num">Rule 03</span><h3>Data helps, but never blocks</h3><ul class="nut-bullets"><li>Found data fills in the details for the dealer</li><li>No data? The dealer carries on as normal</li></ul></article>
+      <article class="card card-kpi tilt reveal" data-tilt style="--i:3"><span class="num">Rule 04</span><h3>Say what's wrong and how to fix it</h3><ul class="nut-bullets"><li>Plain reasons, like <em>"the label looks dirty"</em></li><li>A next step, like <em>"wipe the label"</em></li><li>Never just <em>"failed"</em></li></ul></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 FINAL · ENTRY ============ -->
+<section id="final">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">06. Final experience · Entry</span>
+      <h2 class="heading-1 reveal" style="--i:1">Designing the entry experience</h2>
+      <p class="body-large measure reveal" style="--i:2">Four steps, from picking the right option to getting a number the dealer can trust.</p>
+    </div>
+    <div class="stages reveal" data-stages>
+      <div class="stage-tabs" role="tablist" aria-label="Entry experience steps">
+        <button type="button" role="tab" class="stage-tab" id="en-tab-1" aria-controls="en-panel-1" aria-selected="true"><span>1</span><b>Two paths</b></button>
+        <button type="button" role="tab" class="stage-tab" id="en-tab-2" aria-controls="en-panel-2" aria-selected="false" tabindex="-1"><span>2</span><b>Vehicle type</b></button>
+        <button type="button" role="tab" class="stage-tab" id="en-tab-3" aria-controls="en-panel-3" aria-selected="false" tabindex="-1"><span>3</span><b>Scan help</b></button>
+        <button type="button" role="tab" class="stage-tab" id="en-tab-4" aria-controls="en-panel-4" aria-selected="false" tabindex="-1"><span>4</span><b>Scan fails</b></button>
+      </div>
+      <div class="stage-panel" role="tabpanel" id="en-panel-1" aria-labelledby="en-tab-1">
+        <article class="slide">
+          <div class="slide-head">
+            <h3 class="heading-3">Two clear paths: car or powersports</h3>
+          </div>
+          <div class="slide-split">
+            <div class="slide-copy">
+              <p>The Create menu now separates the two flows, so dealers know what they’re getting into before they start.</p>
+              <ul class="nut-bullets"><li><b>Cars:</b> “Inspect a vehicle with 17-digit VIN”</li><li><b>Powersports:</b> its own option, marked <em>New</em></li><li>Sets expectations from the first tap</li></ul>
+            </div>
+            <div class="phone-vid">
+              <video src="case-study%20sections/08-final-experience/entry-experience/1.%20New%20entry%20(clearly%20distingusing%20car%20vin%20vs%20powersports%20vin%20entry)/entry%20flow.mp4" width="956" height="2074"
+                     autoplay muted loop playsinline preload="metadata"
+                     aria-label="The Create menu: separate options for a car with a 17-digit VIN and for a powersports vehicle"></video>
+              <div class="vid-bar">
+                <button type="button" class="vid-btn vid-toggle" aria-label="Pause video">
+                  <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>
+                  <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+                </button>
+                <input type="range" class="vid-seek" min="0" max="100" step="0.01" value="0" aria-label="Seek through the video">
+                <span class="vid-time" aria-hidden="true">0:00</span>
+                <button type="button" class="vid-btn vid-full" aria-label="Expand video">
+                  <svg class="i-expand" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  <svg class="i-shrink" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="stage-panel" role="tabpanel" id="en-panel-2" aria-labelledby="en-tab-2" hidden>
+        <article class="slide">
+          <div class="slide-head">
+            <h3 class="heading-3">Pick the vehicle type first</h3>
+          </div>
+          <div class="slide-split slide-split-wide">
+            <div class="slide-copy">
+              <p>The dealer picks the vehicle type first, so the app asks for the right ID and shows where to find it.</p>
+            </div>
+          </div>
+          <div class="type-grid" data-lb-group>
+              <figure>
+                <div class="shot" data-slot="Motorcycle" data-bare data-full="case-study%20sections/08-final-experience/entry-experience/2.%20Where%20to%20fin%20VIN%20for%20each%20vehicle%20(make%20it%20easier%20for%20dealers%20to%20find%20where%20VIN%3AHIN%20could%20be)/Bike%20selected.png" data-title="Motorcycle selected" data-cap="The field label and the location guide match the vehicle type.">
+                  <img src="case-study%20sections/08-final-experience/entry-experience/2.%20Where%20to%20fin%20VIN%20for%20each%20vehicle%20(make%20it%20easier%20for%20dealers%20to%20find%20where%20VIN%3AHIN%20could%20be)/Bike%20selected.png" width="403" height="862" loading="lazy" decoding="async" alt="VIN guide for a motorcycle: steering neck, engine block, frame rail, or printed document"></div>
+                <figcaption>Motorcycle</figcaption>
+              </figure>
+              <figure>
+                <div class="shot" data-slot="ATV" data-bare data-full="case-study%20sections/08-final-experience/entry-experience/2.%20Where%20to%20fin%20VIN%20for%20each%20vehicle%20(make%20it%20easier%20for%20dealers%20to%20find%20where%20VIN%3AHIN%20could%20be)/ATV%20selected.png" data-title="ATV selected" data-cap="The field label and the location guide match the vehicle type.">
+                  <img src="case-study%20sections/08-final-experience/entry-experience/2.%20Where%20to%20fin%20VIN%20for%20each%20vehicle%20(make%20it%20easier%20for%20dealers%20to%20find%20where%20VIN%3AHIN%20could%20be)/ATV%20selected.png" width="403" height="862" loading="lazy" decoding="async" alt="VIN guide for an ATV"></div>
+                <figcaption>ATV</figcaption>
+              </figure>
+              <figure>
+                <div class="shot" data-slot="Snowmobile" data-bare data-full="case-study%20sections/08-final-experience/entry-experience/2.%20Where%20to%20fin%20VIN%20for%20each%20vehicle%20(make%20it%20easier%20for%20dealers%20to%20find%20where%20VIN%3AHIN%20could%20be)/Snowmobile%20selected.png" data-title="Snowmobile selected" data-cap="The field label and the location guide match the vehicle type.">
+                  <img src="case-study%20sections/08-final-experience/entry-experience/2.%20Where%20to%20fin%20VIN%20for%20each%20vehicle%20(make%20it%20easier%20for%20dealers%20to%20find%20where%20VIN%3AHIN%20could%20be)/Snowmobile%20selected.png" width="403" height="862" loading="lazy" decoding="async" alt="VIN guide for a snowmobile"></div>
+                <figcaption>Snowmobile</figcaption>
+              </figure>
+              <figure>
+                <div class="shot" data-slot="Boat" data-bare data-full="case-study%20sections/08-final-experience/entry-experience/2.%20Where%20to%20fin%20VIN%20for%20each%20vehicle%20(make%20it%20easier%20for%20dealers%20to%20find%20where%20VIN%3AHIN%20could%20be)/Boat%20selected.png" data-title="Boat selected" data-cap="The field label and the location guide match the vehicle type.">
+                  <img src="case-study%20sections/08-final-experience/entry-experience/2.%20Where%20to%20fin%20VIN%20for%20each%20vehicle%20(make%20it%20easier%20for%20dealers%20to%20find%20where%20VIN%3AHIN%20could%20be)/Boat%20selected.png" width="403" height="862" loading="lazy" decoding="async" alt="HIN guide for a boat: rear transom, rear hull side, inside the hull, or printed document"></div>
+                <figcaption>Boat</figcaption>
+              </figure>
+          </div>
+        </article>
+      </div>
+      <div class="stage-panel" role="tabpanel" id="en-panel-3" aria-labelledby="en-tab-3" hidden>
+        <article class="slide">
+          <div class="slide-head">
+            <h3 class="heading-3">Help is always one tap away</h3>
+          </div>
+          <div class="slide-split">
+            <div class="slide-copy">
+              <p>While scanning, the dealer is never stuck.</p>
+              <ul class="nut-bullets"><li><b>“Where’s the VIN?”</b> stays on the scan screen</li><li>Manual entry is available at any point</li><li>Help shows up before an error, not after</li></ul>
+            </div>
+            <div class="phone-vid">
+              <video src="case-study%20sections/08-final-experience/entry-experience/3.%20VIN%3ASerial%20number%20scan%20flow/openlane%20Scan%20success%20flow.mp4" width="1950" height="4250"
+                     autoplay muted loop playsinline preload="metadata"
+                     aria-label="Scanning a VIN, with the Where is the VIN on a motorcycle button on screen"></video>
+              <div class="vid-bar">
+                <button type="button" class="vid-btn vid-toggle" aria-label="Pause video">
+                  <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>
+                  <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+                </button>
+                <input type="range" class="vid-seek" min="0" max="100" step="0.01" value="0" aria-label="Seek through the video">
+                <span class="vid-time" aria-hidden="true">0:00</span>
+                <button type="button" class="vid-btn vid-full" aria-label="Expand video">
+                  <svg class="i-expand" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  <svg class="i-shrink" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="stage-panel" role="tabpanel" id="en-panel-4" aria-labelledby="en-tab-4" hidden>
+        <article class="slide">
+          <div class="slide-head">
+            <h3 class="heading-3">When a scan fails, help steps up</h3>
+          </div>
+          <div class="slide-split slide-split-two">
+            <div class="slide-copy">
+              <p>A failed scan isn’t a dead end. Each miss offers a bit more help.</p>
+              <ul class="nut-bullets"><li><b>First miss:</b> a gentle nudge</li><li><b>Next:</b> name the cause and what to do</li><li><b>After 3 tries:</b> suggest manual entry</li><li>The camera never turns off</li></ul>
+              <div class="tip-note">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>
+                <div>
+                  <b>Agreed with engineering</b>
+                  <p>The camera reads the VIN many times a second, so one read isn’t one try.</p>
+                  <p>A scan only counts as failed if the VIN can’t be read clearly, or after 5 seconds with no match.</p>
+                </div>
+              </div>
+            </div>
+            <figure class="slide-phone">
+              <div class="shot" data-slot="After 3 failed scans" data-bare data-full="case-study%20sections/08-final-experience/entry-experience/3.%20VIN%3ASerial%20number%20scan%20flow/After%20scanning%203%20times%20(1).png" data-title="After 3 failed scans" data-cap="Names the likely cause, gives a fix, and recommends manual entry.">
+                <img src="case-study%20sections/08-final-experience/entry-experience/3.%20VIN%3ASerial%20number%20scan%20flow/After%20scanning%203%20times%20(1).png" width="605" height="1293" loading="lazy" decoding="async" alt="Unable to scan sheet: wipe the label, hold steady 4 to 6 inches away, add light and avoid glare; scan again, or enter manually, recommended after 3 failed attempts"></div>
+              <figcaption>After 3 failed scans</figcaption>
+            </figure>
+            <div class="phone-vid">
+              <video src="case-study%20sections/08-final-experience/entry-experience/3.%20VIN%3ASerial%20number%20scan%20flow/openlane%20Scan%20error%20flow.mp4" width="1942" height="4266"
+                     autoplay muted loop playsinline preload="metadata"
+                     aria-label="A scan that fails: the app explains why and offers to scan again or enter the number manually"></video>
+              <div class="vid-bar">
+                <button type="button" class="vid-btn vid-toggle" aria-label="Pause video">
+                  <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>
+                  <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+                </button>
+                <input type="range" class="vid-seek" min="0" max="100" step="0.01" value="0" aria-label="Seek through the video">
+                <span class="vid-time" aria-hidden="true">0:00</span>
+                <button type="button" class="vid-btn vid-full" aria-label="Expand video">
+                  <svg class="i-expand" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  <svg class="i-shrink" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 FINAL · 360° INSPECTION ============ -->
+<section id="final-capture">
+  <div class="wrap">
+    <div class="capture-split">
+      <div class="sec-head">
+        <span class="overline reveal">06. Final experience · 360° inspection</span>
+        <h2 class="heading-1 reveal" style="--i:1">Every step is guided, so dealers never wonder what’s next</h2>
+        <div class="cap-body">
+          <ol class="vflow reveal" style="--i:2" aria-label="The guided capture flow">
+            <li><span class="vflow-n" aria-hidden="true">1</span><div><b>Line up the ghost outline</b><span>Every photo is framed the same way, so all listing photos look consistent.</span></div></li>
+            <li><span class="vflow-n" aria-hidden="true">2</span><div><b>Tag damage <em class="vflow-tag">Optional</em></b><span>Tap the photo and a red dot marks the spot.</span></div></li>
+            <li><span class="vflow-n" aria-hidden="true">3</span><div><b>Take a close-up</b><span>Only if damage was tagged. If not, the app takes you to the next view.</span></div></li>
+            <li><span class="vflow-n" aria-hidden="true">4</span><div><b>Next view</b><span>The app leads the way around the vehicle.</span></div></li>
+          </ol>
+          <p class="cap-result reveal" style="--i:3">This ensures the dealer never has to revisit a section once it has been cleared.</p>
+        </div>
+      </div>
+      <div class="phone-vid reveal" style="--i:1">
+        <video src="case-study%20sections/08-final-experience/Guided%20damage%20capture/guided%20damange%20capture.mp4" width="927" height="2006"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="Guided damage capture on a motorcycle in the powersports app"></video>
+        <div class="vid-bar">
+          <button type="button" class="vid-btn vid-toggle" aria-label="Pause video">
+            <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>
+            <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+          </button>
+          <input type="range" class="vid-seek" min="0" max="100" step="0.01" value="0" aria-label="Seek through the video">
+          <span class="vid-time" aria-hidden="true">0:00</span>
+          <button type="button" class="vid-btn vid-full" aria-label="Expand video">
+            <svg class="i-expand" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            <svg class="i-shrink" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <details class="more cap-vehicles reveal">
+      <summary>
+        <span class="more-text">
+          <span class="overline">By vehicle type</span>
+          <span class="more-title">Built for each vehicle</span>
+        </span>
+        <span class="more-btn"><span class="more-show">Show details</span><span class="more-hide">Hide details</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+      </summary>
+      <div class="more-body">
+        <p>Each type has its own must-have shots, based on what buyers check, and its own order around the vehicle.</p>
+        <div class="cap-veh-row">
+          <div class="cap-veh"><b>Motorcycle</b><ul class="chips"><li>Engine, both sides</li><li>Dashboard</li><li>Gas tank</li></ul><p class="cap-veh-path">VIN on the steering neck, captured before the walk-around.</p></div>
+          <div class="cap-veh"><b>ATV</b><ul class="chips"><li>Frame</li><li>All 4 tires</li><li>CV boots</li><li>Racks</li></ul><p class="cap-veh-path">VIN on the frame, in a spot that varies by maker. Each corner is a stop for its tire and axle.</p></div>
+          <div class="cap-veh"><b>Snowmobile</b><ul class="chips"><li>Track</li><li>Skis &amp; carbides</li><li>Slides</li><li>Shocks</li></ul><p class="cap-veh-path">VIN on the right side of the tunnel. The track and slides sit underneath, so they’re one stop at the back.</p></div>
+          <div class="cap-veh"><b>Boat</b><ul class="chips"><li>Hull</li><li>Transom</li><li>Motor &amp; lower unit</li><li>Engine hours</li><li>Trailer</li></ul><p class="cap-veh-path">HIN on the right side of the transom, so the loop starts at the back: HIN, transom and motor in one stop.</p></div>
+          <div class="cap-veh"><b>Personal watercraft</b><ul class="chips"><li>Hull</li><li>Intake grate</li><li>Impeller</li><li>Engine hours</li></ul><p class="cap-veh-path">The intake and impeller are underneath at the back, checked in one stop with the craft on its trailer.</p></div>
+        </div>
+        <p class="src" style="max-width:none">Sources: <a href="https://www.jdpower.com/motorcycles/shopping-guides/used-atv-buying-checklist" target="_blank" rel="noopener">J.D. Power used ATV checklist</a>, <a href="https://ski-doo.brp.com/us/en/owners/your-vehicle/maintenance/snowmobile-pre-ride-inspection.html" target="_blank" rel="noopener">Ski-Doo snowmobile inspection</a>, <a href="https://www.polaris.com/en-us/snowmobiles/owner-resources/help-center/article/KA-01133/" target="_blank" rel="noopener">Polaris VIN location</a>, <a href="https://www.law.cornell.edu/cfr/text/33/181.29" target="_blank" rel="noopener">33 CFR 181.29 (HIN location)</a>, <a href="https://boatzon.com/blog/used-boat-inspection-checklist/" target="_blank" rel="noopener">Boatzon used boat checklist</a>, <a href="https://www.jdpower.com/boats/shopping-guides/used-jet-ski-buying-checklist" target="_blank" rel="noopener">J.D. Power used jet ski checklist</a>.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ 06 FINAL · REVIEW & PUBLISH ============ -->
+<section id="final-review">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">06. Final experience · Review &amp; publish</span>
+      <h2 class="heading-1 reveal" style="--i:1">From photos to a live listing</h2>
+      <p class="body-large measure reveal" style="--i:2">After capture, one overview screen shows what's done and what's missing, so the dealer can finish the listing without hunting for gaps.</p>
+    </div>
+    <div class="stages reveal" data-stages>
+      <div class="stage-tabs" role="tablist" aria-label="Review and publish stages">
+        <button type="button" role="tab" class="stage-tab" id="rp-tab-1" aria-controls="rp-panel-1" aria-selected="true"><b>Review</b><span>2 screens</span></button>
+        <button type="button" role="tab" class="stage-tab" id="rp-tab-2" aria-controls="rp-panel-2" aria-selected="false" tabindex="-1"><b>Complete details</b><span>4 screens</span></button>
+        <button type="button" role="tab" class="stage-tab" id="rp-tab-3" aria-controls="rp-panel-3" aria-selected="false" tabindex="-1"><b>Publish</b><span>4 screens</span></button>
+      </div>
+      <div class="stage-panel" role="tabpanel" id="rp-panel-1" aria-labelledby="rp-tab-1">
+        <p class="stage-lead">See every photo, then check what’s still missing.</p>
+        <div class="iphone-row" style="--n:2">
+          <figure class="iphone-item">
+            <div class="iphone"><div class="iphone-in">
+              <div class="iphone-screen is-long" tabindex="0" role="region" aria-label="Photo gallery, scrollable">
+                <img src="case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/1.%20once%20all%20photo%20taken-gallery%20view-multimedia%20section.png" width="590" height="2667" loading="lazy" decoding="async" alt="Gallery of every photo taken, grouped in the multimedia section">
+              </div>
+            <span class="iphone-top" style="--h:157;background-image:url('case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/1.%20once%20all%20photo%20taken-gallery%20view-multimedia%20section.png')" aria-hidden="true"></span>
+            <span class="iphone-bot" style="--h:139;background-image:url('case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/1.%20once%20all%20photo%20taken-gallery%20view-multimedia%20section.png')" aria-hidden="true"></span>
+            </div></div>
+            <figcaption><span class="iphone-n">1</span><b>Photo gallery</b><span class="iphone-hint">Scroll the screen</span></figcaption>
+          </figure>
+
+          <figure class="iphone-item">
+            <div class="iphone"><div class="iphone-in">
+              <div class="iphone-screen is-long" tabindex="0" role="region" aria-label="Overview: what’s missing, scrollable">
+                <img src="case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/2.%20Overview-incomplete%20sections.png" width="590" height="2303" loading="lazy" decoding="async" alt="Self inspect overview marking each section as done or missing">
+              </div>
+            <span class="iphone-top" style="--h:157;background-image:url('case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/2.%20Overview-incomplete%20sections.png')" aria-hidden="true"></span>
+            <span class="iphone-bot" style="--h:139;background-image:url('case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/2.%20Overview-incomplete%20sections.png')" aria-hidden="true"></span>
+            </div></div>
+            <figcaption><span class="iphone-n">2</span><b>Overview: what’s missing</b><span class="iphone-hint">Scroll the screen</span></figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="stage-panel" role="tabpanel" id="rp-panel-2" aria-labelledby="rp-tab-2" hidden>
+        <p class="stage-lead">Fill in each section the overview flagged.</p>
+        <div class="iphone-row" style="--n:4">
+          <figure class="iphone-item">
+            <div class="iphone"><div class="iphone-in">
+              <div class="iphone-screen is-long" tabindex="0" role="region" aria-label="VIN information, scrollable">
+                <img src="case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/3.%20VIN%20info%20section.png" width="590" height="2727" loading="lazy" decoding="async" alt="VIN information section">
+              </div>
+            <span class="iphone-top" style="--h:157;background-image:url('case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/3.%20VIN%20info%20section.png')" aria-hidden="true"></span>
+            <span class="iphone-bot" style="--h:139;background-image:url('case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/3.%20VIN%20info%20section.png')" aria-hidden="true"></span>
+            </div></div>
+            <figcaption><span class="iphone-n">3</span><b>VIN information</b><span class="iphone-hint">Scroll the screen</span></figcaption>
+          </figure>
+
+          <figure class="iphone-item">
+            <div class="iphone"><div class="iphone-in">
+              <div class="iphone-screen is-long" tabindex="0" role="region" aria-label="Vehicle details, scrollable">
+                <img src="case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/4.%20Vehicle%20details%20section.png" width="590" height="2232" loading="lazy" decoding="async" alt="Vehicle details section">
+              </div>
+            <span class="iphone-top" style="--h:157;background-image:url('case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/4.%20Vehicle%20details%20section.png')" aria-hidden="true"></span>
+            <span class="iphone-bot" style="--h:139;background-image:url('case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/4.%20Vehicle%20details%20section.png')" aria-hidden="true"></span>
+            </div></div>
+            <figcaption><span class="iphone-n">4</span><b>Vehicle details</b><span class="iphone-hint">Scroll the screen</span></figcaption>
+          </figure>
+
+          <figure class="iphone-item">
+            <div class="iphone"><div class="iphone-in">
+              <div class="iphone-screen">
+                <img src="case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/5.%20spec%20and%20features.png" width="590" height="1278" loading="lazy" decoding="async" alt="Specs and features section">
+              </div>
+            </div></div>
+            <figcaption><span class="iphone-n">5</span><b>Specs & features</b></figcaption>
+          </figure>
+
+          <figure class="iphone-item">
+            <div class="iphone"><div class="iphone-in">
+              <div class="iphone-screen">
+                <img src="case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/6.%20set%20floor%20price.png" width="590" height="1278" loading="lazy" decoding="async" alt="Set floor price screen with a dollar amount field">
+              </div>
+            </div></div>
+            <figcaption><span class="iphone-n">6</span><b>Set <span class="term">floor price<button type="button" class="info" aria-label="What is a floor price?" aria-describedby="tip-floor-1" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5.5"/><path d="M12 7.6h.01"/></svg></button><span class="tip" role="tooltip" id="tip-floor-1">The lowest price the dealer will accept.</span></span></b></figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="stage-panel" role="tabpanel" id="rp-panel-3" aria-labelledby="rp-tab-3" hidden>
+        <p class="stage-lead">Everything’s done. Upload, save to Parked, then launch.</p>
+        <div class="iphone-row" style="--n:4">
+          <figure class="iphone-item">
+            <div class="iphone"><div class="iphone-in">
+              <div class="iphone-screen is-long" tabindex="0" role="region" aria-label="Overview: all done, scrollable">
+                <img src="case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/Overview-complete.png" width="590" height="2195" loading="lazy" decoding="async" alt="Self inspect overview with every section done">
+              </div>
+            <span class="iphone-top" style="--h:157;background-image:url('case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/Overview-complete.png')" aria-hidden="true"></span>
+            <span class="iphone-bot" style="--h:139;background-image:url('case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/Overview-complete.png')" aria-hidden="true"></span>
+            </div></div>
+            <figcaption><span class="iphone-n">7</span><b>Overview: all done</b><span class="iphone-hint">Scroll the screen</span></figcaption>
+          </figure>
+
+          <figure class="iphone-item">
+            <div class="iphone"><div class="iphone-in">
+              <div class="iphone-screen">
+                <img src="case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/7.%20uploading%20vehicle.png" width="590" height="1278" loading="lazy" decoding="async" alt="Uploading the vehicle">
+              </div>
+            </div></div>
+            <figcaption><span class="iphone-n">8</span><b>Uploading</b></figcaption>
+          </figure>
+
+          <figure class="iphone-item">
+            <div class="iphone"><div class="iphone-in">
+              <div class="iphone-screen">
+                <img src="case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/8.%20selling%3Aparked%20page.png" width="590" height="1278" loading="lazy" decoding="async" alt="The vehicle in the Selling, Parked list">
+              </div>
+            </div></div>
+            <figcaption><span class="iphone-n">9</span><b>Saved to Parked</b></figcaption>
+          </figure>
+
+          <figure class="iphone-item">
+            <div class="iphone"><div class="iphone-in">
+              <div class="iphone-screen is-long" tabindex="0" role="region" aria-label="Live listing, scrollable">
+                <img src="case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/9.%20Vehicle%20details.png" width="590" height="1361" loading="lazy" decoding="async" alt="The vehicle details page buyers see, with Launch to Upcoming and Launch to Active">
+              </div>
+            <span class="iphone-top" style="--h:78;background-image:url('case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/9.%20Vehicle%20details.png')" aria-hidden="true"></span>
+            <span class="iphone-bot iphone-bot-line" style="--h:125;background-image:url('case-study%20sections/08-final-experience/review-and-publish/Individual%20Screens/9.%20Vehicle%20details.png')" aria-hidden="true"></span>
+            </div></div>
+            <figcaption><span class="iphone-n">10</span><b>Live listing</b><span class="iphone-hint">Scroll the screen</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 IMPACT ============ -->
+<section class="impact-band" id="impact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">07. Impact</span>
+      <h2 class="heading-1 reveal" style="--i:1">Dealer impact &amp; business results</h2>
+    </div>
+    <div class="impact-rule reveal"><span>Post-launch · business impact</span><i></i></div>
+    <div class="biz">
+      <div class="biz-card tilt reveal" data-tilt>
+        <div class="biz-v"><i>↑</i><b><span data-count="20">20</span>%</b></div>
+        <div class="biz-text"><strong>Faster inspection</strong><span>Single-orbit flow eliminates backtracking and reduces dealer effort.</span></div>
+      </div>
+      <div class="biz-card tilt reveal" data-tilt style="--i:1">
+        <div class="biz-v"><i>↓</i><b><span data-count="12">12</span>%</b></div>
+        <div class="biz-text"><strong>Reduced <span class="term below">arbitration<button type="button" class="info" aria-label="What is arbitration?" aria-describedby="tip-arb-2" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5.5"/><path d="M12 7.6h.01"/></svg></button><span class="tip" role="tooltip" id="tip-arb-2">A dispute after the sale: the buyer says the vehicle isn't as described, and OPENLANE steps in to settle it. Fewer disputes means more accurate listings.</span></span></strong><span>Ensures coverage of high-risk mechanical zones, reducing post-sale disputes.</span></div>
+      </div>
+      <div class="biz-card tilt reveal" data-tilt style="--i:2">
+        <div class="biz-v"><i>↑</i><b><span data-count="15">15</span>%</b></div>
+        <div class="biz-text"><strong>Increased bid velocity</strong><span>Standardized hero shots build buyer trust → faster first bids.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 COLLABORATION ============ -->
+<section id="collaboration">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">08. Collaboration &amp; role</span>
+      <h2 class="heading-1 reveal" style="--i:1">How I worked, and what was mine</h2>
+      <p class="body-large measure reveal" style="--i:2">I owned the end-to-end experience design, but the decisions that made it ship were cross-functional. My job as the senior designer was as much about <em>aligning</em> the right people on the right problem as it was about the screens.</p>
+    </div>
+    <div class="grid g4">
+      <article class="card tilt reveal" data-tilt><span class="lbl">Me</span><h3 class="heading-4">What I led</h3><ul class="nut-bullets"><li>Interviewed dealers to learn what they need</li><li>Split "scan" into capture, decode and match</li><li>Designed the entry flow, retries and errors</li><li>Set the 360° path and must-have shots for each vehicle type</li></ul></article>
+      <article class="card tilt reveal" data-tilt style="--i:1"><span class="lbl">PM</span><h3 class="heading-4">Product &amp; scope</h3><ul class="nut-bullets"><li>Co-wrote the PRD</li><li>Set success metrics</li><li>Picked which vehicle types launch first</li></ul></article>
+      <article class="card tilt reveal" data-tilt style="--i:2"><span class="lbl">Eng</span><h3 class="heading-4">Feasibility</h3><ul class="nut-bullets"><li>Tested how decode and match work</li><li>Agreed when a scan counts as failed</li><li>Shaped the calm "no match" screen</li></ul></article>
+      <article class="card tilt reveal" data-tilt style="--i:3"><span class="lbl">Data</span><h3 class="heading-4">Valuations</h3><ul class="nut-bullets"><li>Mapped the ID types: VIN, <span class="term">HIN<button type="button" class="info" aria-label="What is a HIN?" aria-describedby="tip-hin-5" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5.5"/><path d="M12 7.6h.01"/></svg></button><span class="tip" role="tooltip" id="tip-hin-5">Hull Identification Number: the ID stamped on boats and personal watercraft.</span></span>, serial</li><li>Found price sources that cover powersports</li><li>Kept auto-filled details accurate</li></ul></article>
+    </div>
+    <div class="note notes note-influence reveal">
+      <span class="tag">◆ Where I had the most influence</span>
+      <p>My biggest impact was changing the question the team asked. We stopped asking <em>"why did the scan fail?"</em> and started asking <em>"what do we do when a step comes up empty?"</em> That shift, more than any screen, moved the roadmap forward. It's the work I'm most proud of.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09 REFLECTION ============ -->
+<section class="reflect band-center" id="reflection">
+  <div class="wrap">
+    <div class="band-head">
+      <span class="overline reveal">09. Reflection</span>
+      <h2 class="heading-1 reveal" style="--i:1">The biggest lever wasn't a screen. It was a <em>reframe</em>.</h2>
+      <p class="body-large reveal" style="--i:2">Treating "scan" as three jobs instead of one turned a scary, all-or-nothing failure into a set of small, designable states.</p>
+    </div>
+    <div class="takes">
+      <article class="card card-solid tilt reveal" data-tilt><span class="lbl">01</span><h3 class="heading-3">Design for real life,<br>not the perfect case.</h3><p>"No match" is common in powersports, so it had to feel normal, not like an error.</p></article>
+      <article class="card card-solid tilt reveal" data-tilt style="--i:1"><span class="lbl">02</span><h3 class="heading-3">Set expectations<br>at the start.</h3><p>A separate powersports entry told dealers upfront this isn’t the car flow, so a VIN that doesn’t auto-fill feels expected, not broken.</p></article>
+      <article class="card card-solid tilt reveal" data-tilt style="--i:2"><span class="lbl">03</span><h3 class="heading-3">Feasibility is a<br>design input.</h3><p>Knowing early what the data could return kept the design realistic.</p></article>
+    </div>
+    <div class="band-note reveal">
+      <span class="tag">Where I'd take it next</span>
+      <p>Track where scans fail for each vehicle type, then tune the retry rules. Confirm which price data covers powersports in Canada. And show live hints, like “too dark” or “hold steady”, so dealers can fix the shot <em>before</em> a scan fails.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h2 class="heading-1">Thanks for reading.</h2>
+    <p>Happy to walk through the deeper artifacts — flows, edge-case maps, and the engineering trade-offs behind each decision.</p>
+    <dl class="contact">
+      <div><dt>Designer</dt><dd>Sambit Mohanty</dd></div>
+      <div><dt>Email</dt><dd><a href="mailto:sambitmohanty2707@gmail.com">sambitmohanty2707@gmail.com</a></dd></div>
+      <div><dt>Phone</dt><dd>437-484-3041</dd></div>
+      <div><dt>Project</dt><dd>OPENLANE Powersports Self-Inspect · iOS &amp; web</dd></div>
+    </dl>
+  </div>
+</footer>
+
+<div class="sr-only" aria-live="polite" data-tip-live></div>
+
+<!-- ============ LIGHTBOX ============ -->
+<dialog class="lb" data-lb aria-label="Expanded screen">
+  <div class="lb-in">
+    <div class="lb-bar">
+      <div>
+        <div class="lb-title" data-lb-title></div>
+        <div class="lb-sub" data-lb-cap></div>
+      </div>
+      <button class="lb-close" data-lb-close aria-label="Close expanded view">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="lb-view">
+      <div class="lb-stage" data-lb-stage>
+        <img data-lb-img alt="">
+      </div>
+      <button type="button" class="lb-nav lb-prev" data-lb-prev aria-label="Previous image" hidden>
+        <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button type="button" class="lb-nav lb-next" data-lb-next aria-label="Next image" hidden>
+        <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+    <div class="lb-hint"><span class="lb-count" data-lb-count></span>Press <b>Esc</b> or click outside the image to close<span data-lb-keys hidden> · <b>←</b> <b>→</b> to move between images</span></div>
+  </div>
+</dialog>
+
+<script>
+(function(){
+'use strict';
+var mqReduce = matchMedia('(prefers-reduced-motion: reduce)');
+var reduce   = mqReduce.matches;
+mqReduce.addEventListener('change', function(e){ reduce = e.matches; });
+/* Cards fill blue while touched on touch screens */
+document.querySelectorAll('.card,.stat').forEach(function(c){
+  var t;
+  c.addEventListener('pointerdown', function(e){ if (e.pointerType !== 'touch') return; clearTimeout(t); c.classList.add('touched'); });
+  function off(){ clearTimeout(t); t = setTimeout(function(){ c.classList.remove('touched'); }, 450); }
+  c.addEventListener('pointerup', off);
+  c.addEventListener('pointercancel', function(){ clearTimeout(t); c.classList.remove('touched'); });
+});
+/* Phone videos: play/pause, a scrubber to step to any screen, and expand to
+   full screen. Clicking the video also toggles. Start paused when motion is reduced. */
+document.querySelectorAll('.phone-vid').forEach(function(box){
+  var v = box.querySelector('video'), btn = box.querySelector('.vid-toggle'),
+      seek = box.querySelector('.vid-seek'), time = box.querySelector('.vid-time'),
+      full = box.querySelector('.vid-full'), dragging = false, wasPlaying = false;
+  function fmt(t){ t = Math.floor(t || 0); return Math.floor(t / 60) + ':' + ('0' + t % 60).slice(-2); }
+  function paint(){
+    var d = v.duration || 0, pct = d ? v.currentTime / d * 100 : 0;
+    if (!dragging) seek.value = pct;
+    seek.style.setProperty('--p', seek.value + '%');
+    seek.setAttribute('aria-valuetext', fmt(v.currentTime) + ' of ' + fmt(d));
+    time.textContent = fmt(v.currentTime);
+  }
+  function tick(){ paint(); if (!v.paused) requestAnimationFrame(tick); }
+  function render(){
+    btn.classList.toggle('paused', v.paused);
+    btn.setAttribute('aria-label', v.paused ? 'Play video' : 'Pause video');
+    if (!v.paused) requestAnimationFrame(tick);
+  }
+  function toggle(){ if (v.paused) v.play().catch(function(){}); else v.pause(); }
+  v.addEventListener('play', render); v.addEventListener('pause', render);
+  v.addEventListener('loadedmetadata', paint); v.addEventListener('seeked', paint);
+  btn.addEventListener('click', toggle); v.addEventListener('click', toggle);
+  seek.addEventListener('pointerdown', function(){ dragging = true; wasPlaying = !v.paused; v.pause(); });
+  seek.addEventListener('input', function(){
+    if (v.duration) v.currentTime = seek.value / 100 * v.duration;
+    seek.style.setProperty('--p', seek.value + '%');
+    time.textContent = fmt(v.currentTime);
+  });
+  seek.addEventListener('change', function(){
+    if (dragging && wasPlaying) v.play().catch(function(){});
+    dragging = false;
+  });
+  /* Expand: the whole phone + controls go full screen; iPhone Safari only
+     supports full screen on the video itself, so fall back to that. */
+  function exitFull(){ (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
+  var close = document.createElement('button');
+  close.type = 'button'; close.className = 'vid-close';
+  close.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Close';
+  close.addEventListener('click', exitFull);
+  box.appendChild(close);
+  full.addEventListener('click', function(){
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      exitFull();
+    } else if (box.requestFullscreen) { box.requestFullscreen().catch(function(){}); }
+    else if (box.webkitRequestFullscreen) { box.webkitRequestFullscreen(); }
+    else if (v.webkitEnterFullscreen) { v.webkitEnterFullscreen(); }
+  });
+  function onFull(){
+    var on = (document.fullscreenElement || document.webkitFullscreenElement) === box;
+    box.classList.toggle('is-full', on);
+    full.setAttribute('aria-label', on ? 'Exit full screen' : 'Expand video');
+  }
+  document.addEventListener('fullscreenchange', onFull);
+  document.addEventListener('webkitfullscreenchange', onFull);
+  if (reduce) v.pause();
+  render(); paint();
+});
+/* Videos pause while off-screen so scrolling stays smooth, and resume when
+   back in view. A video the visitor paused stays paused. */
+if ('IntersectionObserver' in window){
+  var vo = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      var v = en.target;
+      if (!en.isIntersecting){
+        if (!v.paused){ v.dataset.offscreen = '1'; v.pause(); }
+      } else if (v.dataset.offscreen){
+        delete v.dataset.offscreen;
+        if (!reduce && !v.closest('[hidden]')) v.play().catch(function(){});
+      }
+    });
+  });
+  document.querySelectorAll('video').forEach(function(v){ vo.observe(v); });
+}
+var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+/* 1. Broken-image fallback — keeps a labeled slot visible */
+document.querySelectorAll('.shot img').forEach(function(img){
+  function fail(){ var s = img.closest('.shot'); if (s) s.classList.add('missing'); }
+  img.addEventListener('error', fail);
+  if (img.complete && img.naturalWidth === 0) fail();
+});
+
+/* 2. Scroll progress */
+var bar = document.querySelector('[data-progress]');
+if (bar){
+  var ticking = false;
+  function drawProgress(){
+    var h = document.documentElement.scrollHeight - innerHeight;
+    var p = h > 0 ? Math.min(1, Math.max(0, scrollY / h)) : 0;
+    bar.style.transform = 'scaleX(' + p + ')';
+    ticking = false;
+  }
+  addEventListener('scroll', function(){
+    if (!ticking){ ticking = true; requestAnimationFrame(drawProgress); }
+  }, {passive:true});
+  drawProgress();
+}
+
+/* 3. Reveal on scroll — one-shot */
+var reveals = document.querySelectorAll('.reveal');
+if (!('IntersectionObserver' in window) || reduce){
+  reveals.forEach(function(el){ el.classList.add('in'); });
+} else {
+  var ro = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting){ en.target.classList.add('in'); ro.unobserve(en.target); }
+    });
+  }, {rootMargin:'0px 0px -12% 0px', threshold:.08});
+  reveals.forEach(function(el){ ro.observe(el); });
+}
+
+/* 4. Parallax — transform only, small offsets, desktop only */
+var pxEls = [].slice.call(document.querySelectorAll('[data-px]'));
+if (pxEls.length && fine && !reduce){
+  var visible = [], raf = 0;
+  var pxo = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      var i = visible.indexOf(en.target);
+      if (en.isIntersecting && i === -1) visible.push(en.target);
+      else if (!en.isIntersecting && i > -1){
+        visible.splice(i,1);
+        en.target.style.setProperty('--py','0px');
+      }
+    });
+    schedule();
+  }, {rootMargin:'20% 0px 20% 0px'});
+  pxEls.forEach(function(el){ el.classList.add('px'); pxo.observe(el); });
+
+  function paint(){
+    raf = 0;
+    var vh = innerHeight;
+    for (var i=0;i<visible.length;i++){
+      var el = visible[i];
+      var r  = el.getBoundingClientRect();
+      var mid = (r.top + r.height/2 - vh/2) / (vh/2 + r.height/2);
+      mid = Math.max(-1, Math.min(1, mid));
+      var strength = parseFloat(el.dataset.pxStrength || '-20');
+      var py = Math.round(mid * strength);
+      el.style.setProperty('--py', py + 'px');
+      el.classList.toggle('px-live', py !== 0);
+    }
+  }
+  function schedule(){ if (!raf) raf = requestAnimationFrame(paint); }
+  addEventListener('scroll', schedule, {passive:true});
+  addEventListener('resize', schedule, {passive:true});
+  schedule();
+}
+
+/* 5. Stat counters — animate the numeral, keep the format */
+var counters = document.querySelectorAll('[data-count]');
+if (counters.length && !reduce && 'IntersectionObserver' in window){
+  var co = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (!en.isIntersecting) return;
+      var el = en.target; co.unobserve(el);
+      var to = parseFloat(el.dataset.count);
+      var dec = parseInt(el.dataset.decimals || '0', 10);
+      if (isNaN(to)) return;
+      var dur = 900, t0 = 0;
+      function tick(ts){
+        if (!t0) t0 = ts;
+        var p = Math.min(1, (ts - t0) / dur);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = (to * eased).toFixed(dec);
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = to.toFixed(dec);
+      }
+      el.textContent = (0).toFixed(dec);
+      requestAnimationFrame(tick);
+    });
+  }, {threshold:.6});
+  counters.forEach(function(el){ co.observe(el); });
+}
+
+/* 6. Tilt + glare — decorative only, pointer devices only */
+if (fine){
+  document.querySelectorAll('[data-tilt]').forEach(function(card){
+    var rect = null;
+    function enter(){ rect = card.getBoundingClientRect(); card.classList.add('live'); }
+    function move(e){
+      if (reduce) return;
+      if (!rect) rect = card.getBoundingClientRect();
+      var x = (e.clientX - rect.left) / rect.width;
+      var y = (e.clientY - rect.top) / rect.height;
+      var rx = (0.5 - y) * 7, ry = (x - 0.5) * 7;
+      card.style.transform = 'perspective(900px) rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg) translateZ(0)';
+      card.style.setProperty('--gx', (x*100).toFixed(1) + '%');
+      card.style.setProperty('--gy', (y*100).toFixed(1) + '%');
+    }
+    function leave(){ card.classList.remove('live'); card.style.transform = ''; rect = null; }
+    card.addEventListener('pointerenter', enter);
+    card.addEventListener('pointermove', move);
+    card.addEventListener('pointerleave', leave);
+  });
+}
+
+/* 7. Lightbox — expand any screen */
+var lb      = document.querySelector('[data-lb]');
+var lbImg   = lb && lb.querySelector('[data-lb-img]');
+var lbTitle = lb && lb.querySelector('[data-lb-title]');
+var lbCap   = lb && lb.querySelector('[data-lb-cap]');
+var lbStage = lb && lb.querySelector('[data-lb-stage]');
+var lbClose = lb && lb.querySelector('[data-lb-close]');
+var lbPrev  = lb && lb.querySelector('[data-lb-prev]');
+var lbNext  = lb && lb.querySelector('[data-lb-next]');
+var lbCount = lb && lb.querySelector('[data-lb-count]');
+var lbKeys  = lb && lb.querySelector('[data-lb-keys]');
+var lastFocus = null, lbGroup = [], lbIndex = 0;
+var EXPAND_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';
+
+document.querySelectorAll('.shot[data-full]').forEach(function(shot){
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'expand';
+  btn.innerHTML = EXPAND_SVG;
+  btn.setAttribute('aria-label', 'Expand ' + (shot.dataset.title || shot.dataset.slot || 'screen'));
+  btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); open(shot, btn); });
+  shot.appendChild(btn);
+  shot.classList.add('zoomable');
+  shot.addEventListener('click', function(e){
+    if (e.target.closest('button,a')) return;
+    open(shot, btn);
+  });
+});
+
+/* The whole slide is a target: clicking its headline or copy expands its
+   screen — unless it's a control, a link, or someone selecting text. */
+document.querySelectorAll('.slide').forEach(function(card){
+  var shot = card.querySelector('.shot[data-full]');
+  if (!shot) return;
+  card.classList.add('zoom-card');
+  card.addEventListener('click', function(e){
+    if (shot.contains(e.target)) return;
+    if (e.target.closest('button,a,input,label')) return;
+    if (String(window.getSelection())) return;
+    open(shot, shot.querySelector('.expand'));
+  });
+});
+
+/* Shots inside a [data-lb-group] can be stepped through without closing. */
+function fill(shot){
+  var img = shot.querySelector('img');
+  lbImg.src = shot.dataset.full || (img && img.src) || '';
+  lbImg.alt = (img && img.alt) || shot.dataset.title || '';
+  lbImg.classList.toggle('bare', shot.hasAttribute('data-bare'));
+  lbTitle.textContent = shot.dataset.title || shot.dataset.slot || '';
+  lbCap.textContent   = shot.dataset.cap || '';
+  lbStage.scrollTop = 0;
+  var many = lbGroup.length > 1;
+  lbPrev.hidden = lbNext.hidden = lbKeys.hidden = !many;
+  lbPrev.disabled = lbIndex === 0;
+  lbNext.disabled = lbIndex === lbGroup.length - 1;
+  lbCount.textContent = many ? (lbIndex + 1) + ' / ' + lbGroup.length : '';
+  if (document.activeElement && document.activeElement.disabled)
+    (lbPrev.disabled ? lbNext : lbPrev).focus();
+}
+
+function go(d){
+  var i = lbIndex + d;
+  if (i < 0 || i >= lbGroup.length) return;
+  lbIndex = i;
+  if (window.getSelection) window.getSelection().removeAllRanges();
+  fill(lbGroup[i]);
+}
+
+function open(shot, trigger){
+  if (!lb || shot.classList.contains('missing')) return;
+  lastFocus = trigger || document.activeElement;
+  var group = shot.closest('[data-lb-group]');
+  lbGroup = group
+    ? Array.prototype.filter.call(group.querySelectorAll('.shot[data-full]'),
+        function(s){ return !s.classList.contains('missing'); })
+    : [shot];
+  lbIndex = Math.max(0, lbGroup.indexOf(shot));
+  fill(shot);
+  if (typeof lb.showModal === 'function') lb.showModal();
+  else lb.setAttribute('open','');
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(function(){ lb.classList.add('ready'); });
+  lbClose.focus();
+}
+
+function close(){
+  if (!lb) return;
+  lb.classList.remove('ready');
+  var done = function(){
+    if (typeof lb.close === 'function' && lb.open) lb.close();
+    else lb.removeAttribute('open');
+    lbImg.removeAttribute('src');
+    document.body.style.overflow = '';
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  };
+  if (reduce) done(); else setTimeout(done, 160);
+}
+
+if (lb){
+  lbClose.addEventListener('click', close);
+  lbPrev.addEventListener('click', function(){ go(-1); });
+  lbNext.addEventListener('click', function(){ go(1); });
+  /* Rapid clicks on the arrows count as a double-click; don't let that select text. */
+  [lbPrev, lbNext].forEach(function(b){
+    b.addEventListener('mousedown', function(e){ if (e.detail > 1) e.preventDefault(); });
+  });
+  lb.addEventListener('keydown', function(e){
+    if (lbGroup.length < 2) return;
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(-1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+  });
+  lb.addEventListener('cancel', function(e){ e.preventDefault(); close(); });
+  lb.addEventListener('click', function(e){
+    if (e.target === lb || e.target === lbStage) close();
+  });
+}
+
+/* Stage tabs: click or use the arrow keys to switch stage. */
+document.querySelectorAll('[data-stages]').forEach(function(box){
+  var tabs = Array.prototype.slice.call(box.querySelectorAll('[role="tab"]'));
+  function pick(t, focus){
+    tabs.forEach(function(x){
+      var on = x === t;
+      x.setAttribute('aria-selected', on ? 'true' : 'false');
+      x.tabIndex = on ? 0 : -1;
+      var panel = document.getElementById(x.getAttribute('aria-controls'));
+      panel.hidden = !on;
+      panel.querySelectorAll('video').forEach(function(v){
+        if (!on) v.pause();
+        else if (!reduce){ var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+      });
+    });
+    if (focus) t.focus();
+  }
+  box.querySelectorAll('[role="tabpanel"][hidden] video').forEach(function(v){
+    v.addEventListener('play', function(){ if (v.closest('[hidden]')) v.pause(); });
+  });
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ pick(t); });
+    t.addEventListener('keydown', function(e){
+      var j = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : null;
+      if (j === null) return;
+      e.preventDefault();
+      pick(tabs[(j + tabs.length) % tabs.length], true);
+    });
+  });
+});
+
+/* 8. Horizontal scrollers — arrows, keyboard, drag */
+document.querySelectorAll('[data-hs]').forEach(function(hs){
+  var track = hs.querySelector('[data-track]'),
+      view  = hs.querySelector('[data-view]'),
+      prev  = hs.querySelector('[data-prev]'),
+      next  = hs.querySelector('[data-next]'),
+      rail  = hs.querySelector('[data-rail]');
+  if (!track) return;
+
+  if (rail){
+    for (var i=0;i<track.children.length;i++) rail.appendChild(document.createElement('b'));
+  }
+
+  function step(){
+    var f = track.firstElementChild; if (!f) return 320;
+    var cs = getComputedStyle(track), gap = parseFloat(cs.columnGap || cs.gap) || 16;
+    return f.getBoundingClientRect().width + gap;
+  }
+  function update(){
+    var max = track.scrollWidth - track.clientWidth, x = track.scrollLeft;
+    var atStart = x <= 1;
+    var last = track.lastElementChild, atEnd;
+    if (max <= 1) atEnd = true;
+    else atEnd = (x >= max - 1) ||
+                 (!!last && last.getBoundingClientRect().right <= track.getBoundingClientRect().right + 2);
+    view.dataset.atStart = atStart;
+    view.dataset.atEnd   = atEnd;
+    if (prev) prev.disabled = atStart;
+    if (next) next.disabled = atEnd;
+    if (rail){
+      var n = rail.children.length;
+      var idx = (max <= 1) ? 0 : Math.round((x / max) * (n - 1));
+      if (atEnd) idx = n - 1;
+      if (atStart) idx = 0;
+      for (var i=0;i<n;i++) rail.children[i].classList.toggle('on', i === idx);
+    }
+  }
+  function go(d){ track.scrollBy({left: d*step(), behavior: reduce ? 'auto' : 'smooth'}); }
+
+  prev && prev.addEventListener('click', function(){ go(-1); });
+  next && next.addEventListener('click', function(){ go(1); });
+  track.addEventListener('scroll', function(){ requestAnimationFrame(update); }, {passive:true});
+  track.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight'){ e.preventDefault(); go(1); }
+    else if (e.key === 'ArrowLeft'){ e.preventDefault(); go(-1); }
+    else if (e.key === 'Home'){ e.preventDefault(); track.scrollTo({left:0, behavior:'smooth'}); }
+    else if (e.key === 'End'){ e.preventDefault(); track.scrollTo({left:track.scrollWidth, behavior:'smooth'}); }
+  });
+
+  /* Drag to scroll; capture only once the pointer has really moved, so a
+     plain click still reaches the card under it. */
+  var DRAG_THRESHOLD = 6;
+  var down=false, dragging=false, startX=0, startLeft=0, moved=0, pid=null;
+  track.addEventListener('pointerdown', function(e){
+    if (e.pointerType === 'touch') return;
+    if (e.target.closest('a,button')) return;
+    down=true; dragging=false; moved=0; pid=e.pointerId;
+    startX=e.clientX; startLeft=track.scrollLeft;
+  });
+  track.addEventListener('pointermove', function(e){
+    if (!down) return;
+    var dx = e.clientX - startX;
+    moved = Math.max(moved, Math.abs(dx));
+    if (!dragging && moved > DRAG_THRESHOLD){
+      dragging = true;
+      track.classList.add('dragging');
+      try { track.setPointerCapture(pid); } catch(err){}
+    }
+    if (dragging) track.scrollLeft = startLeft - dx;
+  });
+  ['pointerup','pointercancel'].forEach(function(ev){
+    track.addEventListener(ev, function(){
+      if (!down) return;
+      down = false;
+      if (dragging){
+        track.classList.remove('dragging');
+        try { track.releasePointerCapture(pid); } catch(err){}
+        var s = step();
+        track.scrollTo({left: Math.round(track.scrollLeft/s)*s, behavior: reduce ? 'auto' : 'smooth'});
+      }
+      dragging = false; pid = null;
+    });
+  });
+  track.addEventListener('click', function(e){
+    if (moved > DRAG_THRESHOLD){ e.preventDefault(); e.stopPropagation(); }
+  }, true);
+
+  new ResizeObserver(update).observe(track);
+  update();
+});
+
+/* 9a. Term tooltips — tap to toggle, Esc or tap elsewhere to close,
+   and keep the bubble inside the viewport. */
+function placeTip(term){
+  var tip = term.querySelector('.tip');
+  tip.style.setProperty('--tip-shift','0px');
+  var r = tip.getBoundingClientRect(), pad = 12, shift = 0;
+  if (r.left < pad) shift = pad - r.left;
+  else if (r.right > innerWidth - pad) shift = innerWidth - pad - r.right;
+  tip.style.setProperty('--tip-shift', Math.round(shift) + 'px');
+}
+var tipLive = document.querySelector('[data-tip-live]');
+function announce(text){
+  if (!tipLive) return;
+  tipLive.textContent = '';
+  setTimeout(function(){ tipLive.textContent = text; }, 60);
+}
+function closeTips(except){
+  document.querySelectorAll('.term[data-open]').forEach(function(t){
+    if (t === except) return;
+    t.removeAttribute('data-open');
+    t.querySelector('.info').setAttribute('aria-expanded','false');
+  });
+}
+document.querySelectorAll('.term').forEach(function(term){
+  var btn = term.querySelector('.info');
+  ['pointerenter','focusin'].forEach(function(ev){ term.addEventListener(ev, function(){ placeTip(term); }); });
+  btn.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    var open = !term.hasAttribute('data-open');
+    closeTips(term);
+    if (open){ term.setAttribute('data-open',''); placeTip(term); announce(term.querySelector('.tip').textContent); }
+    else term.removeAttribute('data-open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+});
+document.addEventListener('click', function(e){ if (!e.target.closest('.term')) closeTips(); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeTips(); });
+
+/* 9. Nav — highlight the section in view. The four final-experience
+   sections all light "Final". */
+var links = [].slice.call(document.querySelectorAll('[data-navlinks] a'));
+if (links.length && 'IntersectionObserver' in window){
+  var map = {};
+  links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var no = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (!en.isIntersecting) return;
+      var a = map[en.target.id.split('-')[0]];
+      links.forEach(function(l){ l.removeAttribute('aria-current'); });
+      if (a) a.setAttribute('aria-current','true');
+    });
+  }, {rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('section[id]').forEach(function(s){ no.observe(s); });
+}
+})();
+</script>
+</body>
+</html>
