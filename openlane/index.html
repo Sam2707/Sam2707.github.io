@@ -2174,5 +2174,40 @@ if (links.length && 'IntersectionObserver' in window){
 }
 })();
 </script>
+<script>
+/* Browser Back always returns to the portfolio home page. */
+(function () {
+  var HOME = new URL(location.protocol === 'file:' ? '../index.html' : '../', location.href).href;
+
+  /* 1. In-page links scroll without adding history entries. */
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = decodeURIComponent(a.getAttribute('href').slice(1));
+    var el = id && document.getElementById(id);
+    if (!el) return;
+    e.preventDefault();
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    try { history.replaceState(history.state, '', '#' + id); } catch (_) {}
+  });
+
+  /* 2. Visitors who arrive from outside the site get the home page behind them,
+        added on their first click or key press so browsers honour it. */
+  var fromSite = false;
+  try { fromSite = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (_) {}
+  if (fromSite || !history.pushState) return;
+  var armed = false;
+  function arm() {
+    if (armed) return; armed = true;
+    var here = location.href;
+    try { history.replaceState({ toHome: true }, '', HOME); history.pushState({}, '', here); } catch (_) {}
+  }
+  addEventListener('pointerdown', arm, { capture: true, once: true });
+  addEventListener('keydown', arm, { capture: true, once: true });
+  addEventListener('popstate', function (e) { if (e.state && e.state.toHome) location.replace(HOME); });
+})();
+</script>
 </body>
 </html>
