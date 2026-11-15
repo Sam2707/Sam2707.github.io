@@ -62,8 +62,11 @@
   /* ===== fixed atmosphere ===== */
   .bg { position: fixed; inset: 0; z-index: -4; background: var(--night); transition: background-color 1s var(--ease); }
   .stars { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
-  .stars i { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: var(--cream); opacity: var(--o); animation: twinkle var(--t) ease-in-out infinite; animation-delay: var(--dl); }
-  @keyframes twinkle { 50% { opacity: calc(var(--o) * 0.2); } }
+  /* Each star keeps its base brightness; the twinkle runs on an inner layer with fixed keyframe values,
+     so the browser can animate it on the GPU instead of restyling 80 stars on the main thread. */
+  .stars i { position: absolute; width: 2px; height: 2px; opacity: var(--o); }
+  .stars .star-layer { position: absolute; left: 0; top: 0; width: 2px; height: 2px; opacity: 1; border-radius: 50%; animation: twinkle var(--t) ease-in-out infinite; animation-delay: var(--dl); }
+  @keyframes twinkle { 50% { opacity: 0.2; } }
   /* chalky pastel finish on the background only: white speckle (screen) lifts the colour, dark speckle (multiply) adds tooth.
      Sits between .bg and the content, so text, cards and images stay clean. */
   :root { --card-fill: color-mix(in srgb, var(--lake) 93%, #f1eee6); --card-fill-hover: color-mix(in srgb, var(--lake) 90%, #f1eee6); --noise-lift: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.62' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.6 -0.55'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); --noise-tooth: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.5 -0.5'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
@@ -423,7 +426,7 @@
     html { scroll-behavior: auto; }
     .rv { opacity: 1; transform: none; transition: none; }
     .jumble .ch { transform: none !important; transition: none; }
-    .grain, .stars i, .cursor, .sparkle, .clock .colon { animation: none; }
+    .grain, .stars i, .stars .star-layer, .cursor, .sparkle, .clock .colon { animation: none; }
       .belief-b .lines .ln { color: var(--cream); }
   }
 </style>
@@ -799,16 +802,24 @@
   var stars = document.getElementById('stars');
   var seed = 11;
   function rand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  /* 80 stars drawn by 4 layers (each star is a shadow of one tiny element), so the browser animates
+     4 layers on the GPU instead of restyling 80 elements every frame. Same positions, sizes and
+     brightness as before; the random calls are unchanged so the hero lines below stay identical. */
+  var LAYERS = [['2.6s', '0s'], ['3.4s', '-1.3s'], ['4.6s', '-2.1s'], ['5.8s', '-3.2s']], dots = [[], [], [], []];
   for (var s = 0; s < 80; s++) {
-    var st = document.createElement('i');
-    st.style.left = (rand() * 100) + '%';
-    st.style.top = (rand() * 100) + '%';
-    st.style.setProperty('--o', (0.25 + rand() * 0.6).toFixed(2));
-    st.style.setProperty('--t', (2 + rand() * 4).toFixed(1) + 's');
-    st.style.setProperty('--dl', (-rand() * 5).toFixed(1) + 's');
-    if (rand() > 0.85) { st.style.width = st.style.height = '3px'; }
-    stars.appendChild(st);
+    var x = rand() * 100, y = rand() * 100, o = 0.25 + rand() * 0.6;
+    rand(); rand(); // duration and delay now come from the star's layer
+    var big = rand() > 0.85;
+    dots[s % 4].push(x.toFixed(2) + 'vw ' + y.toFixed(2) + 'vh 0 ' + (big ? '0.5px' : '0') + ' rgba(241,238,230,' + o.toFixed(2) + ')');
   }
+  dots.forEach(function (list, k) {
+    var layer = document.createElement('i');
+    layer.className = 'star-layer';
+    layer.style.boxShadow = list.join(',');
+    layer.style.setProperty('--t', LAYERS[k][0]);
+    layer.style.setProperty('--dl', LAYERS[k][1]);
+    stars.appendChild(layer);
+  });
 
   /* ---------- jumbled letters ---------- */
   document.querySelectorAll('.jumble').forEach(function (el) {
