@@ -841,10 +841,13 @@
      its scroll position instead of jumping, so it reads as a slow, steady drive past. */
   var sky = document.getElementById('skyline'), tram = document.getElementById('tram');
   var tramX = null, tramTarget = 0, tramRaf = 0;
+  /* The skyline's page position is measured on load and resize, so scrolling never forces a layout. */
+  var skyBottom = 0, skyVh = 0;
+  function measureSky() { var r = sky.getBoundingClientRect(); skyBottom = r.bottom + window.scrollY; skyVh = window.innerHeight; }
   function tramGoal() {
-    var r = sky.getBoundingClientRect(), vh = window.innerHeight;
+    var bottom = skyBottom - window.scrollY, vh = skyVh;
     var start = vh - 50, end = 80;
-    var p = reduce ? 0.62 : Math.max(0, Math.min(1, (start - r.bottom) / (start - end)));
+    var p = reduce ? 0.62 : Math.max(0, Math.min(1, (start - bottom) / (start - end)));
     return 1010 + (-80 - 1010) * p;
   }
   function drawTram(x) { tram.setAttribute('transform', 'translate(' + x.toFixed(1) + ' 232) scale(.4)'); }
@@ -859,9 +862,15 @@
     if (!tramRaf) tramRaf = requestAnimationFrame(stepTram);
   }
   if (sky && tram) {
-    onTramScroll();
-    window.addEventListener('scroll', onTramScroll, { passive: true });
-    window.addEventListener('resize', onTramScroll);
+    measureSky(); onTramScroll();
+    var tramTick = false;
+    window.addEventListener('scroll', function () {
+      if (tramTick) return; tramTick = true;
+      requestAnimationFrame(function () { tramTick = false; onTramScroll(); });
+    }, { passive: true });
+    window.addEventListener('resize', function () { measureSky(); onTramScroll(); });
+    window.addEventListener('load', function () { measureSky(); onTramScroll(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measureSky(); onTramScroll(); });
   }
 
   /* skyline draw: size the dash to the outline's real on-screen length so it always completes */
@@ -981,35 +990,59 @@
     labelEls.forEach(function (el, k) { el.style.right = 'auto'; el.style.left = lefts[k] + 'px'; });
   }
 
+  /* Layout is measured once per resize; scrolling only reads scrollY and writes when something changes. */
+  var geo = { vh: 0, max: 0, heroH: 0, sceneTops: [], labelTops: [], rulerW: 0 };
+  var shownScene = null, shownLabel = -1;
+  function measureGeo() {
+    geo.vh = window.innerHeight;
+    geo.max = document.documentElement.scrollHeight - geo.vh;
+    geo.heroH = heroTrack.offsetHeight;
+    geo.sceneTops = scenes.map(function (s) { return s.offsetTop; });
+    geo.labelTops = labelled.map(function (s) { return s.offsetTop; });
+    geo.rulerW = needle.parentElement.clientWidth;
+  }
   function onScroll() {
-    var y = window.scrollY, vh = window.innerHeight, max = document.documentElement.scrollHeight - vh;
+    var y = window.scrollY, vh = geo.vh, max = geo.max;
     // hero untangle
-    var dist = heroTrack.offsetHeight - vh;
+    var dist = geo.heroH - vh;
     progress = dist > 0 ? Math.min(1, Math.max(0, y / (dist * 0.9))) : 1;
-    heroVisible = y < heroTrack.offsetHeight;
-    if (reduce) drawTangle(0);
-    // scene colour
+    heroVisible = y < geo.heroH;
+    if (reduce) drawTangle(0); else wakeTangle();
+    // scene colour: only touch styles when the scene changes
     var mid = y + vh * 0.5, current = scenes[0];
-    scenes.forEach(function (s) { if (s.offsetTop <= mid) current = s; });
-    bg.style.backgroundColor = current.getAttribute('data-bg');
-    document.documentElement.style.setProperty('--scene', current.getAttribute('data-bg'));
-    // ruler
-    var frac = max > 0 ? y / max : 0;
-    needle.style.left = (frac * 100) + '%';
-    var on = 0; labelled.forEach(function (s, k) { if (s.offsetTop <= mid) on = k; });
-    labelEls.forEach(function (b, k) { b.classList.toggle('on', k === on); });
+    for (var i = 0; i < scenes.length; i++) if (geo.sceneTops[i] <= mid) current = scenes[i];
+    if (current !== shownScene) {
+      shownScene = current;
+      bg.style.backgroundColor = current.getAttribute('data-bg');
+      document.documentElement.style.setProperty('--scene', current.getAttribute('data-bg'));
+    }
+    // ruler: transform only, no layout
+    var frac = max > 0 ? Math.min(1, Math.max(0, y / max)) : 0;
+    needle.style.transform = 'translateX(' + (frac * geo.rulerW - 1).toFixed(1) + 'px)';
+    var on = 0; for (var k = 0; k < geo.labelTops.length; k++) if (geo.labelTops[k] <= mid) on = k;
+    if (on !== shownLabel) { shownLabel = on; labelEls.forEach(function (b, k) { b.classList.toggle('on', k === on); }); }
   }
   var ticking = false;
   window.addEventListener('scroll', function () {
     if (ticking) return; ticking = true;
     requestAnimationFrame(function () { onScroll(); ticking = false; });
   }, { passive: true });
-  function onResize() { layoutRuler(); measure(); onScroll(); }
+  function onResize() { layoutRuler(); measure(); measureGeo(); onScroll(); }
   window.addEventListener('resize', onResize);
   window.addEventListener('load', onResize);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(onResize);
+  /* Hero lines animate only while the hero is on screen and still tangled; the loop sleeps otherwise. */
+  var tangleRaf = 0, drewStill = false;
+  function tangleLoop(t) {
+    tangleRaf = 0;
+    if (!heroVisible) return;
+    if (progress >= 1) { if (!drewStill) { drawTangle(t); drewStill = true; } return; }
+    drewStill = false; drawTangle(t);
+    tangleRaf = requestAnimationFrame(tangleLoop);
+  }
+  function wakeTangle() { if (!tangleRaf && heroVisible && (progress < 1 || !drewStill)) tangleRaf = requestAnimationFrame(tangleLoop); }
   onResize(); drawTangle(0);
-  if (!reduce) (function loop(t) { if (heroVisible) drawTangle(t); requestAnimationFrame(loop); })(0);
+  if (!reduce) wakeTangle();
 
   /* ---------- copy email ---------- */
   var copyBtn = document.getElementById('copyBtn');
