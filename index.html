@@ -596,6 +596,10 @@
     .menu-open .ruler { display: none; }
   }
   @media (max-width: 720px) and (prefers-reduced-motion: reduce) { .nav-links, .menu-btn span { transition: none; } }
+
+  /* Openlane is password protected on the public site; the label hides once a visitor has unlocked it (for example via /cv) */
+  .card .meta span.lock-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--coral); color: var(--ink); border-color: var(--ink); }
+  .card .meta span.lock-pill svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 </style>
 </head>
 <body>
@@ -743,7 +747,7 @@
       <a class="card rv" href="openlane/">
         <div class="info">
           <span class="idx">01</span>
-          <div class="meta"><span>Openlane · Powersports</span><span>B2B marketplace</span><span>iOS &amp; Web</span><span>Lead designer</span></div>
+          <div class="meta"><span>Openlane · Powersports</span><span>B2B marketplace</span><span>iOS &amp; Web</span><span>Lead designer</span><span class="lock-pill" data-lock-pill><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Password protected</span></div>
           <h3>Listing a motorbike is now as easy as listing a car.</h3>
           <p>Built for cars, the listing app failed on motorcycles, ATVs and snowmobiles, and 62% of dealers quit at step one. I led the 0→1 redesign so a failed scan never dead-ends a listing.</p>
           <div class="metrics"><div><b>+20%</b><small>Faster inspections</small></div><div><b>−12%</b><small>Post-sale disputes</small></div><div><b>+15%</b><small>Bid velocity</small></div></div>
@@ -1288,6 +1292,10 @@
   (mq.addEventListener ? mq.addEventListener.bind(mq, 'change') : mq.addListener.bind(mq))(place);
   place();
 })();
+</script>
+<script>
+/* Hide the "Password protected" label for visitors who have already unlocked the Openlane case study. */
+(function () { try { if (localStorage.getItem('sambitux-openlane-key')) document.querySelectorAll('[data-lock-pill]').forEach(function (e) { e.remove(); }); } catch (e) {} })();
 </script>
 <script>
 /* Mobile menu: the hamburger opens the site links as a full-screen panel. */
