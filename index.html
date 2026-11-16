@@ -446,6 +446,14 @@
   @media (prefers-reduced-motion: reduce) { .cover-device .phone, .cover-device .laptop { transition: none; } }
   /* single-column layouts: the cover keeps a fixed shape so the device always fits */
   @media (max-width: 900px) { .cover.cover-device { min-height: 0; aspect-ratio: 16 / 11; } }
+  /* phones: the hero is only as tall as its content (no pinned scroll), lines sit right under the text */
+  @media (max-width: 720px) {
+    .hero-track { height: auto; }
+    .hero { position: relative; height: auto; min-height: 0; padding-bottom: 8px; }
+    .tangle-box { position: relative; left: auto; right: auto; bottom: auto; justify-self: stretch; height: 110px; max-height: none;
+                  margin: 26px calc(-1 * (var(--edge) + var(--pad))) 0; }
+    .scene.hello { padding-top: 72px; }
+  }
   /* phones: a compact card so each project takes less of the screen */
   @media (max-width: 720px) {
     .work-list { gap: 22px; }
@@ -1034,7 +1042,8 @@
     var y = window.scrollY, vh = geo.vh, max = geo.max;
     // hero untangle
     var dist = geo.heroH - vh;
-    progress = dist > 0 ? Math.min(1, Math.max(0, y / (dist * 0.9))) : 1;
+    // pinned hero (desktop): untangle while pinned; unpinned (phones): untangle as the hero scrolls away
+    progress = dist > 0 ? Math.min(1, Math.max(0, y / (dist * 0.9))) : Math.min(1, Math.max(0, y / (geo.heroH * 0.6)));
     heroVisible = y < geo.heroH;
     if (reduce) drawTangle(0); else wakeTangle();
     // scene colour: only touch styles when the scene changes
