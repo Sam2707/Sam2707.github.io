@@ -525,9 +525,9 @@
     .cursor, .cursor.design, .cursor.business, .cursor.eng { display: flex; animation-name: drift-c; }
     .cursor svg { width: 15px; height: 15px; }
     .cursor span { margin-top: 10px; font-size: 11px; padding: 3px 6px; border-radius: 3px 8px 8px 8px; }
-    /* one bubble in each inside corner of the frame box */
-    .sel .cursor.business { left: 4px; right: auto; top: 6px; bottom: auto; }
-    .sel .cursor.design { right: 4px; left: auto; top: 6px; bottom: auto; }
+    /* Business and Design sit just above the frame labels; Eng and PM in the box's bottom corners */
+    .sel .cursor.business { left: 0; right: auto; top: -58px; bottom: auto; }
+    .sel .cursor.design { right: 0; left: auto; top: -58px; bottom: auto; }
     .sel .cursor.eng { left: 4px; right: auto; top: auto; bottom: 6px; }
     .sel .cursor.pm { right: 4px; left: auto; top: auto; bottom: 6px; }
   }
