@@ -460,6 +460,16 @@
     .scene.craft { padding-top: 56px; padding-bottom: 40px; }
     .scene.contact { padding-top: 56px; padding-bottom: 210px; }
   }
+  /* phones: the ruler shows the current section on the left and the next one on the right, tappable */
+  @media (max-width: 720px) {
+    .ruler .lbl { opacity: 0; visibility: hidden; pointer-events: none; transition: color .3s, opacity .3s, visibility .3s; }
+    .ruler .lbl.on, .ruler .lbl.next { opacity: 1; visibility: visible; transform: none; }
+    .ruler .lbl.on { left: 0 !important; right: auto !important; }
+    .ruler .lbl.next { left: auto !important; right: 0 !important; pointer-events: auto; color: var(--cream-2);
+                       padding: 10px 0 10px 16px; margin-bottom: -10px; }
+    .ruler .lbl.next::after { content: " \2192"; color: var(--coral); }
+    .ruler .lbl.next:active { color: var(--cream); }
+  }
   /* phones: a compact card so each project takes less of the screen */
   @media (max-width: 720px) {
     .work-list { gap: 22px; }
@@ -1064,7 +1074,7 @@
     var frac = max > 0 ? Math.min(1, Math.max(0, y / max)) : 0;
     needle.style.transform = 'translateX(' + (frac * geo.rulerW - 1).toFixed(1) + 'px)';
     var on = 0; for (var k = 0; k < geo.labelTops.length; k++) if (geo.labelTops[k] <= mid) on = k;
-    if (on !== shownLabel) { shownLabel = on; labelEls.forEach(function (b, k) { b.classList.toggle('on', k === on); }); }
+    if (on !== shownLabel) { shownLabel = on; labelEls.forEach(function (b, k) { b.classList.toggle('on', k === on); b.classList.toggle('next', k === on + 1); }); }
   }
   var ticking = false;
   window.addEventListener('scroll', function () {
