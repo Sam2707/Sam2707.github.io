@@ -507,6 +507,12 @@
       background: linear-gradient(var(--coral), var(--coral)) top / 100% calc(var(--fill, 0) * 100%) no-repeat, var(--cream-line); }
     .process h3 { margin-top: 4px; }
     .process p { margin-top: 8px; }
+    /* the number line is exactly as tall as the dot, so their centres line up */
+    .process li::before { top: 0; }
+    .process .n { display: block; height: 22px; line-height: 22px; }
+    /* each step's heading brightens as the timeline reaches its dot */
+    .process h3 { color: var(--cream-3); transition: color .45s var(--ease); }
+    .process li.reached h3 { color: var(--cream); }
   }
   /* phones: a compact card so each project takes less of the screen */
   @media (max-width: 720px) {
