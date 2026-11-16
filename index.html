@@ -453,6 +453,12 @@
     .tangle-box { position: relative; left: auto; right: auto; bottom: auto; justify-self: stretch; height: 110px; max-height: none;
                   margin: 26px calc(-1 * (var(--edge) + var(--pad))) 0; }
     .scene.hello { padding-top: 72px; }
+    /* every section sizes to its content with one consistent rhythm, instead of filling a whole screen */
+    .scene { min-height: 0; padding-top: 56px; padding-bottom: 56px; }
+    .scene.hello { padding-top: 56px; }
+    .scene.toronto { padding-top: 56px; padding-bottom: calc(25vw + 64px); }
+    .scene.craft { padding-top: 56px; padding-bottom: 40px; }
+    .scene.contact { padding-top: 56px; padding-bottom: 210px; }
   }
   /* phones: a compact card so each project takes less of the screen */
   @media (max-width: 720px) {
