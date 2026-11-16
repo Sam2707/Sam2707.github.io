@@ -497,6 +497,28 @@
     .ct-e .res b { display: inline; margin: 0; font-size: 22px; }
     .ct-e .res small { display: inline; margin: 0 0 0 4px; font-size: 14px; }
   }
+  /* phones: more room inside each point, and the card is an accordion so readers can choose to open it */
+  .ct-toggle { display: none; }
+  .ct-collapse { display: grid; grid-template-rows: 1fr; }
+  .ct-collapse > .ct { min-height: 0; }
+  @media (max-width: 720px) {
+    .ct-row { gap: 16px; padding: 22px 0; }
+    .ct-e .proj::before, .ct-c b::before, .ct-r::before, .ct-e .res::before { margin-bottom: 6px; }
+    .ct-head { margin-bottom: 0; }
+    .ct-toggle { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 9px 16px; border: 1.5px solid var(--ink); border-radius: 999px;
+                 font: 600 14px/1 var(--f-ui); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: transparent; }
+    .ct-toggle i { position: relative; width: 12px; height: 12px; flex: none; }
+    .ct-toggle i::before, .ct-toggle i::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: currentColor; border-radius: 2px; transition: transform .35s var(--ease); }
+    .ct-toggle i::after { transform: rotate(90deg); }
+    .ct-card.open .ct-toggle i::after { transform: rotate(0deg); }
+    .ct-toggle:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
+    .ct-collapse { grid-template-rows: 0fr; transition: grid-template-rows .45s var(--ease); }
+    .ct-collapse > .ct { overflow: hidden; }
+    .ct-card.open .ct-collapse { grid-template-rows: 1fr; }
+    .ct-card.open .ct-collapse > .ct { overflow: visible; }
+    .ct-card .ct { margin-top: 4px; }
+  }
+  @media (max-width: 720px) and (prefers-reduced-motion: reduce) { .ct-collapse, .ct-toggle i::before, .ct-toggle i::after { transition: none; } }
   /* phones: the process becomes a vertical timeline; the coral line fills between the dots as you scroll */
   @media (max-width: 720px) {
     .process { row-gap: 40px; }
@@ -657,7 +679,9 @@
           <span class="tag">Real constraints</span>
           <h3>Ideal frameworks are great on paper. Here's what I do when reality shows up.</h3>
         </div>
+        <button class="ct-toggle" type="button" aria-expanded="false" aria-controls="ctList"><span>See 4 examples</span><i aria-hidden="true"></i></button>
       </div>
+      <div class="ct-collapse" id="ctList">
       <div class="ct" role="table" aria-label="Constraints, responses and examples">
         <div class="ct-row th" role="row"><span role="columnheader">Constraint</span><span role="columnheader">How I responded</span><span role="columnheader">Where it happened</span></div>
         <div class="ct-row" role="row">
@@ -680,6 +704,7 @@
           <div class="ct-r" role="cell">Interviews couldn't show what a job looks like inside a customer's home. I did monthly ride-alongs with the technicians who used the app to see how they worked on site and where the bottlenecks were.</div>
           <div class="ct-e" role="cell"><span class="proj">Comcast</span><span class="res"><b>−4 min</b><small>per on-site visit</small></span></div>
         </div>
+      </div>
       </div>
     </div>
     <p class="velocity rv">Great design should <em>support</em> product velocity, not block it.</p>
@@ -1212,6 +1237,24 @@
   addEventListener('scroll', schedule, { passive: true });
   addEventListener('resize', schedule);
   schedule();
+})();
+</script>
+<script>
+/* Phones: the "Real constraints" card opens and closes; on larger screens it is always open. */
+(function () {
+  var card = document.querySelector('.ct-card'), btn = card && card.querySelector('.ct-toggle');
+  if (!btn) return;
+  var panel = document.getElementById(btn.getAttribute('aria-controls')), label = btn.querySelector('span');
+  var mq = window.matchMedia('(max-width: 720px)');
+  function sync() {
+    var open = card.classList.contains('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    label.textContent = open ? 'Hide examples' : 'See 4 examples';
+    if (mq.matches && !open) panel.setAttribute('inert', ''); else panel.removeAttribute('inert');
+  }
+  btn.addEventListener('click', function () { card.classList.toggle('open'); sync(); });
+  (mq.addEventListener ? mq.addEventListener.bind(mq, 'change') : mq.addListener.bind(mq))(sync);
+  sync();
 })();
 </script>
 <script>
