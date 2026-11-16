@@ -519,6 +519,15 @@
     .ct-card .ct { margin-top: 4px; }
   }
   @media (max-width: 720px) and (prefers-reduced-motion: reduce) { .ct-collapse, .ct-toggle i::before, .ct-toggle i::after { transition: none; } }
+  /* phones: all four cursor bubbles show, smaller, with a gentler drift so they stay in place */
+  @media (max-width: 720px) {
+    .cursor, .cursor.design, .cursor.business, .cursor.eng { display: flex; animation-name: drift-c; }
+    .cursor svg { width: 15px; height: 15px; }
+    .cursor span { margin-top: 10px; font-size: 11px; padding: 3px 6px; border-radius: 3px 8px 8px 8px; }
+    .cursor.design { right: 4px; top: -80px; }
+    .cursor.business { left: 20%; top: 80px; }
+    .cursor.eng { left: 4px; right: auto; top: 6px; }
+  }
   /* phones: the process becomes a vertical timeline; the coral line fills between the dots as you scroll */
   @media (max-width: 720px) {
     .process { row-gap: 40px; }
