@@ -744,19 +744,26 @@
     </div>
 
     <div class="work-list">
-      <a class="card rv" href="openlane/">
+      <a class="card rv" href="mailto:sambitmohanty2707@gmail.com?subject=Access%20to%20your%20Openlane%20case%20study&amp;body=Hi%20Sambit%2C%0A%0AI%27d%20like%20to%20read%20your%20Openlane%20case%20study.%0A%0AThanks%2C%0A" data-openlane-card aria-label="Openlane case study, password protected. Email Sambit for access.">
         <div class="info">
           <span class="idx">01</span>
           <div class="meta"><span>Openlane · Powersports</span><span>B2B marketplace</span><span>iOS &amp; Web</span><span>Lead designer</span><span class="lock-pill" data-lock-pill><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Password protected</span></div>
           <h3>Listing a motorbike is now as easy as listing a car.</h3>
           <p>Built for cars, the listing app failed on motorcycles, ATVs and snowmobiles, and 62% of dealers quit at step one. I led the 0→1 redesign so a failed scan never dead-ends a listing.</p>
           <div class="metrics"><div><b>+20%</b><small>Faster inspections</small></div><div><b>−12%</b><small>Post-sale disputes</small></div><div><b>+15%</b><small>Bid velocity</small></div></div>
-          <span class="go">Read the case study <i>→</i></span>
+          <span class="go">Email me for access <i>→</i></span>
         </div>
         <div class="cover cover-device">
           <div class="phone"><img src="assets/thumbs/openlane-screen.webp" alt="Openlane app: vehicle details for a 2014 Harley-Davidson listing" width="590" height="1361" loading="lazy" decoding="async"></div>
         </div>
       </a>
+      <script>
+      /* Visitors who have unlocked Openlane (via /cv or the password) get the normal card back. */
+      (function () { try { if (!localStorage.getItem('sambitux-openlane-key')) return;
+        var c = document.querySelector('[data-openlane-card]'); c.href = 'openlane/'; c.removeAttribute('aria-label');
+        c.querySelector('.go').firstChild.nodeValue = 'Read the case study ';
+        var pill = c.querySelector('[data-lock-pill]'); if (pill) pill.remove(); } catch (e) {} })();
+      </script>
 
       <a class="card rv" href="finra-workspace/">
         <div class="info">
