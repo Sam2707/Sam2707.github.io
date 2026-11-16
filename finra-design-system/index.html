@@ -1010,6 +1010,24 @@ body .card.card-white:not(:hover):not(.touched){background:#fff}
 .subnav-back:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:2px}
 .subnav-items{margin-left:auto;min-width:0}
 @media(max-width:720px){.subnav-back-more{display:none}.subnav-in{gap:var(--space-16)}}
+
+/* ---------- mobile menu ---------- */
+.menu-btn{display:none}
+@media(max-width:720px){
+  .menu-btn{position:relative;z-index:101;display:grid;place-content:center;gap:7px;width:42px;height:42px;margin:0 -9px 0 auto;
+    background:none;border:0;color:#f1eee6;cursor:pointer}
+  .menu-btn span{display:block;width:24px;height:2px;border-radius:2px;background:currentColor;transition:transform .35s cubic-bezier(.22,1,.36,1)}
+  .nav.open .menu-btn span:first-child{transform:translateY(4.5px) rotate(45deg)}
+  .nav.open .menu-btn span:last-child{transform:translateY(-4.5px) rotate(-45deg)}
+  .nav .brand{position:relative;z-index:101}
+  .nav-site{position:fixed;inset:0;z-index:100;flex-direction:column;justify-content:center;gap:6px;margin:0;
+    padding:0 var(--site-edge);border:0;background:var(--band);opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s}
+  .nav.open .nav-site{opacity:1;visibility:visible}
+  .nav-site a,.nav-site a:not(.keep){display:block;align-self:flex-start;font-size:52px;line-height:1.1;letter-spacing:.03em}
+  .nav-site a::after{bottom:4px;height:3px}
+  .menu-open,.menu-open body{overflow:hidden}
+}
+@media(max-width:720px) and (prefers-reduced-motion:reduce){.nav-site,.menu-btn span{transition:none}}
 </style>
 </head>
 <body>
@@ -1022,11 +1040,12 @@ body .card.card-white:not(:hover):not(.touched){background:#fff}
       <img class="brand-logo" src="../assets/logo.svg" alt="" width="34" height="34">
       <span class="brand-name">Sambit Mohanty</span>
     </a>
-    <div class="nav-site">
+    <div class="nav-site" id="siteMenu">
       <a href="../index.html#hello">About</a>
       <a href="../index.html#work" class="is-here">Work</a>
       <a href="../index.html#contact" class="keep">Contact</a>
     </div>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="siteMenu" aria-label="Open menu"><span></span><span></span></button>
   </div>
 </nav>
 <div class="subnav">
@@ -1995,6 +2014,26 @@ if (links.length && 'IntersectionObserver' in window){
   addEventListener('pointerdown', arm, { capture: true, once: true });
   addEventListener('keydown', arm, { capture: true, once: true });
   addEventListener('popstate', function (e) { if (e.state && e.state.toHome) location.replace(HOME); });
+})();
+</script>
+<script>
+/* Mobile menu: the hamburger opens the site links as a full-screen panel. */
+(function () {
+  var nav = document.querySelector('.nav'), btn = nav && nav.querySelector('.menu-btn');
+  if (!btn) return;
+  var panel = document.getElementById(btn.getAttribute('aria-controls'));
+  function set(open) {
+    nav.classList.toggle('open', open);
+    document.documentElement.classList.toggle('menu-open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    if (open) { var first = panel.querySelector('a'); if (first) first.focus({ preventScroll: true }); }
+  }
+  btn.addEventListener('click', function () { set(!nav.classList.contains('open')); });
+  panel.addEventListener('click', function (e) { if (e.target.closest('a')) set(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nav.classList.contains('open')) { set(false); btn.focus(); } });
+  var wide = window.matchMedia('(min-width: 721px)');
+  (wide.addEventListener ? wide.addEventListener.bind(wide, 'change') : wide.addListener.bind(wide))(function (m) { if (m.matches) set(false); });
 })();
 </script>
 </body>
