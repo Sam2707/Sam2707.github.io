@@ -446,6 +446,35 @@
   @media (prefers-reduced-motion: reduce) { .cover-device .phone, .cover-device .laptop { transition: none; } }
   /* single-column layouts: the cover keeps a fixed shape so the device always fits */
   @media (max-width: 900px) { .cover.cover-device { min-height: 0; aspect-ratio: 16 / 11; } }
+  /* phones: a compact card so each project takes less of the screen */
+  @media (max-width: 720px) {
+    .work-list { gap: 22px; }
+    .card { gap: 14px; padding: 16px; border-radius: 18px; box-shadow: 5px 6px 0 var(--ink); }
+    .card .idx { font-size: 40px; }
+    .card .meta { gap: 5px 6px; margin-top: 10px; }
+    .card .meta span { font-size: 11px; letter-spacing: .06em; padding: 3px 8px; border-width: 1.25px; }
+    .card h3 { margin-top: 10px; font-size: 26px; line-height: 1.05; }
+    .card p { margin-top: 8px; font-size: 16px; line-height: 1.4; }
+    .card .metrics { gap: 18px; padding-top: 14px; }
+    .card .metrics b { font-size: 26px; }
+    .card .metrics small { font-size: 11px; letter-spacing: .06em; }
+    .card .go { margin-top: 14px; padding: 8px 14px; font-size: 14px; gap: 6px; }
+    .cover.cover-device { aspect-ratio: 16 / 10; border-radius: 12px; border-width: 1.5px; }
+    .phone { top: 14px; bottom: 14px; border-width: 5px; border-radius: 20px; box-shadow: 5px 6px 0 rgba(12, 12, 14, .22); }
+    .phone img { border-radius: 15px; }
+    .laptop { width: min(76%, 420px); }
+    .laptop-screen { border-width: 6px; border-bottom-width: 9px; border-radius: 10px 10px 3px 3px; box-shadow: 5px 6px 0 rgba(12, 12, 14, .22); }
+    .laptop-base { height: 9px; }
+    .laptop-base::after { height: 3px; }
+  }
+  @media (max-width: 420px) {
+    .card .idx { font-size: 34px; }
+    .card h3 { font-size: 23px; }
+    .card p { font-size: 15px; }
+    .card .metrics { gap: 14px; }
+    .card .metrics b { font-size: 23px; }
+    .card .metrics small { font-size: 10px; }
+  }
 </style>
 </head>
 <body>
