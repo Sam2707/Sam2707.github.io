@@ -600,6 +600,17 @@
   /* Openlane is password protected on the public site; the label hides once a visitor has unlocked it (for example via /cv) */
   .card .meta span.lock-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--coral); color: var(--ink); border-color: var(--ink); }
   .card .meta span.lock-pill svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .card .ask-email { margin-top: 12px; font-size: 16px; line-height: 1.4; color: #5b5a63; overflow-wrap: anywhere; }
+  .card .ask-email b { font-weight: 600; color: var(--ink); }
+  @media (max-width: 720px) { .card .ask-email { margin-top: 10px; font-size: 14px; } }
+  /* locked Openlane card: the CTA link covers the whole card; the Copy button sits above it */
+  .card-locked { cursor: pointer; }
+  .card-locked .stretch::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
+  .card-locked .stretch:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
+  .card .ask-email .copy-email { position: relative; z-index: 2; margin-left: 6px; padding: 3px 10px; border: 1.5px solid var(--ink); border-radius: 999px;
+    font: 600 13px/1.2 var(--f-ui); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); background: transparent; cursor: pointer; vertical-align: 1px; }
+  .card .ask-email .copy-email:hover { background: var(--ink); color: var(--cream); }
+  .card .ask-email .copy-email.done { background: var(--mint); border-color: var(--ink); color: var(--ink); }
 </style>
 </head>
 <body>
@@ -744,25 +755,26 @@
     </div>
 
     <div class="work-list">
-      <a class="card rv" href="mailto:sambitmohanty2707@gmail.com?subject=Access%20to%20your%20Openlane%20case%20study&amp;body=Hi%20Sambit%2C%0A%0AI%27d%20like%20to%20read%20your%20Openlane%20case%20study.%0A%0AThanks%2C%0A" data-openlane-card aria-label="Openlane case study, password protected. Email Sambit for access.">
+      <div class="card rv card-locked" data-openlane-card>
         <div class="info">
           <span class="idx">01</span>
           <div class="meta"><span>Openlane · Powersports</span><span>B2B marketplace</span><span>iOS &amp; Web</span><span>Lead designer</span><span class="lock-pill" data-lock-pill><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Password protected</span></div>
           <h3>Listing a motorbike is now as easy as listing a car.</h3>
           <p>Built for cars, the listing app failed on motorcycles, ATVs and snowmobiles, and 62% of dealers quit at step one. I led the 0→1 redesign so a failed scan never dead-ends a listing.</p>
           <div class="metrics"><div><b>+20%</b><small>Faster inspections</small></div><div><b>−12%</b><small>Post-sale disputes</small></div><div><b>+15%</b><small>Bid velocity</small></div></div>
-          <span class="go">Email me for access <i>→</i></span>
+          <a class="go stretch" href="mailto:sambitmohanty2707@gmail.com?subject=Access%20to%20your%20Openlane%20case%20study&amp;body=Hi%20Sambit%2C%0A%0AI%27d%20like%20to%20read%20your%20Openlane%20case%20study.%0A%0AThanks%2C%0A" data-openlane-cta>Email me for access <i>→</i></a>
+          <span class="ask-email" data-lock-email>Or write to <b>sambitmohanty2707@gmail.com</b> <button class="copy-email" type="button" data-copy-email="sambitmohanty2707@gmail.com" aria-live="polite">Copy</button></span>
         </div>
         <div class="cover cover-device">
           <div class="phone"><img src="assets/thumbs/openlane-screen.webp" alt="Openlane app: vehicle details for a 2014 Harley-Davidson listing" width="590" height="1361" loading="lazy" decoding="async"></div>
         </div>
-      </a>
+      </div>
       <script>
       /* Visitors who have unlocked Openlane (via /cv or the password) get the normal card back. */
       (function () { try { if (!localStorage.getItem('sambitux-openlane-key')) return;
-        var c = document.querySelector('[data-openlane-card]'); c.href = 'openlane/'; c.removeAttribute('aria-label');
-        c.querySelector('.go').firstChild.nodeValue = 'Read the case study ';
-        var pill = c.querySelector('[data-lock-pill]'); if (pill) pill.remove(); } catch (e) {} })();
+        var c = document.querySelector('[data-openlane-card]'), go = c.querySelector('[data-openlane-cta]');
+        go.href = 'openlane/'; go.firstChild.nodeValue = 'Read the case study ';
+        var pill = c.querySelector('[data-lock-pill]'); if (pill) pill.remove(); var em = c.querySelector('[data-lock-email]'); if (em) em.remove(); } catch (e) {} })();
       </script>
 
       <a class="card rv" href="finra-workspace/">
@@ -1303,6 +1315,20 @@
 <script>
 /* Hide the "Password protected" label for visitors who have already unlocked the Openlane case study. */
 (function () { try { if (localStorage.getItem('sambitux-openlane-key')) document.querySelectorAll('[data-lock-pill]').forEach(function (e) { e.remove(); }); } catch (e) {} })();
+</script>
+<script>
+/* Copy-email buttons: copy the address and confirm, without following the surrounding card link. */
+(function () {
+  document.querySelectorAll('[data-copy-email]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      var email = btn.getAttribute('data-copy-email');
+      function done() { btn.textContent = 'Copied \u2713'; btn.classList.add('done'); clearTimeout(btn._t); btn._t = setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 1800); }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(email).then(done, fallback); else fallback();
+      function fallback() { var t = document.createElement('textarea'); t.value = email; t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); done(); } catch (err) {} t.remove(); }
+    });
+  });
+})();
 </script>
 <script>
 /* Mobile menu: the hamburger opens the site links as a full-screen panel. */
