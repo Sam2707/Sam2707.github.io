@@ -1402,5 +1402,9 @@
   schedule();
 })();
 </script>
+<script>
+/* GoatCounter can start before the whole page is parsed; attach its click tracking again once everything has loaded. */
+window.addEventListener('load', function () { try { if (window.goatcounter && window.goatcounter.bind_events) window.goatcounter.bind_events(); } catch (e) {} });
+</script>
 </body>
 </html>
