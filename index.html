@@ -548,6 +548,14 @@
     .process h3 { color: var(--cream-3); transition: color .45s var(--ease); }
     .process li.reached h3 { color: var(--cream); }
   }
+  /* tablet and desktop: the steps light up as you scroll; on wide screens the coral line fills left to right */
+  @media (min-width: 721px) {
+    .process::before { transform: none; transition: none; background: linear-gradient(var(--coral), var(--coral)) left / calc(var(--fill, 0) * 100%) 100% no-repeat, var(--cream-line); }
+    .process li::before { background: var(--brick); border: 2px solid var(--coral); transition: background-color .35s var(--ease), border-color .35s var(--ease); }
+    .process li.reached::before { background: var(--coral); border-color: var(--ink); }
+    .process h3 { color: var(--cream-3); transition: color .45s var(--ease); }
+    .process li.reached h3 { color: var(--cream); }
+  }
   /* phones: a compact card so each project takes less of the screen */
   @media (max-width: 720px) {
     .work-list { gap: 22px; }
@@ -1244,23 +1252,32 @@
 })();
 </script>
 <script>
-/* Phones: fill the process timeline between the dots as it scrolls past the middle of the screen. */
+/* Process timeline: steps light up as they scroll into view.
+   Phones: a vertical line fills between the dots. Wide screens: the horizontal line fills left to right. */
 (function () {
   var list = document.querySelector('.process');
   if (!list) return;
-  var items = [].slice.call(list.children), mq = window.matchMedia('(max-width: 720px)');
+  var items = [].slice.call(list.children), phone = window.matchMedia('(max-width: 720px)'), wide = window.matchMedia('(min-width: 901px)');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches, raf = 0, active = true;
   function paint() {
     raf = 0;
-    if (!mq.matches) return;
-    var anchor = window.innerHeight * 0.6;
-    var rects = items.map(function (li) { return li.getBoundingClientRect(); });
+    var vh = window.innerHeight, rects = items.map(function (li) { return li.getBoundingClientRect(); });
+    if (wide.matches) {
+      // the line fills as the row travels from 85% to 40% of the screen height
+      var box = list.getBoundingClientRect();
+      var f = reduce ? 1 : Math.max(0, Math.min(1, (vh * 0.85 - box.top) / (vh * 0.45)));
+      list.style.setProperty('--fill', f.toFixed(3));
+      var reach = box.left + f * box.width;
+      items.forEach(function (li, i) { li.classList.toggle('reached', reduce || rects[i].left + 11 <= reach); });
+      return;
+    }
+    var anchor = vh * 0.6;
     items.forEach(function (li, i) {
       li.classList.toggle('reached', reduce || rects[i].top + 11 <= anchor);
-      if (i < items.length - 1) {
+      if (phone.matches && i < items.length - 1) {
         var top = rects[i].top + 25, bottom = rects[i + 1].top;
-        var f = reduce ? 1 : Math.max(0, Math.min(1, (anchor - top) / (bottom - top)));
-        li.style.setProperty('--fill', f.toFixed(3));
+        var g = reduce ? 1 : Math.max(0, Math.min(1, (anchor - top) / (bottom - top)));
+        li.style.setProperty('--fill', g.toFixed(3));
       }
     });
   }
