@@ -626,6 +626,8 @@
   .card .ask-email .copy-email:hover { background: rgba(12, 12, 14, .16); }
   .card .ask-email .copy-email.done { background: var(--mint); color: var(--ink); }
 </style>
+<!-- privacy-friendly visit counts (no cookies): https://sambitux.goatcounter.com -->
+<script data-goatcounter="https://sambitux.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 <div class="bg" id="bg" aria-hidden="true"></div>
@@ -776,8 +778,8 @@
           <h3>Listing a motorbike is now as easy as listing a car.</h3>
           <p>Built for cars, the listing app failed on motorcycles, ATVs and snowmobiles, and 62% of dealers quit at step one. I led the 0→1 redesign so a failed scan never dead-ends a listing.</p>
           <div class="metrics"><div><b>+20%</b><small>Faster inspections</small></div><div><b>−12%</b><small>Post-sale disputes</small></div><div><b>+15%</b><small>Bid velocity</small></div></div>
-          <a class="go stretch" href="mailto:sambitmohanty2707@gmail.com?subject=Access%20to%20your%20Openlane%20case%20study&amp;body=Hi%20Sambit%2C%0A%0AI%27d%20like%20to%20read%20your%20Openlane%20case%20study.%0A%0AThanks%2C%0A" data-openlane-cta>Email me for access <i>→</i></a>
-          <span class="ask-email" data-lock-email>Or write to <b>sambitmohanty2707@gmail.com</b> <button class="copy-email" type="button" data-copy-email="sambitmohanty2707@gmail.com" aria-live="polite">Copy</button></span>
+          <a class="go stretch" data-goatcounter-click="openlane-request-access" data-goatcounter-title="Openlane: Email me for access" href="mailto:sambitmohanty2707@gmail.com?subject=Access%20to%20your%20Openlane%20case%20study&amp;body=Hi%20Sambit%2C%0A%0AI%27d%20like%20to%20read%20your%20Openlane%20case%20study.%0A%0AThanks%2C%0A" data-openlane-cta>Email me for access <i>→</i></a>
+          <span class="ask-email" data-lock-email>Or write to <b>sambitmohanty2707@gmail.com</b> <button class="copy-email" type="button" data-goatcounter-click="openlane-copy-email" data-goatcounter-title="Openlane: Copy email" data-copy-email="sambitmohanty2707@gmail.com" aria-live="polite">Copy</button></span>
         </div>
         <div class="cover cover-device">
           <div class="phone"><img src="assets/thumbs/openlane-screen.webp" alt="Openlane app: vehicle details for a 2014 Harley-Davidson listing" width="590" height="1361" loading="lazy" decoding="async"></div>
@@ -787,7 +789,7 @@
       /* Visitors who have unlocked Openlane (via /cv or the password) get the normal card back. */
       (function () { try { if (!localStorage.getItem('sambitux-openlane-key')) return;
         var c = document.querySelector('[data-openlane-card]'), go = c.querySelector('[data-openlane-cta]');
-        go.href = 'openlane/'; go.firstChild.nodeValue = 'Read the case study ';
+        go.href = 'openlane/'; go.firstChild.nodeValue = 'Read the case study '; go.removeAttribute('data-goatcounter-click');
         var pill = c.querySelector('[data-lock-pill]'); if (pill) pill.remove(); var em = c.querySelector('[data-lock-email]'); if (em) em.remove(); } catch (e) {} })();
       </script>
 
@@ -909,16 +911,16 @@
         </div>
       </figure>
     </div>
-    <p class="words-more rv"><a href="https://www.linkedin.com/in/mohanty-sambit/details/recommendations/" target="_blank" rel="noopener">See recommendations on LinkedIn <span aria-hidden="true">↗</span></a></p>
+    <p class="words-more rv"><a href="https://www.linkedin.com/in/mohanty-sambit/details/recommendations/" target="_blank" rel="noopener" data-goatcounter-click="click-linkedin-recommendations" data-goatcounter-title="LinkedIn recommendations">See recommendations on LinkedIn <span aria-hidden="true">↗</span></a></p>
   </section>
 
   <!-- ===== 06 TORONTO ===== -->
   <section class="scene toronto center" id="contact" data-scene="Location" data-bg="var(--lake)">
     <h2 class="big jumble">Based in Toronto.</h2>
     <div class="links rv" style="--d:150ms">
-      <button class="copy" id="copyBtn" data-email="sambitmohanty2707@gmail.com" aria-live="polite">sambitmohanty2707@gmail.com <span class="ic" aria-hidden="true">⧉</span><span class="ok">Copied ✓</span></button>
-      <a href="https://www.linkedin.com/in/mohanty-sambit/" target="_blank" rel="noopener">LinkedIn ↗</a>
-      <a href="https://drive.google.com/file/d/1UyJW_m2JZ5abP3k-2eXYb190p5n2Q60u/view?usp=sharing" target="_blank" rel="noopener">Resume ↗</a>
+      <button class="copy" id="copyBtn" data-goatcounter-click="copy-email" data-goatcounter-title="Copy email (Toronto section)" data-email="sambitmohanty2707@gmail.com" aria-live="polite">sambitmohanty2707@gmail.com <span class="ic" aria-hidden="true">⧉</span><span class="ok">Copied ✓</span></button>
+      <a href="https://www.linkedin.com/in/mohanty-sambit/" target="_blank" rel="noopener" data-goatcounter-click="click-linkedin" data-goatcounter-title="LinkedIn">LinkedIn ↗</a>
+      <a href="https://drive.google.com/file/d/1UyJW_m2JZ5abP3k-2eXYb190p5n2Q60u/view?usp=sharing" target="_blank" rel="noopener" data-goatcounter-click="click-resume" data-goatcounter-title="Resume">Resume ↗</a>
     </div>
     <!-- Skyline outline simplified from "Toronto skyline from centre island" by Dillon Scheenaard, CC BY 3.0 (commons.wikimedia.org) -->
     <div class="skyline" id="skyline" aria-hidden="true">

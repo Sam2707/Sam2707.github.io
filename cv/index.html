@@ -8,6 +8,14 @@
 <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
 <script>
   try { localStorage.setItem('sambitux-openlane-key', 'm5MiYzejevfb7S0lIDY2DtQhhpglWwXJkiTEDhMBJKg='); } catch (e) {}
+  // count this as a visit from the resume link (skipped for the owner's browser via #toggle-goatcounter)
+  try {
+    if (localStorage.getItem('skipgc') !== 't' && !navigator.webdriver) {
+      var u = 'https://sambitux.goatcounter.com/count?p=' + encodeURIComponent('/cv') + '&t=' + encodeURIComponent('Resume link (/cv)') +
+        '&r=' + encodeURIComponent(document.referrer) + '&s=' + screen.width + '&b=0&rnd=' + Math.random().toString(36).slice(2, 7);
+      if (!(navigator.sendBeacon && navigator.sendBeacon(u))) new Image().src = u;
+    }
+  } catch (e) {}
   location.replace('../');
 </script>
 </head>
