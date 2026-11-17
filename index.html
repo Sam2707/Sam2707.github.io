@@ -627,6 +627,10 @@
   .card .ask-email .copy-email.done { background: var(--mint); color: var(--ink); }
 </style>
 <!-- privacy-friendly visit counts (no cookies): https://sambitux.goatcounter.com -->
+<script>
+/* Label home visits by version: "/" is the locked (LinkedIn) version, "/ (open version)" is for visitors who have Openlane access (from /cv or an earlier unlock). */
+window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' && localStorage.getItem('sambitux-openlane-key')) return '/ (open version)'; } catch (e) {} return p; } };
+</script>
 <script data-goatcounter="https://sambitux.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
