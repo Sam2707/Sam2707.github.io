@@ -879,6 +879,26 @@ footer .src{font:500 11.5px/1.5 var(--mono);opacity:.8;margin-top:var(--space-4)
   .menu-open,.menu-open body{overflow:hidden}
 }
 @media(max-width:720px) and (prefers-reduced-motion:reduce){.nav-site,.menu-btn span{transition:none}}
+
+/* ===== shared case study footer (same on every case study, coloured by each page's band) ===== */
+footer.cs-foot{background:var(--band);color:var(--band-ink-2);padding-block:var(--space-96) 28px;border-top:0}
+footer.cs-foot .wrap{display:block}
+.cs-foot-main{display:flex;flex-direction:column;gap:var(--space-24)}
+footer.cs-foot h2{color:#fff;margin:0}
+footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;line-height:1.6;color:var(--band-ink-2)}
+.cs-foot-links{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-16) 32px;margin-top:var(--space-8)}
+.cs-foot-links a,.cs-foot-links button{display:inline-flex;align-items:center;gap:8px;padding:0 0 3px;background:none;border:0;border-bottom:2px solid rgba(255,255,255,.32);
+  color:#fff;font-family:inherit;font-size:17px;font-weight:600;line-height:1.3;text-decoration:none;cursor:pointer;transition:color .2s,border-color .2s}
+.cs-foot-links a:hover,.cs-foot-links button:hover{color:var(--band-accent);border-bottom-color:var(--band-accent)}
+.cs-foot-links button .ok{display:none;color:var(--band-accent)}
+.cs-foot-links button.done .ok{display:inline}
+.cs-foot-links button.done .ic{display:none}
+.cs-foot-links .ic{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--band-accent)}
+.cs-foot-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px;margin-top:var(--space-96);padding-top:var(--space-24);
+  border-top:1px solid var(--band-rule);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--band-ink-2)}
+.cs-foot-bar nav{display:flex;flex-wrap:wrap;gap:12px 28px}
+.cs-foot-bar a,.cs-foot-bar button{padding:0;background:none;border:0;color:var(--band-ink-2);font:inherit;letter-spacing:inherit;text-transform:inherit;text-decoration:none;cursor:pointer}
+.cs-foot-bar a:hover,.cs-foot-bar button:hover{color:#fff}
 </style>
 <!-- privacy-friendly visit counts (no cookies): https://sambitux.goatcounter.com -->
 <script data-goatcounter="https://sambitux.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
@@ -1769,12 +1789,39 @@ footer .src{font:500 11.5px/1.5 var(--mono);opacity:.8;margin-top:var(--space-4)
   </div>
 </section>
 
-<footer>
+<footer class="cs-foot">
   <div class="wrap">
-    <div>Sambit Mohanty · Product designer</div>
-    <div class="src">Figma gkXtayVa6IRN21dAMcP0Hz · node 479:4211 · Design System v3</div>
+    <div class="cs-foot-main">
+      <h2 class="heading-1">Thanks for reading.</h2>
+      <p>Happy to walk through the deeper artifacts: the research with regulators, the end-to-end flows and the trade-offs behind the single task view.</p>
+      <div class="cs-foot-links">
+        <button type="button" class="cs-copy" data-email="sambitmohanty2707@gmail.com" aria-live="polite" data-goatcounter-click="copy-email-finra-workspace" data-goatcounter-title="Copy email (finra-workspace footer)">sambitmohanty2707@gmail.com <span class="ic">Copy</span><span class="ok">Copied ✓</span></button>
+        <a href="https://www.linkedin.com/in/mohanty-sambit/" target="_blank" rel="noopener" data-goatcounter-click="click-linkedin-finra-workspace" data-goatcounter-title="LinkedIn (finra-workspace footer)">LinkedIn ↗</a>
+        <a href="https://drive.google.com/file/d/1UyJW_m2JZ5abP3k-2eXYb190p5n2Q60u/view?usp=sharing" target="_blank" rel="noopener" data-goatcounter-click="click-resume-finra-workspace" data-goatcounter-title="Resume (finra-workspace footer)">Resume ↗</a>
+      </div>
+    </div>
+    <div class="cs-foot-bar">
+      <span>© Sambit Mohanty</span>
+      <nav aria-label="Footer"><a href="../index.html#work">← Back to work</a><button type="button" class="cs-top">Back to top ↑</button></nav>
+    </div>
   </div>
 </footer>
+<script>
+(function () {
+  var copy = document.querySelector('.cs-copy');
+  if (copy) copy.addEventListener('click', function () {
+    var email = copy.getAttribute('data-email');
+    var done = function () { copy.classList.add('done'); clearTimeout(copy._t); copy._t = setTimeout(function () { copy.classList.remove('done'); }, 1800); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(email).then(done, function () { location.href = 'mailto:' + email; });
+    else location.href = 'mailto:' + email;
+  });
+  var top = document.querySelector('.cs-top');
+  if (top) top.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  // GoatCounter may load before this footer exists; attach its click tracking once everything is in place
+  var bind = function () { try { if (window.goatcounter && window.goatcounter.bind_events) window.goatcounter.bind_events(); } catch (e) {} };
+  bind(); window.addEventListener('load', bind);
+})();
+</script>
 
 <!-- ============ LIGHTBOX ============ -->
 <dialog class="lb" data-lb aria-label="Expanded screen">
