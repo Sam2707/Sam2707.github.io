@@ -256,7 +256,8 @@
   .belief-body { margin: clamp(28px, 3.4vw, 48px) auto 0; max-width: 54ch; text-align: center; text-wrap: pretty; font-size: clamp(20px, 1.75vw, 25px); line-height: 1.45; color: var(--cream-2); }
 
   /* ===== 06 toronto ===== */
-  .toronto { align-content: start; padding-top: 150px; padding-bottom: calc(25vw + 150px); }
+  .toronto { align-content: start; padding-top: 150px; padding-bottom: 0; }
+  .scene.toronto { min-height: 0; padding-bottom: 0; }
   .toronto h2 { font-size: clamp(84px, 14.5vw, 232px); }
   .facts-row { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 1.4vw, 18px); width: 100%; max-width: 1100px; margin-top: 34px; }
   .facts-row li { padding: 20px 16px 18px; text-align: center; background: var(--card-fill); border-radius: 16px; box-shadow: 5px 6px 0 rgba(12, 12, 14, 0.38); transition: background-color .3s, box-shadow .4s var(--ease), transform .4s var(--ease); }
@@ -267,9 +268,10 @@
   .clock .colon { animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: .2; } }
   /* skyline + streetcar scene: full-bleed, scales with width so nothing distorts */
-  .skyline { position: absolute; left: var(--edge); right: var(--edge); bottom: 76px; }
+  /* the skyline sits at the very bottom of the Toronto section, so the streetcar rides on the Craft section's top rule */
+  .skyline { position: relative; justify-self: stretch; width: 100%; margin-top: clamp(40px, 6vw, 90px); }
   .skyline svg { display: block; width: 100%; height: auto; overflow: hidden; }
-  .skyline path, .skyline .track { fill: none; stroke: #f5f4f0; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .skyline path { fill: none; stroke: #f5f4f0; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 
   /* ===== 07 work (stacked cards) ===== */
   .work { align-content: start; }
@@ -373,7 +375,7 @@
   .copy.done .ic { display: none; }
   .contact { padding-bottom: 80px; }
   /* Craft is the last section, so it holds the footer line */
-  .scene.craft { padding-top: 90px; padding-bottom: 200px; }
+  .scene.craft { padding-top: 0; padding-bottom: 200px; }
   .scene.contact { min-height: 0; padding-top: 72px; }
   .site-foot { position: absolute; left: calc(var(--edge) + var(--pad)); right: calc(var(--edge) + var(--pad)); bottom: 74px; display: flex; justify-content: space-between; gap: 12px; font-size: 16px; letter-spacing: .06em; text-transform: uppercase; color: var(--cream-3); }
   .site-foot a:hover { color: var(--cream); }
@@ -416,8 +418,6 @@
     .pillar.photo { aspect-ratio: 1 / 1; }
     .cover { min-height: 220px; order: -1; }
       .cols { grid-template-columns: 1fr; }
-    .toronto { padding-bottom: calc(25vw + 90px); }
-    .skyline { bottom: 36px; }
     .facts-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .site-foot { flex-direction: column; align-items: center; }
   }
@@ -455,8 +455,8 @@
     /* every section sizes to its content with one consistent rhythm, instead of filling a whole screen */
     .scene { min-height: 0; padding-top: 56px; padding-bottom: 56px; }
     .scene.hello { padding-top: 56px; }
-    .scene.toronto { padding-top: 56px; padding-bottom: calc(25vw + 64px); }
-    .scene.craft { padding-top: 56px; padding-bottom: 210px; }
+    .scene.toronto { padding-top: 56px; padding-bottom: 0; }
+    .scene.craft { padding-top: 0; padding-bottom: 210px; }
     .scene.contact { padding-top: 56px; padding-bottom: 72px; }
   }
   /* phones: the ruler shows the current section on the left and the next one on the right, tappable */
@@ -913,9 +913,8 @@
     </div>
     <!-- Skyline outline simplified from "Toronto skyline from centre island" by Dillon Scheenaard, CC BY 3.0 (commons.wikimedia.org) -->
     <div class="skyline" id="skyline" aria-hidden="true">
-      <svg viewBox="30 10 1140 288" preserveAspectRatio="xMidYMax meet">
+      <svg viewBox="30 10 1140 283.5" preserveAspectRatio="xMidYMax meet">
         <path id="skyPath" d="M25 278 L44.3 278 Q46.3 278 46.3 276.2 L46.3 267.3 Q46.3 265.5 48.3 265.5 L70.1 265.5 Q71.2 265.5 71.2 266.5 L71.2 267.8 Q71.2 268.8 72.2 268.8 L95.5 268.8 Q97.4 268.8 97.4 267 L97.4 264.6 Q97.4 262.8 99.3 262.8 L113.9 262.8 Q115.9 262.8 115.9 264.7 L115.9 270.9 Q115.9 272.7 117.9 272.7 L137.3 272.7 Q139.3 272.7 139.3 270.9 L139.3 264.7 Q139.3 262.8 141.3 262.8 L152.7 262.8 Q154.2 262.8 154.2 261.4 L154.2 259.6 Q154.2 258.2 155.7 258.2 L177.8 258.2 Q179.8 258.2 179.8 260 L179.8 265.6 Q179.8 267.4 181.8 267.4 L194.8 267.4 Q196.8 267.4 196.9 265.6 L199.5 223.7 Q199.7 221.9 201.6 221.9 L213.3 221.9 Q215.3 221.9 215.5 223.7 L217.9 244.5 Q218.1 246.3 220.1 246.3 L231.8 246.3 Q233.7 246.3 233.9 244.5 L235.7 221.1 Q235.9 219.3 237.7 218.6 L244.6 216.4 Q245.8 216 245.8 214.8 L245.8 213.2 Q245.8 212 247.1 211.7 L253.3 210.3 Q254.3 210 254.3 209 L254.3 207.7 Q254.3 206.7 255.3 206.2 L260.4 203.6 Q262.1 202.8 264.1 202.8 L267.3 202.8 Q269.2 202.8 269.3 204.6 L270.6 251.1 Q270.7 252.9 272.6 252.9 L279.3 252.9 Q281.3 252.9 281.3 254.8 L281.3 258.3 Q281.3 260.2 283.3 260.2 L297.1 260.2 Q299.1 260.2 299.1 258.3 L300.4 207.9 Q300.5 206.1 302.1 205 L304.6 203.2 Q306.2 202.1 308.1 202.1 L312 202.1 Q314 202.1 315.2 203.5 L317 205.3 Q318.2 206.7 318.3 208.5 L318.9 235.9 Q318.9 237.7 320.9 237.7 L326.2 237.7 Q328.2 237.7 328.3 235.9 L329.4 222.4 Q329.6 220.6 331.6 220.6 L341.8 220.6 Q343.8 220.6 344 222.4 L346.4 245.1 Q346.6 247 348.6 247 L358.8 247 Q360.8 247 361.5 245.2 L364.5 236.9 Q365.1 235.1 367.1 235.1 L373 235.1 Q375 235.1 375.5 233.3 L378.1 222.4 Q378.6 220.6 380.6 220.4 L388.7 219.5 Q390.6 219.3 390.9 221.1 L393.9 241.2 Q394.2 243 396.2 243 L401.7 243 Q403.4 243 403.4 241.4 L403.4 239.3 Q403.4 237.7 405.1 237.7 L410.7 237.7 Q412.7 237.7 413 239.6 L415.2 251.8 Q415.5 253.6 417.5 253.6 L424.7 253.6 C438.2 242.4 453.8 236.4 471.6 236.4 C490.8 236.4 509.2 243.7 523.4 256.9 Q524.8 258.2 524.8 256.2 L524.8 239.1 Q524.8 237.1 527.7 237.1 H541.2 Q543.3 237.1 543.3 239.1 L544.7 251.6 H553.9 Q556.8 251.6 557.5 249 C560.3 210 561.8 168.4 563.2 130.8 Q563.2 129.5 560.3 128.2 C556.8 126.9 556.1 123.6 556.8 118.9 Q556.8 116.3 560.3 114.3 L563.9 113 L563.9 109.7 Q563.9 107.7 566 107.1 L566.4 77.4 Q566.4 76 565 75.4 Q563.5 74.1 565.7 72.7 L566.7 71.4 L567.4 29.8 Q567.6 27.2 568.1 27.2 Q568.7 27.2 568.9 29.8 L569.6 71.4 L570.6 72.7 Q572.8 74.1 571.3 75.4 Q569.9 76 569.9 77.4 L570.3 107.1 Q572.4 107.7 572.4 109.7 L572.4 113 L576 114.3 Q579.5 116.3 579.5 118.9 C580.2 123.6 579.5 126.9 576 128.2 Q573.1 129.5 573.1 130.8 C573.8 161.8 575.2 198.1 577.4 232.5 L580.4 232.5 Q581.6 232.5 581.6 231.3 L581.6 227 Q581.6 225.2 583.6 225.2 L597.4 225.2 Q599.4 225.2 599.4 227 L599.4 243.8 Q599.4 245.7 601.4 245.7 L607.3 245.7 Q609.3 245.7 609.4 243.8 L610 222.4 Q610 220.6 612 220.6 L625.1 220.6 Q627.1 220.6 627.3 218.7 L628.2 212.5 Q628.5 210.7 630.5 210.3 L644.3 207.7 Q646.2 207.4 646.4 209.2 L648.3 241.2 Q648.4 243 650.4 243 L659.2 243 Q661.2 243 661.2 244.9 L661.2 248.4 Q661.2 250.3 663.1 250.3 L670.5 250.3 Q672.5 250.3 672.9 248.5 L674.3 242.2 Q674.6 240.4 676.6 240.4 L691.8 240.4 Q693.8 240.4 694.9 238.8 L696.3 236.7 Q697.4 235.1 699.4 235 L711 234.5 Q713 234.4 714.3 233.1 L716 231.2 Q717.2 229.8 719.2 229.8 L733 229.8 Q735 229.8 735 228 L735 216.5 Q735 214.6 737 214.6 L757.2 214.6 Q759.1 214.6 759.2 212.8 L759.8 182.8 Q759.8 181 761.8 180.6 L767.8 179.4 Q769.8 179 769.9 177.2 L771.2 161.8 Q771.2 161.2 771.8 161.2 L772.7 161.2 Q773.3 161.2 773.4 161.8 L774.6 177.2 Q774.8 179 776.7 179.5 L783.5 181.2 Q785.4 181.6 785.5 183.5 L786 196.3 Q786.1 198.1 788.1 198.2 L809 198.7 Q811 198.8 811.3 200.6 L814.2 215.5 Q814.5 217.3 816.5 217.3 L823.2 217.3 Q825.2 217.3 825.3 215.4 L826.5 192.1 Q826.6 190.2 828.5 189.9 L839.5 187.9 Q841.5 187.6 842.1 189.3 L843.7 193.7 Q844.3 195.5 846.3 195.5 L850.2 195.5 Q852.1 195.5 852.3 197.3 L853.4 212.8 Q853.6 214.6 855.6 214.6 L860.8 214.6 Q862.8 214.6 863.5 212.9 L866.3 206.5 Q867.1 204.7 868.1 203.2 L869.9 200.5 Q870.6 199.5 871.5 198.5 L872.6 197.2 Q873.4 196.2 873.5 194.9 L874.1 186.4 Q874.2 185.6 875 185.6 L876.1 185.6 Q877 185.6 877 186.4 L877.6 194.3 Q877.7 196.2 878.8 197.7 L880.9 200.6 Q882 202.1 882.9 203.8 L884.6 207.1 Q885.5 208.7 887.5 208.7 L892.1 208.7 Q894 208.7 894.4 210.5 L897.2 223.4 Q897.6 225.2 899.6 225.2 L906.1 225.2 Q907.5 225.2 908.2 224 L909 222.4 Q909.7 221.2 911.1 221.4 L919.8 222.4 Q921 222.6 921.7 223.6 L922.5 224.9 Q923.1 225.9 924.4 225.9 L930.8 225.9 Q932.4 225.9 933.2 224.7 L934.4 223.1 Q935.2 221.9 936.8 221.9 L946.6 221.9 Q948 221.9 948.9 222.9 L950 224.2 Q950.8 225.2 952.2 225.2 L961.6 225.2 Q963.6 225.2 963.9 223.4 L965.5 212.5 Q965.8 210.7 967.7 210.4 L977.3 209 Q979.2 208.7 980.7 209.9 L982.7 211.5 Q984.2 212.7 984.2 214.5 L984.2 224 Q984.2 225.9 986.2 225.9 L1004.7 225.9 Q1006.2 225.9 1006.4 227.2 L1006.7 229.1 Q1006.9 230.5 1008.4 230.5 L1020.4 230.5 Q1021.8 230.5 1022.5 231.7 L1023.3 233.3 Q1024 234.4 1025.4 234.4 L1040.4 234.4 Q1042.4 234.4 1043.9 235.6 L1050.1 240.5 Q1051.7 241.7 1051.7 243.5 L1051.7 264.9 Q1051.7 266.8 1053.6 266.8 L1063.9 266.8 Q1065.9 266.8 1065.9 264.9 L1066.5 240.9 Q1066.6 239.1 1068 237.8 L1070.1 235.7 Q1071.5 234.4 1071.7 232.6 L1072.1 229.7 Q1072.2 227.8 1074.2 227.8 L1083.8 227.8 Q1085.7 227.8 1085.7 229.7 L1085.7 233.9 Q1085.7 235.8 1087.7 235.9 L1092.3 236.3 Q1094.3 236.4 1094.3 238.3 L1094.3 271.5 Q1094.3 273.4 1096.2 273.4 L1113.4 273.4 Q1114.8 273.4 1114.8 272 L1114.8 270.1 Q1114.8 268.8 1116.3 268.8 L1130.6 268.8 Q1132.6 268.8 1132.6 270.6 L1132.6 276.2 Q1132.6 278 1134.6 278 L1175.2 278"/>
-        <line class="track" x1="30" y1="293" x2="1170" y2="293"/>
         <g id="tram" transform="translate(1010 232) scale(.4)"><image href="assets/toronto-streetcar.svg" width="720" height="170"/></g>
       </svg>
     </div>
