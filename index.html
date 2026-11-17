@@ -919,12 +919,6 @@
   <!-- ===== 06 TORONTO ===== -->
   <section class="scene toronto center" data-scene="Location" data-bg="var(--lake)">
     <h2 class="big jumble">Based in Toronto.</h2>
-    <ul class="facts-row rv" style="--d:200ms">
-      <li><span class="k">Time in Toronto</span><b class="clock" id="clock">--<span class="colon">:</span>--</b><small>Eastern Time</small></li>
-      <li><span class="k">Work style</span><b>Hybrid</b><small>Remote or on-site for the right team</small></li>
-      <li><span class="k">Availability</span><b>1–2 weeks</b><small>from an accepted offer</small></li>
-      <li><span class="k">Contracts</span><b>3+ months</b><small>long enough to do it properly</small></li>
-    </ul>
     <div class="skyline" id="skyline" aria-hidden="true">
       <svg viewBox="30 10 1140 288" preserveAspectRatio="xMidYMax meet">
         <path class="draw" id="skyPath" d="M30 278 H65 V250 H106 V227 H137 V207 H181 V255 H209 V229
@@ -1249,7 +1243,7 @@
       clock.innerHTML = h + '<span class="colon">:</span>' + m;
     } catch (e) {}
   }
-  tick(); setInterval(tick, 15000);
+  if (clock) { tick(); setInterval(tick, 15000); }
   document.getElementById('year').textContent = new Date().getFullYear();
 })();
 </script>
