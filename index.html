@@ -282,21 +282,21 @@
   .work-list { display: grid; gap: clamp(28px, 3.4vw, 44px); }
   .card {
     position: relative; display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: clamp(24px, 3vw, 48px); align-items: stretch;
-    width: 100%; padding: clamp(22px, 2.6vw, 36px);
-    background: var(--cream); color: var(--ink); border: 2px solid var(--ink); border-radius: 22px; box-shadow: 7px 8px 0 var(--ink);
+    width: 100%; padding: clamp(26px, 3vw, 44px);
+    background: var(--cream); color: var(--ink); border: 1.5px solid var(--ink); border-radius: 22px; box-shadow: 5px 6px 0 var(--ink);
     transition: transform .6s var(--ease), box-shadow .6s var(--ease), opacity 1s var(--ease);
   }
-  .card:hover { transform: translate(-4px, -4px); box-shadow: 11px 12px 0 var(--ink); }
+  .card:hover { transform: translate(-3px, -3px); box-shadow: 8px 9px 0 var(--ink); }
   .card .info { display: flex; flex-direction: column; min-width: 0; }
-  .card .idx { font-family: var(--f-big); font-size: clamp(54px, 5.4vw, 84px); line-height: .9; color: var(--coral); }
-  .card .meta { display: flex; flex-wrap: wrap; gap: 6px 10px; margin-top: 18px; }
-  .card .meta span { font-size: 15px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 4px 11px; border: 1.5px solid var(--ink); border-radius: 999px; }
-  .card .meta span:first-child { background: var(--ink); color: var(--cream); }
-  .card h3 { margin-top: 18px; font-family: var(--f-fine); font-size: clamp(34px, 3.6vw, 58px); line-height: 1.02; }
-  .card p { margin-top: 12px; font-size: 20px; line-height: 1.4; color: #4a4850; text-wrap: pretty; }
-  .card .metrics { display: flex; flex-wrap: wrap; gap: 26px; margin-top: auto; padding-top: 26px; }
-  .card .metrics b { display: block; font-family: var(--f-big); font-weight: 400; font-size: clamp(30px, 2.8vw, 42px); line-height: 1; }
-  .card .metrics small { font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: #5b5a63; }
+  .card .idx { font-family: var(--f-big); font-size: clamp(40px, 3.8vw, 58px); line-height: .9; color: var(--coral); }
+  .card .meta { display: flex; flex-wrap: wrap; gap: 6px 6px; margin-top: 16px; }
+  .card .meta span { font-size: 13px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: rgba(12, 12, 14, .06); color: #55535c; }
+  .card .meta span:first-child { background: rgba(12, 12, 14, .11); color: var(--ink); }
+  .card h3 { margin-top: 18px; font-family: var(--f-fine); font-size: clamp(30px, 3vw, 46px); line-height: 1.05; }
+  .card p { margin-top: 14px; font-size: 18px; line-height: 1.5; color: #4a4850; text-wrap: pretty; max-width: 46ch; }
+  .card .metrics { display: flex; flex-wrap: wrap; gap: 32px; margin-top: auto; padding-top: 28px; }
+  .card .metrics b { display: block; font-family: var(--f-big); font-weight: 400; font-size: clamp(26px, 2.3vw, 34px); line-height: 1; }
+  .card .metrics small { display: block; margin-top: 4px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: #5b5a63; }
   .card .go { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-top: 22px; padding: 0 0 4px; border-bottom: 2px solid var(--ink); color: var(--ink); font-size: 16px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; transition: border-color .3s; }
   .card .go i { font-style: normal; display: inline-block; transition: transform .35s var(--ease); }
   .card:hover .go, .card .go:focus-visible { border-color: var(--coral); }
@@ -373,8 +373,9 @@
   .copy .ok { display: none; color: var(--mint); }
   .copy.done .ok { display: inline; }
   .copy.done .ic { display: none; }
-  .contact { padding-bottom: 210px; }
-  .scene.craft { padding-bottom: 40px; }
+  .contact { padding-bottom: 80px; }
+  /* Craft is the last section, so it holds the footer line */
+  .scene.craft { padding-top: 90px; padding-bottom: 200px; }
   .scene.contact { min-height: 0; padding-top: 72px; }
   .site-foot { position: absolute; left: calc(var(--edge) + var(--pad)); right: calc(var(--edge) + var(--pad)); bottom: 74px; display: flex; justify-content: space-between; gap: 12px; font-size: 16px; letter-spacing: .06em; text-transform: uppercase; color: var(--cream-3); }
   .site-foot a:hover { color: var(--cream); }
@@ -458,8 +459,8 @@
     .scene { min-height: 0; padding-top: 56px; padding-bottom: 56px; }
     .scene.hello { padding-top: 56px; }
     .scene.toronto { padding-top: 56px; padding-bottom: calc(25vw + 64px); }
-    .scene.craft { padding-top: 56px; padding-bottom: 40px; }
-    .scene.contact { padding-top: 56px; padding-bottom: 210px; }
+    .scene.craft { padding-top: 56px; padding-bottom: 210px; }
+    .scene.contact { padding-top: 56px; padding-bottom: 72px; }
   }
   /* phones: the ruler shows the current section on the left and the next one on the right, tappable */
   @media (max-width: 720px) {
@@ -559,14 +560,14 @@
   /* phones: a compact card so each project takes less of the screen */
   @media (max-width: 720px) {
     .work-list { gap: 22px; }
-    .card { gap: 14px; padding: 16px; border-radius: 18px; box-shadow: 5px 6px 0 var(--ink); }
-    .card .idx { font-size: 40px; }
+    .card { gap: 16px; padding: 18px; border-radius: 18px; box-shadow: 4px 5px 0 var(--ink); }
+    .card .idx { font-size: 34px; }
     .card .meta { gap: 5px 6px; margin-top: 10px; }
-    .card .meta span { font-size: 11px; letter-spacing: .06em; padding: 3px 8px; border-width: 1.25px; }
-    .card h3 { margin-top: 10px; font-size: 26px; line-height: 1.05; }
+    .card .meta span { font-size: 11px; letter-spacing: .06em; padding: 3px 8px; }
+    .card h3 { margin-top: 12px; font-size: 25px; line-height: 1.08; }
     .card p { margin-top: 8px; font-size: 16px; line-height: 1.4; }
     .card .metrics { gap: 18px; padding-top: 14px; }
-    .card .metrics b { font-size: 26px; }
+    .card .metrics b { font-size: 24px; }
     .card .metrics small { font-size: 11px; letter-spacing: .06em; }
     .card .go { margin-top: 14px; padding: 0 0 3px; font-size: 14px; gap: 6px; }
     .cover.cover-device { aspect-ratio: 16 / 10; border-radius: 12px; border-width: 1.5px; }
@@ -606,7 +607,7 @@
   @media (max-width: 720px) and (prefers-reduced-motion: reduce) { .nav-links, .menu-btn span { transition: none; } }
 
   /* Openlane is password protected on the public site; the label hides once a visitor has unlocked it (for example via /cv) */
-  .card .meta span.lock-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--coral); color: var(--ink); border-color: var(--ink); }
+  .card .meta span.lock-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 138, 91, .22); color: #8a3415; }
   .card .meta span.lock-pill svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
   .card .ask-email { margin-top: 12px; font-size: 16px; line-height: 1.4; color: #5b5a63; overflow-wrap: anywhere; }
   .card .ask-email b { font-weight: 600; color: var(--ink); }
@@ -615,10 +616,10 @@
   .card-locked { cursor: pointer; }
   .card-locked .stretch::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
   .card-locked .stretch:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
-  .card .ask-email .copy-email { position: relative; z-index: 2; margin-left: 6px; padding: 3px 10px; border: 1.5px solid var(--ink); border-radius: 999px;
-    font: 600 13px/1.2 var(--f-ui); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); background: transparent; cursor: pointer; vertical-align: 1px; }
-  .card .ask-email .copy-email:hover { background: var(--ink); color: var(--cream); }
-  .card .ask-email .copy-email.done { background: var(--mint); border-color: var(--ink); color: var(--ink); }
+  .card .ask-email .copy-email { position: relative; z-index: 2; margin-left: 6px; padding: 3px 10px; border: 0; border-radius: 999px;
+    font: 600 12px/1.2 var(--f-ui); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); background: rgba(12, 12, 14, .08); cursor: pointer; vertical-align: 1px; transition: background-color .2s; }
+  .card .ask-email .copy-email:hover { background: rgba(12, 12, 14, .16); }
+  .card .ask-email .copy-email.done { background: var(--mint); color: var(--ink); }
 </style>
 </head>
 <body>
@@ -905,15 +906,6 @@
     <p class="words-more rv"><a href="https://www.linkedin.com/in/mohanty-sambit/details/recommendations/" target="_blank" rel="noopener">See recommendations on LinkedIn <span aria-hidden="true">↗</span></a></p>
   </section>
 
-  <!-- ===== 08 CRAFT ===== -->
-  <section class="scene craft" id="about" data-scene="Craft" data-bg="var(--streetcar)">
-    <div class="cols rv" style="--d:200ms">
-      <div class="col"><h3>Now</h3><ul><li>Looking for a team where design has a real seat at the table, shaping product decisions with product, engineering and business partners from day one.</li></ul></div>
-      <div class="col"><h3>Experience</h3><ul class="xp"><li>Storya <span>2025–now</span></li><li>Openlane <span>2024–25</span></li><li>FINRA <span>2021–23</span></li><li>Ameritas <span>2020–21</span></li><li>Comcast <span>2018–20</span></li></ul></div>
-      <div class="col"><h3>Toolkit</h3><ul class="tools"><li>Figma</li><li>FigJam</li><li>Miro</li><li>Framer</li><li>Figma AI</li><li>Claude</li><li>Dovetail</li><li>UserTesting</li><li>Mixpanel</li><li>FullStory</li><li>Jira</li><li>HTML/CSS</li><li>VS Code</li></ul></div>
-    </div>
-  </section>
-
   <!-- ===== 06 TORONTO ===== -->
   <section class="scene toronto center" data-scene="Location" data-bg="var(--lake)">
     <h2 class="big jumble">Based in Toronto.</h2>
@@ -944,6 +936,15 @@
       <button class="copy" id="copyBtn" data-email="sambitmohanty2707@gmail.com" aria-live="polite">sambitmohanty2707@gmail.com <span class="ic" aria-hidden="true">⧉</span><span class="ok">Copied ✓</span></button>
       <a href="https://www.linkedin.com/in/mohanty-sambit/" target="_blank" rel="noopener">LinkedIn ↗</a>
       <a href="https://drive.google.com/file/d/1UyJW_m2JZ5abP3k-2eXYb190p5n2Q60u/view?usp=sharing" target="_blank" rel="noopener">Resume ↗</a>
+    </div>
+  </section>
+
+  <!-- ===== 08 CRAFT ===== -->
+  <section class="scene craft" id="about" data-scene="Craft" data-bg="var(--streetcar)">
+    <div class="cols rv" style="--d:200ms">
+      <div class="col"><h3>Now</h3><ul><li>Looking for a team where design has a real seat at the table, shaping product decisions with product, engineering and business partners from day one.</li></ul></div>
+      <div class="col"><h3>Experience</h3><ul class="xp"><li>Storya <span>2025–now</span></li><li>Openlane <span>2024–25</span></li><li>FINRA <span>2021–23</span></li><li>Ameritas <span>2020–21</span></li><li>Comcast <span>2018–20</span></li></ul></div>
+      <div class="col"><h3>Toolkit</h3><ul class="tools"><li>Figma</li><li>FigJam</li><li>Miro</li><li>Framer</li><li>Figma AI</li><li>Claude</li><li>Dovetail</li><li>UserTesting</li><li>Mixpanel</li><li>FullStory</li><li>Jira</li><li>HTML/CSS</li><li>VS Code</li></ul></div>
     </div>
     <div class="site-foot">
       <span>© <span id="year">2026</span> Sambit Mohanty</span>
