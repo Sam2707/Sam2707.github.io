@@ -114,6 +114,7 @@
     transition: color .3s; white-space: nowrap;
   }
   .ruler .lbl:hover, .ruler .lbl.on { color: var(--cream); }
+  .ruler .scrub { display: none; }
   .ruler .needle { position: absolute; bottom: 0; width: 2px; height: 20px; background: var(--coral); border-radius: 2px; transform: translateX(-1px); left: 0; }
 
   /* ===== shared scene bits ===== */
@@ -468,6 +469,13 @@
                        padding: 10px 0 10px 16px; margin-bottom: -10px; }
     .ruler .lbl.next::after { content: " \2192"; color: var(--coral); }
     .ruler .lbl.next:active { color: var(--cream); }
+    /* drag along the ticks to scrub through the page; the knob on the needle hints that it moves */
+    .ruler .scrub { display: block; position: absolute; left: -8px; right: -8px; bottom: -10px; height: 30px; touch-action: none; cursor: ew-resize; z-index: 1; }
+    .ruler .lbl { z-index: 2; }
+    .ruler .needle { pointer-events: none; }
+    .ruler .needle::after { content: ""; position: absolute; left: 50%; top: -3px; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--coral); transition: transform .2s var(--ease); }
+    .ruler.scrubbing .needle::after { transform: scale(1.6); }
+    .ruler.scrubbing .ticks { opacity: 1; filter: brightness(1.6); }
   }
   /* phones: each constraint reads as a short labelled list instead of a stacked table */
   @media (max-width: 720px) {
@@ -640,6 +648,7 @@
 
 <div class="ruler" aria-label="Page sections">
   <div class="ticks" aria-hidden="true"></div>
+  <div class="scrub" id="rulerScrub" aria-hidden="true"></div>
   <div id="rulerLabels"></div>
   <i class="needle" id="needle" aria-hidden="true"></i>
 </div>
@@ -1169,6 +1178,29 @@
     needle.style.transform = 'translateX(' + (frac * geo.rulerW - 1).toFixed(1) + 'px)';
     var on = 0; for (var k = 0; k < geo.labelTops.length; k++) if (geo.labelTops[k] <= mid) on = k;
     if (on !== shownLabel) { shownLabel = on; labelEls.forEach(function (b, k) { b.classList.toggle('on', k === on); b.classList.toggle('next', k === on + 1); }); }
+  }
+  /* Phones: drag along the ruler to scrub through the page. */
+  var scrub = document.getElementById('rulerScrub'), phoneMq = window.matchMedia('(max-width: 720px)');
+  if (scrub && window.PointerEvent) {
+    var scrubbing = false, scrubX = 0, scrubRaf = 0, scrubRect = null;
+    var scrubTo = function () {
+      scrubRaf = 0;
+      var f = Math.max(0, Math.min(1, (scrubX - scrubRect.left) / scrubRect.width));
+      window.scrollTo({ top: f * geo.max, behavior: 'instant' });
+    };
+    var queue = function (e) { scrubX = e.clientX; if (!scrubRaf) scrubRaf = requestAnimationFrame(scrubTo); };
+    scrub.addEventListener('pointerdown', function (e) {
+      if (!phoneMq.matches) return;
+      scrubbing = true; scrubRect = needle.parentElement.getBoundingClientRect();
+      needle.parentElement.classList.add('scrubbing');
+      try { scrub.setPointerCapture(e.pointerId); } catch (_) {}
+      queue(e); e.preventDefault();
+    });
+    scrub.addEventListener('pointermove', function (e) { if (scrubbing) queue(e); });
+    var endScrub = function () { if (!scrubbing) return; scrubbing = false; needle.parentElement.classList.remove('scrubbing'); };
+    scrub.addEventListener('pointerup', endScrub);
+    scrub.addEventListener('pointercancel', endScrub);
+    scrub.addEventListener('lostpointercapture', endScrub);
   }
   var ticking = false;
   window.addEventListener('scroll', function () {
