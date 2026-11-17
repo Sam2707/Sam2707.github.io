@@ -249,8 +249,10 @@
   .belief-b .lines .small { font-family: var(--f-fine); font-size: clamp(26px, 3.2vw, 46px); line-height: 1.1; }
   .belief-b .lines .loud { font-family: var(--f-big); text-transform: uppercase; font-size: clamp(48px, 8.6vw, 136px); line-height: 0.98; }
   .belief-b .lines .ln.on .hl { color: var(--coral); }
-  .belief-body .quiet { transition: color .7s var(--ease); }
-  .belief-body .quiet.on { color: var(--coral); }
+  /* the coral phrases fill letter by letter as they scroll up the screen */
+  .belief-body .quiet .c { transition: color .25s var(--ease); }
+  .belief-body .quiet .c.on, .belief-body .quiet.on { color: var(--coral); }
+  .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   .belief-body { margin: clamp(28px, 3.4vw, 48px) auto 0; max-width: 54ch; text-align: center; text-wrap: pretty; font-size: clamp(20px, 1.75vw, 25px); line-height: 1.45; color: var(--cream-2); }
 
   /* ===== 06 toronto ===== */
@@ -1087,7 +1089,7 @@
   }
 
   /* ---------- manifesto lines ---------- */
-  var lines = document.querySelectorAll('#lines .ln, .belief-body .quiet');
+  var lines = document.querySelectorAll('#lines .ln');
   if ('IntersectionObserver' in window && !reduce) {
     var lo = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { en.target.classList.toggle('on', en.isIntersecting || en.boundingClientRect.top < 0); });
@@ -1364,6 +1366,46 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nav.classList.contains('open')) { set(false); btn.focus(); } });
   var wide = window.matchMedia('(min-width: 721px)');
   (wide.addEventListener ? wide.addEventListener.bind(wide, 'change') : wide.addListener.bind(wide))(function (m) { if (m.matches) set(false); });
+})();
+</script>
+<script>
+/* Beliefs paragraph: each coral phrase turns coral one letter at a time, scrubbed by scroll.
+   A phrase starts filling when it reaches 80% of the screen height and is done by 55%. */
+(function () {
+  var phrases = [].slice.call(document.querySelectorAll('.belief-body .quiet'));
+  if (!phrases.length) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { phrases.forEach(function (q) { q.classList.add('on'); }); return; }
+  var sets = phrases.map(function (q) {
+    var text = q.textContent, label = document.createElement('span'), vis = document.createElement('span');
+    label.className = 'sr-only'; label.textContent = text;
+    vis.setAttribute('aria-hidden', 'true');
+    var chars = [];
+    text.split('').forEach(function (ch) {
+      if (ch === ' ') { vis.appendChild(document.createTextNode(' ')); return; }
+      var s = document.createElement('span'); s.className = 'c'; s.textContent = ch; vis.appendChild(s); chars.push(s);
+    });
+    q.textContent = ''; q.appendChild(label); q.appendChild(vis);
+    return { el: q, chars: chars, lit: 0 };
+  });
+  var para = phrases[0].parentNode, raf = 0, active = true;
+  function paint() {
+    raf = 0;
+    var vh = window.innerHeight, start = vh * 0.8, span = vh * 0.25;
+    sets.forEach(function (s) {
+      var r = s.el.getBoundingClientRect();
+      // multi-line phrases get a longer scroll range so the pace per letter stays even
+      var p = Math.max(0, Math.min(1, (start - r.top) / (span + r.height)));
+      var n = Math.round(p * s.chars.length);
+      if (n === s.lit) return;
+      for (var i = Math.min(n, s.lit); i < Math.max(n, s.lit); i++) s.chars[i].classList.toggle('on', i < n);
+      s.lit = n;
+    });
+  }
+  function schedule() { if (active && !raf) raf = requestAnimationFrame(paint); }
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { active = es[0].isIntersecting; schedule(); }, { rootMargin: '30% 0px 30% 0px' }).observe(para);
+  addEventListener('scroll', schedule, { passive: true });
+  addEventListener('resize', schedule);
+  schedule();
 })();
 </script>
 </body>
