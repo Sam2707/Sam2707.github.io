@@ -441,8 +441,12 @@
   .laptop-base { position: relative; height: 13px; margin: 0 -7%; background: var(--ink); border-radius: 2px 2px 12px 12px; }
   .laptop-base::after { content: ""; position: absolute; left: 50%; top: 0; width: 16%; height: 5px; transform: translateX(-50%); background: #3a3a40; border-radius: 0 0 6px 6px; }
   @media (prefers-reduced-motion: reduce) { .cover-device .phone, .cover-device .laptop { transition: none; } }
+  /* a ready-made device render (transparent background) sits centred in the cover */
+  .cover-render img { position: absolute; left: 4%; right: 4%; top: 6%; bottom: 6%; width: 92%; height: 88%; object-fit: contain; transition: transform .9s var(--ease); }
+  .card:hover .cover-render img { transform: translateY(-6px); }
+  @media (prefers-reduced-motion: reduce) { .cover-render img { transition: none; } }
   /* single-column layouts: the cover keeps a fixed shape so the device always fits */
-  @media (max-width: 900px) { .cover.cover-device { min-height: 0; aspect-ratio: 16 / 11; } }
+  @media (max-width: 900px) { .cover.cover-device, .cover.cover-render { min-height: 0; aspect-ratio: 16 / 11; } }
   /* phones: the hero is only as tall as its content (no pinned scroll), lines sit right under the text */
   @media (max-width: 720px) {
     .hero-track { height: auto; }
@@ -572,7 +576,7 @@
     .card .metrics b { font-size: 24px; }
     .card .metrics small { font-size: 11px; letter-spacing: .06em; }
     .card .go { margin-top: 14px; padding: 0 0 3px; font-size: 14px; gap: 6px; }
-    .cover.cover-device { aspect-ratio: 16 / 10; border-radius: 12px; border-width: 1.5px; }
+    .cover.cover-device, .cover.cover-render { aspect-ratio: 16 / 10; border-radius: 12px; border-width: 1.5px; }
     .phone { top: 14px; bottom: 14px; border-width: 5px; border-radius: 20px; box-shadow: 5px 6px 0 rgba(12, 12, 14, .22); }
     .phone img { border-radius: 15px; }
     .laptop { width: min(76%, 420px); }
@@ -782,8 +786,8 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
           <a class="go stretch" data-goatcounter-click="openlane-request-access" data-goatcounter-title="Openlane: Email me for access" href="mailto:sambitmohanty2707@gmail.com?subject=Access%20to%20your%20Openlane%20case%20study&amp;body=Hi%20Sambit%2C%0A%0AI%27d%20like%20to%20read%20your%20Openlane%20case%20study.%0A%0AThanks%2C%0A" data-openlane-cta>Email me for access <i>→</i></a>
           <span class="ask-email" data-lock-email>Or write to <b>sambitmohanty2707@gmail.com</b> <button class="copy-email" type="button" data-goatcounter-click="openlane-copy-email" data-goatcounter-title="Openlane: Copy email" data-copy-email="sambitmohanty2707@gmail.com" aria-live="polite">Copy</button></span>
         </div>
-        <div class="cover cover-device">
-          <div class="phone"><img src="assets/thumbs/openlane-screen.webp" alt="Openlane app: vehicle details for a 2014 Harley-Davidson listing" width="590" height="1361" loading="lazy" decoding="async"></div>
+        <div class="cover cover-render">
+          <img src="assets/thumbs/openlane-phones.webp" alt="Three Openlane app screens: choosing the vehicle type and VIN location, the Unable to scan help sheet, and the photo overlay for a motorcycle" width="1400" height="835" loading="lazy" decoding="async">
         </div>
       </div>
       <script>
