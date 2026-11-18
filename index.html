@@ -442,9 +442,15 @@
   .laptop-base { position: relative; height: 13px; margin: 0 -7%; background: var(--ink); border-radius: 2px 2px 12px 12px; }
   .laptop-base::after { content: ""; position: absolute; left: 50%; top: 0; width: 16%; height: 5px; transform: translateX(-50%); background: #3a3a40; border-radius: 0 0 6px 6px; }
   @media (prefers-reduced-motion: reduce) { .cover-device .phone, .cover-device .laptop { transition: none; } }
-  /* a ready-made device render (transparent background) sits centred in the cover */
-  .cover-render img { position: absolute; left: 4%; right: 4%; top: 6%; bottom: 6%; width: 92%; height: 88%; object-fit: contain; transition: transform .9s var(--ease); }
-  .card:hover .cover-render img { transform: translateY(-6px); }
+  /* a ready-made device render (transparent background) sits centred in the cover; it is sized by the
+     column width, so renders with the same shape come out identical on every card whatever the card height */
+  .cover-render img { position: absolute; left: 50%; top: 50%; width: 92%; height: auto; max-height: 88%; object-fit: contain; transform: translate(-50%, -50%); transition: transform .9s var(--ease); }
+  .card:hover .cover-render img { transform: translate(-50%, calc(-50% - 6px)); }
+  /* side-by-side cards: the laptop panels keep one fixed shape so cards 02 and 03 match exactly; the Openlane phones keep the full-height panel */
+  @media (min-width: 901px) {
+    .cover.cover-render { min-height: 0; aspect-ratio: 16 / 10; align-self: center; }
+    [data-openlane-card] .cover.cover-render { min-height: 320px; aspect-ratio: auto; align-self: stretch; }
+  }
   @media (prefers-reduced-motion: reduce) { .cover-render img { transition: none; } }
   /* single-column layouts: the cover keeps a fixed shape so the device always fits */
   @media (max-width: 900px) { .cover.cover-device, .cover.cover-render { min-height: 0; aspect-ratio: 16 / 11; } }
