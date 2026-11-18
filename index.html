@@ -1094,7 +1094,7 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
 
   /* ---------- tangle ---------- */
   var svg = document.getElementById('tangle'), NS = 'http://www.w3.org/2000/svg';
-  var W = 1200, H = 360, LINES = 7, PTS = 30, threads = [];
+  var W = 1200, H = 360, LINES = 5, PTS = 30, threads = [];
   for (var i = 0; i < LINES; i++) {
     var p = document.createElementNS(NS, 'path'), mid = (LINES - 1) / 2, accent = i === Math.floor(mid);
     p.setAttribute('stroke', accent ? 'var(--coral)' : 'var(--cream)');
