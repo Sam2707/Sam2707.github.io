@@ -165,13 +165,12 @@
   .cursor span { margin-top: 14px; font: 600 13px/1 var(--f-ui); letter-spacing: 0.04em; padding: 5px 8px; border-radius: 4px 10px 10px 10px; color: var(--ink); }
   .cursor path { fill: var(--c); }
   .cursor span { background: var(--c); }
-  .cursor.pm { --c: var(--coral); right: 14%; top: 37%; }
-  .cursor.eng { --c: var(--mint); left: -16px; top: calc(100% + 6px); animation-name: drift-c; animation-duration: 9s; animation-delay: -4s; }
-  @media (max-width: 1100px) { .cursor.eng { left: auto; right: calc(100% + 4px); top: calc(100% - 30px); } }
-  @media (max-width: 720px) { .cursor.eng { display: none; } }
+  /* the four bubbles sit just outside the headline frame's corners, so they never cover the headline */
+  .cursor.pm { --c: var(--coral); right: -20px; top: calc(100% + 8px); animation-name: drift-c; animation-duration: 10s; animation-delay: -2s; }
+  .cursor.eng { --c: var(--mint); left: -20px; top: calc(100% + 8px); animation-name: drift-c; animation-duration: 9s; animation-delay: -4s; }
   @keyframes drift-c { 0%,100% { transform: translate(0,0); } 35% { transform: translate(-9px, 6px); } 65% { transform: translate(6px, -3px); } }
-  .cursor.design { --c: #c9c2ff; right: 6px; top: -86px; animation-duration: 12s; animation-delay: -7s; }
-  .cursor.business { --c: #ff9ecf; left: 17%; top: 11%; animation-duration: 13s; animation-delay: -9s; }
+  .cursor.design { --c: #c9c2ff; right: -20px; top: -74px; animation-name: drift-c; animation-duration: 12s; animation-delay: -7s; }
+  .cursor.business { --c: #ff9ecf; left: -20px; top: -74px; animation-name: drift-c; animation-duration: 13s; animation-delay: -9s; }
   @keyframes drift { 0%,100% { transform: translate(0,0); } 30% { transform: translate(-26px, 14px); } 60% { transform: translate(18px, -10px); } }
   @keyframes drift-l { 0%,100% { transform: translate(0,0); } 30% { transform: translate(-22px, 14px); } 60% { transform: translate(4px, -10px); } }
 
@@ -407,8 +406,6 @@
     .scene { padding-top: 110px; padding-bottom: 100px; }
     .hero { padding-top: 110px; }
     .sel { margin-top: 44px; padding: 12px 14px 12px; }
-    .cursor.pm { right: 4%; top: 30%; }
-    .cursor.design, .cursor.business { display: none; }
                 .tangle-box { height: 13%; bottom: 76px; }
     .process { grid-template-columns: 1fr; }
     .ct-row { grid-template-columns: 1fr; gap: 10px; }
@@ -670,11 +667,11 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
         <h1><span class="h1-a">Product designer for</span><span class="h1-b"><em class="jumble">Complex</em> B2B workflows</span></h1>
         <span class="h tl"></span><span class="h tr"></span><span class="h bl"></span><span class="h br"></span>
         <div class="cursor eng" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-8.1L21 10.3z" stroke="#0c0c0e" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Eng</span></div>
+        <div class="cursor pm" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-8.1L21 10.3z" stroke="#0c0c0e" stroke-width="1.6" stroke-linejoin="round"/></svg><span>PM</span></div>
+        <div class="cursor business" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-8.1L21 10.3z" stroke="#0c0c0e" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Business</span></div>
       </div>
       <p class="hero-sub"><b>I help teams shape <span class="hw">product strategy</span>, simplify <span class="hw"><span class="nowrap">end-to-end</span> workflows</span>, and build <span class="hw">accessible</span>, reusable <span class="hw">design systems</span>, bringing product, design, and engineering together early so feedback and decisions happen sooner.</b></p>
 
-      <div class="cursor pm" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-8.1L21 10.3z" stroke="#0c0c0e" stroke-width="1.6" stroke-linejoin="round"/></svg><span>PM</span></div>
-      <div class="cursor business" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-8.1L21 10.3z" stroke="#0c0c0e" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Business</span></div>
 
       <div class="tangle-box" aria-hidden="true"><svg id="tangle" viewBox="0 0 1200 360" preserveAspectRatio="none"></svg></div>
     </section>
@@ -1306,26 +1303,6 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
   btn.addEventListener('click', function () { card.classList.toggle('open'); sync(); });
   (mq.addEventListener ? mq.addEventListener.bind(mq, 'change') : mq.addListener.bind(mq))(sync);
   sync();
-})();
-</script>
-<script>
-/* Phones: Business and PM move inside the headline frame so every bubble sits in a corner; larger screens keep the original layout. */
-(function () {
-  var sel = document.querySelector('.sel');
-  if (!sel) return;
-  var mq = window.matchMedia('(max-width: 720px)');
-  var items = ['business', 'pm'].map(function (c) {
-    var el = document.querySelector('.cursor.' + c);
-    return el && { el: el, parent: el.parentNode, next: el.nextSibling };
-  }).filter(Boolean);
-  function place() {
-    items.forEach(function (it) {
-      if (mq.matches) { if (it.el.parentNode !== sel) sel.appendChild(it.el); }
-      else if (it.el.parentNode !== it.parent) it.parent.insertBefore(it.el, it.next);
-    });
-  }
-  (mq.addEventListener ? mq.addEventListener.bind(mq, 'change') : mq.addListener.bind(mq))(place);
-  place();
 })();
 </script>
 <script>
