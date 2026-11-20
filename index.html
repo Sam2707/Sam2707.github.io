@@ -279,32 +279,96 @@
   .work-head h2 { font-size: clamp(76px, 11vw, 176px); }
   .work-head .body { font-size: 22px; max-width: 30ch; }
   .work-head .body span { color: var(--cream); }
-  .work-list { display: grid; gap: clamp(28px, 3.4vw, 44px); }
+  /* ===== work cards: image on top, one quiet label, title, story, tags, a results strip and a clear action ===== */
+  .work-list { display: grid; gap: clamp(22px, 2vw, 32px); }
   .card {
-    position: relative; display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: clamp(24px, 3vw, 48px); align-items: stretch;
-    width: 100%; padding: clamp(26px, 3vw, 44px);
+    --cpx: clamp(22px, 1.9vw, 30px);
+    position: relative; display: flex; flex-direction: column; overflow: hidden; width: 100%;
     background: var(--cream); color: var(--ink); border: 1.5px solid var(--ink); border-radius: 22px; box-shadow: 5px 6px 0 var(--ink);
     transition: transform .6s var(--ease), box-shadow .6s var(--ease), opacity 1s var(--ease);
   }
   .card:hover { transform: translate(-3px, -3px); box-shadow: 8px 9px 0 var(--ink); }
-  .card .info { display: flex; flex-direction: column; min-width: 0; }
-  .card .idx { font-family: var(--f-big); font-size: clamp(40px, 3.8vw, 58px); line-height: .9; color: var(--coral); }
-  .card .meta { display: flex; flex-wrap: wrap; gap: 6px 6px; margin-top: 16px; }
-  .card .meta span { font-size: 13px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: rgba(12, 12, 14, .06); color: #55535c; }
-  .card .meta span:first-child { background: rgba(12, 12, 14, .11); color: var(--ink); }
-  /* heading and description share one measure, so both wrap to the same right edge on every card */
-  .card h3 { margin-top: 18px; font-family: var(--f-ui); font-weight: 600; font-size: clamp(30px, 3vw, 46px); line-height: 1.05; max-width: 600px; }
-  .card p { margin-top: 14px; font-size: 18px; line-height: 1.5; color: #4a4850; text-wrap: pretty; max-width: 600px; }
-  .card .metrics { display: flex; flex-wrap: wrap; gap: 32px; padding-top: 28px; }
-  .card .metrics b { display: block; font-family: var(--f-big); font-weight: 400; font-size: clamp(26px, 2.3vw, 34px); line-height: 1; }
-  .card .metrics small { display: block; margin-top: 4px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: #5b5a63; }
-  .card .go { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-top: 22px; padding: 0 0 4px; border-bottom: 2px solid var(--ink); color: var(--ink); font-size: 16px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; transition: border-color .3s; }
-  .card .go i { font-style: normal; display: inline-block; transition: transform .35s var(--ease); }
-  .card:hover .go, .card .go:focus-visible { border-color: var(--coral); }
-  .card:hover .go i { transform: translateX(5px); }
-  .cover { position: relative; min-height: 320px; border-radius: 14px; overflow: hidden; background: #e6e1d5; }
-  .cover svg { position: absolute; inset: 0; width: 100%; height: 100%; transition: transform .9s var(--ease); }
-  .card:hover .cover svg { transform: scale(1.05); }
+  .card-media { position: relative; aspect-ratio: 4 / 3; background: #e6e1d5; overflow: hidden; }
+  .card-media img { position: absolute; left: 50%; top: 50%; width: 86%; height: auto; max-height: 82%; object-fit: contain; transform: translate(-50%, -50%); transition: transform .9s var(--ease); }
+  .card:hover .card-media img { transform: translate(-50%, -50%) scale(1.035); }
+  .card-lock { position: absolute; top: 16px; left: 16px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 999px;
+    background: var(--ink); color: var(--cream); font: 600 12px/1 var(--f-ui); letter-spacing: .08em; text-transform: uppercase; }
+  .card-lock svg { width: 12px; height: 12px; fill: none; stroke: var(--coral); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .card-body { display: flex; flex-direction: column; flex: 1; padding: clamp(22px, 1.9vw, 28px) var(--cpx) clamp(22px, 1.9vw, 28px); }
+  .card-kicker { display: flex; align-items: center; gap: 12px; font: 600 13px/1.2 var(--f-ui); letter-spacing: .1em; text-transform: uppercase; color: #55535c; }
+  .card-kicker .idx { display: inline-flex; align-items: center; gap: 12px; font-family: var(--f-big); font-weight: 400; font-size: 22px; line-height: 1; letter-spacing: .02em; color: var(--coral); }
+  .card-kicker .idx::after { content: ""; width: 22px; height: 1.5px; background: rgba(12, 12, 14, .25); }
+  .card h3 { margin-top: 14px; font-family: var(--f-ui); font-weight: 600; font-size: clamp(26px, 2vw, 32px); line-height: 1.1; text-wrap: pretty; }
+  .card-desc { margin-top: 12px; font-size: 17px; line-height: 1.5; color: #4a4850; text-wrap: pretty; }
+  .card-tags { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 6px; margin: 18px 0 0; padding: 0; list-style: none; }
+  .card-tags li { padding: 6px 10px 5px; border: 1px solid rgba(12, 12, 14, .2); border-radius: 999px; font-size: 12px; font-weight: 600; line-height: 1; letter-spacing: .07em; text-transform: uppercase; color: #55535c; }
+  .card .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 22px; border-top: 1px solid rgba(12, 12, 14, .14); border-bottom: 1px solid rgba(12, 12, 14, .14); }
+  .card .metrics > div { padding: 16px 0 15px 16px; border-left: 1px solid rgba(12, 12, 14, .14); }
+  .card .metrics > div:first-child { padding-left: 0; border-left: 0; }
+  .card .metrics b { display: block; font-family: var(--f-big); font-weight: 400; font-size: clamp(26px, 2vw, 32px); line-height: 1; }
+  .card .metrics small { display: block; margin-top: 7px; font-size: 11.5px; line-height: 1.3; letter-spacing: .07em; text-transform: uppercase; color: #5b5a63; }
+  .card-foot { display: flex; flex-direction: column; margin-top: auto; padding-top: 20px; }
+  .card .go { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--ink); font-size: 15px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  .card .go-ic { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border: 1.5px solid var(--ink); border-radius: 50%; transition: background-color .3s, color .3s; }
+  .card .go-ic svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .35s var(--ease); }
+  .card:hover .go-ic, .card .go:focus-visible .go-ic { background: var(--coral); }
+  .card:hover .go-ic svg { transform: translateX(2px); }
+  .card .ask-email { margin-bottom: 14px; font-size: 15px; line-height: 1.4; color: #5b5a63; overflow-wrap: anywhere; }
+  .card .ask-email b { font-weight: 600; color: var(--ink); }
+  /* locked Openlane card: the CTA link covers the whole card; the Copy button sits above it */
+  .card-locked { cursor: pointer; }
+  .card-locked .stretch::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
+  .card-locked .stretch:focus-visible { outline: none; }
+  .card-locked .stretch:focus-visible .go-ic { outline: 2px solid var(--coral); outline-offset: 3px; }
+  .card .ask-email .copy-email { position: relative; z-index: 2; margin-left: 6px; padding: 3px 10px; border: 0; border-radius: 999px;
+    font: 600 12px/1.2 var(--f-ui); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); background: rgba(12, 12, 14, .08); cursor: pointer; vertical-align: 1px; transition: background-color .2s; }
+  .card .ask-email .copy-email:hover { background: rgba(12, 12, 14, .16); }
+  .card .ask-email .copy-email.done { background: var(--mint); color: var(--ink); }
+  @media (prefers-reduced-motion: reduce) { .card-media img, .card .go-ic svg { transition: none; } }
+
+  /* wide screens: three cards side by side; with subgrid every row lines up across the cards */
+  @media (min-width: 1120px) {
+    .work-list { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
+  }
+  @supports (grid-template-rows: subgrid) {
+    @media (min-width: 1120px) {
+      .work-list { row-gap: 0; }
+      .card { display: grid; grid-row: span 7; grid-template-rows: subgrid; grid-template-columns: minmax(0, 1fr); row-gap: 0; padding-bottom: clamp(22px, 1.9vw, 28px); }
+      .card-body { display: contents; }
+      .card-body > * { margin-left: var(--cpx); margin-right: var(--cpx); align-self: start; }
+      .card-kicker { margin-top: clamp(22px, 1.9vw, 28px); }
+      .card-foot { align-self: end; margin-top: 0; }
+    }
+  }
+  /* in-between widths: one card per row, image beside the story */
+  @media (min-width: 721px) and (max-width: 1119px) {
+    .card { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); }
+    .card-media { aspect-ratio: auto; min-height: 100%; }
+    .card-media img { width: 90%; }
+  }
+  /* phones: image on top, compact type */
+  @media (max-width: 720px) {
+    .work-list { gap: 22px; }
+    .card { --cpx: 18px; border-radius: 18px; box-shadow: 4px 5px 0 var(--ink); }
+    .card-media { aspect-ratio: 16 / 11; }
+    .card-lock { top: 12px; left: 12px; padding: 6px 10px; font-size: 11px; }
+    .card-body { padding: 18px var(--cpx) 20px; }
+    .card-kicker { gap: 10px; font-size: 11.5px; }
+    .card-kicker .idx { gap: 10px; font-size: 19px; }
+    .card-kicker .idx::after { width: 16px; }
+    .card h3 { margin-top: 12px; font-size: 24px; line-height: 1.1; }
+    .card-desc { margin-top: 8px; font-size: 16px; line-height: 1.45; }
+    .card-tags { margin-top: 14px; gap: 5px; }
+    .card-tags li { padding: 5px 8px 4px; font-size: 11px; letter-spacing: .06em; }
+    .card .metrics { margin-top: 16px; }
+    .card .metrics > div { padding: 12px 0 11px 12px; }
+    .card .metrics b { font-size: 24px; }
+    .card .metrics small { font-size: 10.5px; letter-spacing: .05em; }
+    .card-foot { padding-top: 16px; }
+    .card .go { font-size: 14px; }
+    .card .go-ic { width: 36px; height: 36px; }
+    .card .ask-email { margin-bottom: 12px; font-size: 14px; }
+  }
 
   /* ===== 07b testimonials ===== */
   .words { align-content: start; }
@@ -390,7 +454,6 @@
     .pillar.photo { min-height: 0; aspect-ratio: 4 / 5; }
     .quotes { grid-template-columns: 1fr; max-width: 640px; }
     .quote:nth-child(n) { margin-top: 0; grid-column: auto; }
-    .card { grid-template-columns: 1fr; }
     .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; }
     .cols .col:first-child { grid-column: 1 / -1; }
     .ruler .lbl:not(.on) { opacity: 0; }
@@ -415,7 +478,6 @@
     .bring.with-photo { grid-template-columns: 1fr; }
     .bring.with-photo .pillar.photo { grid-row: auto; }
     .pillar.photo { aspect-ratio: 1 / 1; }
-    .cover { min-height: 220px; order: -1; }
       .cols { grid-template-columns: 1fr; }
     .facts-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .site-foot { flex-direction: column; align-items: center; }
@@ -428,27 +490,7 @@
       .belief-b .lines .ln { color: var(--cream); }
   }
 
-  /* ===== card covers: real UI in a device frame ===== */
-  .cover-device { display: block; }
-  .cover-device .phone, .cover-device .laptop { transition: transform .9s var(--ease); }
-  .card:hover .cover-device .phone { transform: translateX(-50%) translateY(-6px); }
-  .card:hover .cover-device .laptop { transform: translate(-50%, calc(-50% - 6px)); }
-  .phone { position: absolute; top: 30px; bottom: 30px; left: 50%; transform: translateX(-50%); aspect-ratio: 590 / 1361; max-height: 520px;
            border: 7px solid var(--ink); border-radius: 30px; background: var(--ink); overflow: hidden; box-shadow: 8px 9px 0 rgba(12, 12, 14, .22); }
-  .phone img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 23px; }
-  .laptop { position: absolute; left: 50%; top: 50%; width: min(82%, 540px); transform: translate(-50%, -50%); }
-  .laptop-screen { border: 9px solid var(--ink); border-bottom-width: 13px; border-radius: 14px 14px 4px 4px; background: var(--ink); box-shadow: 8px 9px 0 rgba(12, 12, 14, .22); }
-  .laptop-screen img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; border-radius: 4px; background: #fff; }
-  .laptop-base { position: relative; height: 13px; margin: 0 -7%; background: var(--ink); border-radius: 2px 2px 12px 12px; }
-  .laptop-base::after { content: ""; position: absolute; left: 50%; top: 0; width: 16%; height: 5px; transform: translateX(-50%); background: #3a3a40; border-radius: 0 0 6px 6px; }
-  @media (prefers-reduced-motion: reduce) { .cover-device .phone, .cover-device .laptop { transition: none; } }
-  /* a ready-made device render (transparent background) sits centred in the cover; it is sized by the
-     column width, so renders with the same shape come out identical on every card whatever the card height */
-  .cover-render img { position: absolute; left: 50%; top: 50%; width: 92%; height: auto; max-height: 88%; object-fit: contain; transform: translate(-50%, -50%); transition: transform .9s var(--ease); }
-  .card:hover .cover-render img { transform: translate(-50%, calc(-50% - 6px)); }
-  @media (prefers-reduced-motion: reduce) { .cover-render img { transition: none; } }
-  /* single-column layouts: the cover keeps a fixed shape so the device always fits */
-  @media (max-width: 900px) { .cover.cover-device, .cover.cover-render { min-height: 0; aspect-ratio: 16 / 11; } }
   /* phones: the hero is only as tall as its content (no pinned scroll), lines sit right under the text */
   @media (max-width: 720px) {
     .hero-track { height: auto; }
@@ -565,35 +607,6 @@
     .process h3 { color: var(--cream-3); transition: color .45s var(--ease); }
     .process li.reached h3 { color: var(--cream); }
   }
-  /* phones: a compact card so each project takes less of the screen */
-  @media (max-width: 720px) {
-    .work-list { gap: 22px; }
-    .card { gap: 16px; padding: 18px; border-radius: 18px; box-shadow: 4px 5px 0 var(--ink); }
-    .card .idx { font-size: 34px; }
-    .card .meta { gap: 5px 6px; margin-top: 10px; }
-    .card .meta span { font-size: 11px; letter-spacing: .06em; padding: 3px 8px; }
-    .card h3 { margin-top: 12px; font-size: 25px; line-height: 1.08; }
-    .card p { margin-top: 8px; font-size: 16px; line-height: 1.4; }
-    .card .metrics { gap: 18px; padding-top: 14px; }
-    .card .metrics b { font-size: 24px; }
-    .card .metrics small { font-size: 11px; letter-spacing: .06em; }
-    .card .go { margin-top: 14px; padding: 0 0 3px; font-size: 14px; gap: 6px; }
-    .cover.cover-device, .cover.cover-render { aspect-ratio: 16 / 10; border-radius: 12px; }
-    .phone { top: 14px; bottom: 14px; border-width: 5px; border-radius: 20px; box-shadow: 5px 6px 0 rgba(12, 12, 14, .22); }
-    .phone img { border-radius: 15px; }
-    .laptop { width: min(76%, 420px); }
-    .laptop-screen { border-width: 6px; border-bottom-width: 9px; border-radius: 10px 10px 3px 3px; box-shadow: 5px 6px 0 rgba(12, 12, 14, .22); }
-    .laptop-base { height: 9px; }
-    .laptop-base::after { height: 3px; }
-  }
-  @media (max-width: 420px) {
-    .card .idx { font-size: 34px; }
-    .card h3 { font-size: 23px; }
-    .card p { font-size: 15px; }
-    .card .metrics { gap: 14px; }
-    .card .metrics b { font-size: 23px; }
-    .card .metrics small { font-size: 10px; }
-  }
 
   /* ===== mobile menu ===== */
   .menu-btn { display: none; }
@@ -613,51 +626,6 @@
     .menu-open .ruler { display: none; }
   }
   @media (max-width: 720px) and (prefers-reduced-motion: reduce) { .nav-links, .menu-btn span { transition: none; } }
-
-  /* Openlane is password protected on the public site; the label hides once a visitor has unlocked it (for example via /cv) */
-  .card .meta span.lock-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 138, 91, .22); color: #8a3415; }
-  .card .meta span.lock-pill svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-  .card .ask-email { margin-top: 12px; font-size: 16px; line-height: 1.4; color: #5b5a63; overflow-wrap: anywhere; }
-  .card .ask-email b { font-weight: 600; color: var(--ink); }
-  @media (max-width: 720px) { .card .ask-email { margin-top: 10px; font-size: 14px; } }
-  /* locked Openlane card: the CTA link covers the whole card; the Copy button sits above it */
-  .card-locked { cursor: pointer; }
-  .card-locked .stretch::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
-  .card-locked .stretch:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
-  .card .ask-email .copy-email { position: relative; z-index: 2; margin-left: 6px; padding: 3px 10px; border: 0; border-radius: 999px;
-    font: 600 12px/1.2 var(--f-ui); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); background: rgba(12, 12, 14, .08); cursor: pointer; vertical-align: 1px; transition: background-color .2s; }
-  .card .ask-email .copy-email:hover { background: rgba(12, 12, 14, .16); }
-  .card .ask-email .copy-email.done { background: var(--mint); color: var(--ink); }
-  /* ===== wide screens: the three projects sit side by side as vertical cards (image on top, story below) ===== */
-  @media (min-width: 1120px) {
-    .work-list { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: clamp(20px, 1.8vw, 32px); row-gap: 0; align-items: stretch; }
-    .card { display: flex; flex-direction: column; gap: 0; padding: clamp(16px, 1.3vw, 22px); border-radius: 20px; }
-    .card .info { flex: 1; padding: 0 clamp(6px, .6vw, 10px) clamp(6px, .5vw, 8px); }
-    .card .cover.cover-render { order: -1; min-height: 0; aspect-ratio: 4 / 3; align-self: stretch; border-radius: 12px; }
-    .card .cover-render img { width: 90%; max-height: 86%; }
-    .card .idx { margin-top: clamp(20px, 1.8vw, 28px); font-size: clamp(34px, 2.6vw, 44px); }
-    .card .meta { margin-top: 14px; gap: 6px; }
-    .card .meta span { font-size: 12px; letter-spacing: .06em; padding: 4px 9px; }
-    .card h3 { margin-top: 16px; font-size: clamp(25px, 1.9vw, 31px); line-height: 1.12; text-wrap: pretty; }
-    .card p { margin-top: 10px; font-size: 17px; line-height: 1.5; }
-    .card .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: auto; padding-top: 24px; border-top: 0; }
-    .card .metrics b { font-size: clamp(24px, 1.9vw, 30px); }
-    .card .metrics small { margin-top: 6px; font-size: 11.5px; line-height: 1.3; letter-spacing: .06em; }
-    .card .go { margin-top: 22px; font-size: 15px; }
-    .card .ask-email { margin-top: 12px; font-size: 15px; }
-  }
-  /* where subgrid is available, every row (number, pills, heading, description, numbers, link) lines up across the three cards */
-  @supports (grid-template-rows: subgrid) {
-    @media (min-width: 1120px) {
-      .card { display: grid; grid-row: span 8; grid-template-rows: subgrid; grid-template-columns: minmax(0, 1fr); row-gap: 0; padding-bottom: clamp(22px, 1.8vw, 28px); }
-      .card .info { display: contents; }
-      .card .cover.cover-render { grid-row: 1; }
-      .card .info > * { margin-left: clamp(6px, .6vw, 10px); margin-right: clamp(6px, .6vw, 10px); align-self: start; }
-      .card .meta { align-content: flex-start; align-items: flex-start; }
-      .card .metrics { margin-top: 0; align-self: start; }
-      .card .go { align-self: start; justify-self: start; }
-    }
-  }
 </style>
 <!-- privacy-friendly visit counts (no cookies): https://sambitux.goatcounter.com -->
 <script>
@@ -809,74 +777,59 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
 
     <div class="work-list">
       <div class="card rv card-locked" data-openlane-card>
-        <div class="info">
-          <span class="idx">01</span>
-          <div class="meta"><span>Openlane · Powersports</span><span>B2B marketplace</span><span>iOS &amp; Web</span><span>Lead designer</span><span class="lock-pill" data-lock-pill><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Password protected</span></div>
-          <h3>Listing a motorbike is now as easy as listing a car.</h3>
-          <p>Built for cars, the listing app failed on motorcycles, ATVs and snowmobiles, and 62% of dealers quit at step one. I led the 0→1 redesign so a failed scan never dead-ends a listing.</p>
-          <div class="metrics"><div><b>+20%</b><small>Faster inspections</small></div><div><b>−12%</b><small>Post-sale disputes</small></div><div><b>+15%</b><small>Bid velocity</small></div></div>
-          <a class="go stretch" data-goatcounter-click="openlane-request-access" data-goatcounter-title="Openlane: Email me for access" href="mailto:sambitmohanty2707@gmail.com?subject=Access%20to%20your%20Openlane%20case%20study&amp;body=Hi%20Sambit%2C%0A%0AI%27d%20like%20to%20read%20your%20Openlane%20case%20study.%0A%0AThanks%2C%0A" data-openlane-cta>Email me for access <i>→</i></a>
-          <span class="ask-email" data-lock-email>Or write to <b>sambitmohanty2707@gmail.com</b> <button class="copy-email" type="button" data-goatcounter-click="openlane-copy-email" data-goatcounter-title="Openlane: Copy email" data-copy-email="sambitmohanty2707@gmail.com" aria-live="polite">Copy</button></span>
-        </div>
-        <div class="cover cover-render">
+        <div class="card-media">
           <img src="assets/thumbs/openlane-trio.webp" alt="Three Openlane app screens: the photo overlay for a motorcycle, the Unable to scan help sheet, and choosing the vehicle type and VIN location" width="1400" height="1131" loading="lazy" decoding="async">
+          <span class="card-lock" data-lock-pill><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Password protected</span>
+        </div>
+        <div class="card-body">
+          <div class="card-kicker"><span class="idx">01</span><span>Openlane · Powersports</span></div>
+          <h3>Listing a motorbike is now as easy as listing a car.</h3>
+          <p class="card-desc">Built for cars, the listing app failed on motorcycles, ATVs and snowmobiles, and 62% of dealers quit at step one. I led the 0→1 redesign so a failed scan never dead-ends a listing.</p>
+          <ul class="card-tags" aria-label="Project details"><li>B2B marketplace</li><li>iOS &amp; Web</li><li>Lead designer</li></ul>
+          <div class="metrics"><div><b>+20%</b><small>Faster inspections</small></div><div><b>−12%</b><small>Post-sale disputes</small></div><div><b>+15%</b><small>Bid velocity</small></div></div>
+          <div class="card-foot">
+            <span class="ask-email" data-lock-email>Or write to <b>sambitmohanty2707@gmail.com</b> <button class="copy-email" type="button" data-goatcounter-click="openlane-copy-email" data-goatcounter-title="Openlane: Copy email" data-copy-email="sambitmohanty2707@gmail.com" aria-live="polite">Copy</button></span>
+            <a class="go stretch" data-goatcounter-click="openlane-request-access" data-goatcounter-title="Openlane: Email me for access" href="mailto:sambitmohanty2707@gmail.com?subject=Access%20to%20your%20Openlane%20case%20study&amp;body=Hi%20Sambit%2C%0A%0AI%27d%20like%20to%20read%20your%20Openlane%20case%20study.%0A%0AThanks%2C%0A" data-openlane-cta><span class="go-t">Email me for access</span><span class="go-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+          </div>
         </div>
       </div>
       <script>
       /* Visitors who have unlocked Openlane (via /cv or the password) get the normal card back. */
       (function () { try { if (!localStorage.getItem('sambitux-openlane-key')) return;
         var c = document.querySelector('[data-openlane-card]'), go = c.querySelector('[data-openlane-cta]');
-        go.href = 'openlane/'; go.firstChild.nodeValue = 'Read the case study '; go.removeAttribute('data-goatcounter-click');
+        go.href = 'openlane/'; go.querySelector('.go-t').textContent = 'Read the case study'; go.removeAttribute('data-goatcounter-click');
         var pill = c.querySelector('[data-lock-pill]'); if (pill) pill.remove(); var em = c.querySelector('[data-lock-email]'); if (em) em.remove(); } catch (e) {} })();
       </script>
 
-      <script>
-      /* In-between widths (901-1119px, image beside text): the two FINRA cards share the taller one's height, so their laptop panels (and the laptops) are identical.
-         Each card is otherwise only as tall as its text, so the impact numbers sit right under the description. */
-      window.addEventListener('DOMContentLoaded', function () {
-        var pair = [].slice.call(document.querySelectorAll('.work .card')).filter(function (c) { var i = c.querySelector('.cover-render img'); return i && /finra-/.test(i.getAttribute('src')); });
-        if (pair.length < 2) return;
-        var wide = window.matchMedia('(min-width: 901px) and (max-width: 1119px)'), raf = 0;
-        function even() {
-          raf = 0;
-          pair.forEach(function (c) { c.style.minHeight = ''; });
-          if (!wide.matches) return;
-          var h = Math.max.apply(null, pair.map(function (c) { return c.offsetHeight; }));
-          pair.forEach(function (c) { c.style.minHeight = h + 'px'; });
-        }
-        function queue() { if (!raf) raf = requestAnimationFrame(even); }
-        even();
-        window.addEventListener('resize', queue);
-        window.addEventListener('load', queue);
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(queue);
-      });
-      </script>
-
       <a class="card rv" href="finra-workspace/">
-        <div class="info">
-          <span class="idx">02</span>
-          <div class="meta"><span>FINRA · Regulator Workspace</span><span>RegTech</span><span>Web</span><span>Product designer</span></div>
-          <h3>From data entry to risk judgment.</h3>
-          <p>State regulators jumped across 5–7 pages to review one application. I redesigned the <span class="nowrap">end-to-end</span> workflow so evidence, actions, comments and audit history sit in one task view.</p>
-          <div class="metrics"><div><b>28%</b><small>Faster decisions</small></div><div><b>−30%</b><small>Support tickets</small></div><div><b>−37%</b><small>Audit kickbacks</small></div></div>
-          <span class="go">Read the case study <i>→</i></span>
-        </div>
-        <div class="cover cover-render">
+        <div class="card-media">
           <img src="assets/thumbs/finra-workspace-laptop.webp" alt="Redesigned FINRA manual approval queue with filters and review status, shown on a laptop" width="1332" height="759" loading="lazy" decoding="async">
+        </div>
+        <div class="card-body">
+          <div class="card-kicker"><span class="idx">02</span><span>FINRA · Regulator Workspace</span></div>
+          <h3>From data entry to risk judgment.</h3>
+          <p class="card-desc">State regulators jumped across 5–7 pages to review one application. I redesigned the <span class="nowrap">end-to-end</span> workflow so evidence, actions, comments and audit history sit in one task view.</p>
+          <ul class="card-tags" aria-label="Project details"><li>RegTech</li><li>Web</li><li>Product designer</li></ul>
+          <div class="metrics"><div><b>28%</b><small>Faster decisions</small></div><div><b>−30%</b><small>Support tickets</small></div><div><b>−37%</b><small>Audit kickbacks</small></div></div>
+          <div class="card-foot">
+            <span class="go"><span class="go-t">Read the case study</span><span class="go-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+          </div>
         </div>
       </a>
 
       <a class="card rv" href="finra-design-system/">
-        <div class="info">
-          <span class="idx">03</span>
-          <div class="meta"><span>FINRA · FINRA UI</span><span>Design system</span><span>Figma</span><span>Product designer</span></div>
-          <h3>Moving FINRA's design system from XD to Figma.</h3>
-          <p>A fragile Adobe XD library, a volunteer team and no budget. We rebuilt FINRA UI in Figma as a token-based atomic system and documented it on a live guidebook site.</p>
-          <div class="metrics"><div><b>58</b><small>Components</small></div><div><b>105</b><small>Styles defined</small></div><div><b>20+</b><small>Designers trained</small></div></div>
-          <span class="go">Read the case study <i>→</i></span>
-        </div>
-        <div class="cover cover-render">
+        <div class="card-media">
           <img src="assets/thumbs/finra-ds-laptop.webp" alt="FINRA Design System documentation home, Start with the essentials, shown on a laptop" width="1332" height="759" loading="lazy" decoding="async">
+        </div>
+        <div class="card-body">
+          <div class="card-kicker"><span class="idx">03</span><span>FINRA · FINRA UI</span></div>
+          <h3>Moving FINRA's design system from XD to Figma.</h3>
+          <p class="card-desc">A fragile Adobe XD library, a volunteer team and no budget. We rebuilt FINRA UI in Figma as a token-based atomic system and documented it on a live guidebook site.</p>
+          <ul class="card-tags" aria-label="Project details"><li>Design system</li><li>Figma</li><li>Product designer</li></ul>
+          <div class="metrics"><div><b>58</b><small>Components</small></div><div><b>105</b><small>Styles defined</small></div><div><b>20+</b><small>Designers trained</small></div></div>
+          <div class="card-foot">
+            <span class="go"><span class="go-t">Read the case study</span><span class="go-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+          </div>
         </div>
       </a>
     </div>
