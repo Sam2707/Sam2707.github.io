@@ -314,17 +314,22 @@
   .card .go-ic svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .35s var(--ease); }
   .card:hover .go-ic, .card .go:focus-visible .go-ic { background: var(--coral); }
   .card:hover .go-ic svg { transform: translateX(2px); }
-  .card .ask-email { margin-bottom: 14px; font-size: 15px; line-height: 1.4; color: #5b5a63; overflow-wrap: anywhere; }
-  .card .ask-email b { font-weight: 600; color: var(--ink); }
+  /* locked Openlane card: one action, the request link with the address (and a copy icon) underneath */
+  .card .go-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .card .go-stack { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .card .ask-email { display: inline-flex; align-items: center; flex-wrap: wrap; font-size: 14.5px; line-height: 1.3; color: #5b5a63; overflow-wrap: anywhere; }
   /* locked Openlane card: the CTA link covers the whole card; the Copy button sits above it */
   .card-locked { cursor: pointer; }
   .card-locked .stretch::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
   .card-locked .stretch:focus-visible { outline: none; }
-  .card-locked .stretch:focus-visible .go-ic { outline: 2px solid var(--coral); outline-offset: 3px; }
-  .card .ask-email .copy-email { position: relative; z-index: 2; margin-left: 6px; padding: 3px 10px; border: 0; border-radius: 999px;
-    font: 600 12px/1.2 var(--f-ui); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); background: rgba(12, 12, 14, .08); cursor: pointer; vertical-align: 1px; transition: background-color .2s; }
+  .card .ask-email .copy-email { position: relative; z-index: 2; display: inline-grid; place-items: center; width: 24px; height: 24px; margin: 0 0 0 4px; padding: 0; border: 0; border-radius: 50%;
+    color: var(--ink); background: rgba(12, 12, 14, .07); cursor: pointer; transition: background-color .2s; }
   .card .ask-email .copy-email:hover { background: rgba(12, 12, 14, .16); }
   .card .ask-email .copy-email.done { background: var(--mint); color: var(--ink); }
+  .card .copy-email svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card .copy-email .i-ok, .card .copy-email.done .i-copy { display: none; }
+  .card .copy-email.done .i-ok { display: block; }
+  .card-locked:has(.stretch:focus-visible) .go-ic { outline: 2px solid var(--coral); outline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) { .card-media img, .card .go-ic svg { transition: none; } }
 
   /* wide screens: three cards side by side; with subgrid every row lines up across the cards */
@@ -367,7 +372,7 @@
     .card-foot { padding-top: 16px; }
     .card .go { font-size: 14px; }
     .card .go-ic { width: 36px; height: 36px; }
-    .card .ask-email { margin-bottom: 12px; font-size: 14px; }
+    .card .ask-email { font-size: 13.5px; }
   }
 
   /* ===== 07b testimonials ===== */
@@ -788,8 +793,13 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
           <ul class="card-tags" aria-label="Project details"><li>B2B marketplace</li><li>iOS &amp; Web</li><li>Lead designer</li></ul>
           <div class="metrics"><div><b>+20%</b><small>Faster inspections</small></div><div><b>−12%</b><small>Post-sale disputes</small></div><div><b>+15%</b><small>Bid velocity</small></div></div>
           <div class="card-foot">
-            <span class="ask-email" data-lock-email>Or write to <b>sambitmohanty2707@gmail.com</b> <button class="copy-email" type="button" data-goatcounter-click="openlane-copy-email" data-goatcounter-title="Openlane: Copy email" data-copy-email="sambitmohanty2707@gmail.com" aria-live="polite">Copy</button></span>
-            <a class="go stretch" data-goatcounter-click="openlane-request-access" data-goatcounter-title="Openlane: Email me for access" href="mailto:sambitmohanty2707@gmail.com?subject=Access%20to%20your%20Openlane%20case%20study&amp;body=Hi%20Sambit%2C%0A%0AI%27d%20like%20to%20read%20your%20Openlane%20case%20study.%0A%0AThanks%2C%0A" data-openlane-cta><span class="go-t">Email me for access</span><span class="go-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+            <div class="go-row">
+              <div class="go-stack">
+                <a class="go stretch" data-goatcounter-click="openlane-request-access" data-goatcounter-title="Openlane: Email me for access" href="mailto:sambitmohanty2707@gmail.com?subject=Access%20to%20your%20Openlane%20case%20study&amp;body=Hi%20Sambit%2C%0A%0AI%27d%20like%20to%20read%20your%20Openlane%20case%20study.%0A%0AThanks%2C%0A" data-openlane-cta><span class="go-t">Email me for access</span></a>
+                <span class="ask-email" data-lock-email>(sambitmohanty2707@gmail.com<button class="copy-email" type="button" aria-label="Copy email address" title="Copy email address" data-goatcounter-click="openlane-copy-email" data-goatcounter-title="Openlane: Copy email" data-copy-email="sambitmohanty2707@gmail.com"><svg class="i-copy" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><svg class="i-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>)</span>
+              </div>
+              <span class="go-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </div>
           </div>
         </div>
       </div>
@@ -1327,7 +1337,7 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
     btn.addEventListener('click', function (e) {
       e.preventDefault(); e.stopPropagation();
       var email = btn.getAttribute('data-copy-email');
-      function done() { btn.textContent = 'Copied \u2713'; btn.classList.add('done'); clearTimeout(btn._t); btn._t = setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 1800); }
+      function done() { btn.classList.add('done'); btn.setAttribute('aria-label', 'Email address copied'); clearTimeout(btn._t); btn._t = setTimeout(function () { btn.classList.remove('done'); btn.setAttribute('aria-label', 'Copy email address'); }, 1800); }
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(email).then(done, fallback); else fallback();
       function fallback() { var t = document.createElement('textarea'); t.value = email; t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); done(); } catch (err) {} t.remove(); }
     });
