@@ -295,7 +295,7 @@
   /* heading and description share one measure, so both wrap to the same right edge on every card */
   .card h3 { margin-top: 18px; font-family: var(--f-ui); font-weight: 600; font-size: clamp(30px, 3vw, 46px); line-height: 1.05; max-width: 600px; }
   .card p { margin-top: 14px; font-size: 18px; line-height: 1.5; color: #4a4850; text-wrap: pretty; max-width: 600px; }
-  .card .metrics { display: flex; flex-wrap: wrap; gap: 32px; margin-top: auto; padding-top: 28px; }
+  .card .metrics { display: flex; flex-wrap: wrap; gap: 32px; padding-top: 28px; }
   .card .metrics b { display: block; font-family: var(--f-big); font-weight: 400; font-size: clamp(26px, 2.3vw, 34px); line-height: 1; }
   .card .metrics small { display: block; margin-top: 4px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: #5b5a63; }
   .card .go { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-top: 22px; padding: 0 0 4px; border-bottom: 2px solid var(--ink); color: var(--ink); font-size: 16px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; transition: border-color .3s; }
@@ -446,11 +446,6 @@
      column width, so renders with the same shape come out identical on every card whatever the card height */
   .cover-render img { position: absolute; left: 50%; top: 50%; width: 92%; height: auto; max-height: 88%; object-fit: contain; transform: translate(-50%, -50%); transition: transform .9s var(--ease); }
   .card:hover .cover-render img { transform: translate(-50%, calc(-50% - 6px)); }
-  /* side-by-side cards: the laptop panels keep one fixed shape so cards 02 and 03 match exactly; the Openlane phones keep the full-height panel */
-  @media (min-width: 901px) {
-    .cover.cover-render { min-height: 0; aspect-ratio: 16 / 10; align-self: center; }
-    [data-openlane-card] .cover.cover-render { min-height: 320px; aspect-ratio: auto; align-self: stretch; }
-  }
   @media (prefers-reduced-motion: reduce) { .cover-render img { transition: none; } }
   /* single-column layouts: the cover keeps a fixed shape so the device always fits */
   @media (max-width: 900px) { .cover.cover-device, .cover.cover-render { min-height: 0; aspect-ratio: 16 / 11; } }
@@ -803,6 +798,28 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
         var c = document.querySelector('[data-openlane-card]'), go = c.querySelector('[data-openlane-cta]');
         go.href = 'openlane/'; go.firstChild.nodeValue = 'Read the case study '; go.removeAttribute('data-goatcounter-click');
         var pill = c.querySelector('[data-lock-pill]'); if (pill) pill.remove(); var em = c.querySelector('[data-lock-email]'); if (em) em.remove(); } catch (e) {} })();
+      </script>
+
+      <script>
+      /* Side-by-side layout: the two FINRA cards share the taller one's height, so their laptop panels (and the laptops) are identical.
+         Each card is otherwise only as tall as its text, so the impact numbers sit right under the description. */
+      window.addEventListener('DOMContentLoaded', function () {
+        var pair = [].slice.call(document.querySelectorAll('.work .card')).filter(function (c) { var i = c.querySelector('.cover-render img'); return i && /finra-/.test(i.getAttribute('src')); });
+        if (pair.length < 2) return;
+        var wide = window.matchMedia('(min-width: 901px)'), raf = 0;
+        function even() {
+          raf = 0;
+          pair.forEach(function (c) { c.style.minHeight = ''; });
+          if (!wide.matches) return;
+          var h = Math.max.apply(null, pair.map(function (c) { return c.offsetHeight; }));
+          pair.forEach(function (c) { c.style.minHeight = h + 'px'; });
+        }
+        function queue() { if (!raf) raf = requestAnimationFrame(even); }
+        even();
+        window.addEventListener('resize', queue);
+        window.addEventListener('load', queue);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(queue);
+      });
       </script>
 
       <a class="card rv" href="finra-workspace/">
