@@ -291,6 +291,8 @@
   .card-media { position: relative; aspect-ratio: 4 / 3; background: #e6e1d5; overflow: hidden; }
   .card-media img { position: absolute; left: 50%; top: 50%; width: 86%; height: auto; max-height: 82%; object-fit: contain; transform: translate(-50%, -50%); transition: transform .9s var(--ease); }
   .card:hover .card-media img { transform: translate(-50%, -50%) scale(1.035); }
+  /* when the lock badge shows, the render drops a little so the badge has clear space */
+  .card-media:has(.card-lock) img { top: 55%; max-height: 76%; }
   .card-lock { position: absolute; top: 16px; left: 16px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 999px;
     background: var(--ink); color: var(--cream); font: 600 12px/1 var(--f-ui); letter-spacing: .08em; text-transform: uppercase; }
   .card-lock svg { width: 12px; height: 12px; fill: none; stroke: var(--coral); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
@@ -778,7 +780,7 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
     <div class="work-list">
       <div class="card rv card-locked" data-openlane-card>
         <div class="card-media">
-          <img src="assets/thumbs/openlane-trio.webp" alt="Three Openlane app screens: the photo overlay for a motorcycle, the Unable to scan help sheet, and choosing the vehicle type and VIN location" width="1400" height="1131" loading="lazy" decoding="async">
+          <img src="assets/thumbs/openlane-duo.webp" alt="Two Openlane app screens: choosing the vehicle type with help finding the VIN on a motorcycle, and the Unable to scan help sheet" width="1400" height="1111" loading="lazy" decoding="async">
           <span class="card-lock" data-lock-pill><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Password protected</span>
         </div>
         <div class="card-body">
