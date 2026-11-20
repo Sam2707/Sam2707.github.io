@@ -317,7 +317,7 @@
   .card:hover .go-t, .card .go:focus-visible .go-t { text-decoration-color: var(--coral); }
   .card:hover .go-ic svg { transform: translateX(2px); }
   /* locked Openlane card: one action, the request link with the address (and a copy icon) underneath */
-  .card .go-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .card .go-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; }
   .card .go-stack { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 6px; min-width: 0; }
   .card .ask-email { display: inline-flex; align-items: center; white-space: nowrap; font-size: 13px; line-height: 1.3; color: #5b5a63; }
   /* while locked, the request and the address share one line; the round arrow returns once the card is unlocked */
@@ -376,6 +376,7 @@
     .card-foot { padding-top: 16px; }
     .card .go { font-size: 14px; letter-spacing: .06em; }
     .card .go-ic { width: 36px; height: 36px; }
+    .card .go-row { min-height: 36px; }
     .card .ask-email { font-size: 12.5px; }
   }
 
@@ -836,9 +837,9 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
           <img src="assets/thumbs/finra-ds-front.webp" alt="FINRA Design System documentation, the Colors page with the blue, red and yellow palettes, shown on a laptop" width="1400" height="866" loading="lazy" decoding="async">
         </div>
         <div class="card-body">
-          <div class="card-kicker"><span class="idx">03</span><span>FINRA · FINRA UI</span></div>
+          <div class="card-kicker"><span class="idx">03</span><span>FINRA · Design System</span></div>
           <h3>Moving FINRA's design system from XD to Figma.</h3>
-          <p class="card-desc">A fragile Adobe XD library, a volunteer team and no budget. We rebuilt FINRA UI in Figma as a token-based atomic system and documented it on a live guidebook site.</p>
+          <p class="card-desc">A fragile Adobe XD library, a volunteer team and no budget. We rebuilt FINRA UI in Figma as a token-based atomic system, made every component WCAG AA compliant and documented it on a live guidebook site.</p>
           <ul class="card-tags" aria-label="Project details"><li>Design system</li><li>Figma</li><li>Product designer</li></ul>
           <div class="metrics"><div><b>58</b><small>Components</small></div><div><b>105</b><small>Styles defined</small></div><div><b>20+</b><small>Designers trained</small></div></div>
           <div class="card-foot">
