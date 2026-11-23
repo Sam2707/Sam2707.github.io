@@ -309,6 +309,7 @@
   .card .metrics b { display: block; font-family: var(--f-big); font-weight: 400; font-size: clamp(26px, 2vw, 32px); line-height: 1; }
   .card .metrics small { display: block; margin-top: 7px; font-size: 11.5px; line-height: 1.3; letter-spacing: .07em; text-transform: uppercase; color: #5b5a63; }
   .card .metrics b { white-space: nowrap; }
+  .card .metrics[data-locked] b { filter: blur(7px); opacity: .55; user-select: none; }
   .card .metrics-note { margin-top: 10px; font-size: 11.5px; line-height: 1.3; letter-spacing: .07em; text-transform: uppercase; color: #5b5a63; }
   .card-foot { display: flex; flex-direction: column; margin-top: auto; padding-top: 20px; }
   .card .go { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--ink); font-size: 15px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
@@ -796,10 +797,10 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
         <div class="card-body">
           <div class="card-kicker"><span class="idx">01</span><span>Openlane · Powersports</span></div>
           <h3>Helping dealers list motorcycles, ATVs and snowmobiles for sale.</h3>
-          <p class="card-desc">Built for cars, the listing app failed on motorcycles, ATVs and snowmobiles, and 62% of dealers quit at step one. I designed its first purpose-built powersports flow, so a failed scan never dead-ends a listing.</p>
+          <p class="card-desc" data-ol-desc>Built for cars, the listing app failed on motorcycles, ATVs and snowmobiles, and most dealers quit at step one. I designed its first purpose-built powersports flow, so a failed scan never dead-ends a listing.</p>
           <ul class="card-tags" aria-label="Project details"><li>B2B marketplace</li><li>iOS &amp; Web</li><li>Lead designer</li></ul>
-          <div class="metrics"><div><b>62→24%</b><small>Drop-off at step one</small></div><div><b>+20%</b><small>Faster inspections</small></div><div><b>−12%</b><small>Post-sale disputes</small></div></div>
-          <p class="metrics-note">Motorcycles · 8 weeks before vs after launch</p>
+          <div class="metrics" data-ol-metrics data-locked><div><b aria-hidden="true">00→00%</b><small>Drop-off at step one</small></div><div><b aria-hidden="true">+00%</b><small>Faster inspections</small></div><div><b aria-hidden="true">−00%</b><small>Post-sale disputes</small></div></div>
+          <p class="metrics-note" data-ol-note hidden></p>
           <div class="card-foot">
             <div class="go-row">
               <div class="go-stack">
@@ -811,12 +812,27 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
           </div>
         </div>
       </div>
+      <!--OL-CARD-DATA--><script type="application/json" id="ol-card-data">{"iv":"4veddM13OqulM4XV","ct":"LCPCAC/jtnw9Sf6QQa57nNJcfkNeu+BQLUjNw83PUkZ7UhO5s9564mxzlXSq0m8OMZRwpgiDS7TYDbV+ap0FAObP0XainhZJRvKalFVNQ7f9Y9oVDJb79PQiGk/KOBkyDB8R1C9LoEYD6ndvnGC7VxudO0S2ugNd6RD+3YN7Pbb4YJ23abSwwfGU950y4nYEVW8mS4mTiDXlXZVV8Sk04Lfrwd2Ypq8ny+D98CWZoT2ZN8x8RuVe4+Lvw46MZXwE3T09XutXjmlrGVC7dFLySAearSabLgifhRyx64Yb1GvhYhI6HHWeaQrnMWnKU+lWROb9eKqKbZax8Q83LV0W5UpcNcHHYWzYJsz55ii1+a25rzvYspmiBel+Gkb6D+olTKc8DxjEqvhzubS0/KeXxZmDP1gcw/cPwyWBiDT2jm8oqDG/4CkaaRgxdg=="}</script><!--/OL-CARD-DATA-->
       <script>
-      /* Visitors who have unlocked Openlane (via /cv or the password) get the normal card back. */
-      (function () { try { if (!localStorage.getItem('sambitux-openlane-key')) return;
+      /* Visitors who have unlocked Openlane (via /cv or the password) get the normal card back,
+         and their saved key decrypts the card's results. Locked visitors only ever get placeholders. */
+      (function () { try { var key = localStorage.getItem('sambitux-openlane-key'); if (!key) return;
         var c = document.querySelector('[data-openlane-card]'), go = c.querySelector('[data-openlane-cta]');
         go.href = 'openlane/'; go.querySelector('.go-t').textContent = 'Read the case study'; go.removeAttribute('data-goatcounter-click');
-        var pill = c.querySelector('[data-lock-pill]'); if (pill) pill.remove(); var em = c.querySelector('[data-lock-email]'); if (em) em.remove(); } catch (e) {} })();
+        var pill = c.querySelector('[data-lock-pill]'); if (pill) pill.remove(); var em = c.querySelector('[data-lock-email]'); if (em) em.remove();
+        var d = JSON.parse(document.getElementById('ol-card-data').textContent || '{}');
+        if (!d.ct || !window.crypto || !crypto.subtle) return;
+        var bytes = function (s) { return Uint8Array.from(atob(s), function (ch) { return ch.charCodeAt(0); }); };
+        crypto.subtle.importKey('raw', bytes(key), 'AES-GCM', false, ['decrypt'])
+          .then(function (k) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: bytes(d.iv) }, k, bytes(d.ct)); })
+          .then(function (pt) {
+            var v = JSON.parse(new TextDecoder().decode(pt)), m = c.querySelector('[data-ol-metrics]');
+            c.querySelector('[data-ol-desc]').textContent = v.desc;
+            m.querySelectorAll('b').forEach(function (b, i) { b.textContent = v.metrics[i]; b.removeAttribute('aria-hidden'); });
+            m.removeAttribute('data-locked');
+            var n = c.querySelector('[data-ol-note]'); n.textContent = v.note; n.hidden = false;
+          }).catch(function () {});
+      } catch (e) {} })();
       </script>
 
       <a class="card rv" href="finra-workspace/">
