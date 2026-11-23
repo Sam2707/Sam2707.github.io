@@ -308,6 +308,8 @@
   .card .metrics > div:first-child { padding-left: 0; border-left: 0; }
   .card .metrics b { display: block; font-family: var(--f-big); font-weight: 400; font-size: clamp(26px, 2vw, 32px); line-height: 1; }
   .card .metrics small { display: block; margin-top: 7px; font-size: 11.5px; line-height: 1.3; letter-spacing: .07em; text-transform: uppercase; color: #5b5a63; }
+  .card .metrics b { white-space: nowrap; }
+  .card .metrics-note { margin-top: 10px; font-size: 11.5px; line-height: 1.3; letter-spacing: .07em; text-transform: uppercase; color: #5b5a63; }
   .card-foot { display: flex; flex-direction: column; margin-top: auto; padding-top: 20px; }
   .card .go { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--ink); font-size: 15px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
   .card .go-ic { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border: 1.5px solid var(--ink); border-radius: 50%; transition: background-color .3s, color .3s; }
@@ -743,9 +745,9 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
       <div class="ct" role="table" aria-label="Constraints, responses and examples">
         <div class="ct-row th" role="row"><span role="columnheader">Constraint</span><span role="columnheader">How I responded</span><span role="columnheader">Where it happened</span></div>
         <div class="ct-row" role="row">
-          <div class="ct-c" role="cell"><span class="n">01</span><b>0→1 product, unreliable data</b></div>
+          <div class="ct-c" role="cell"><span class="n">01</span><b>New vehicle category, unreliable data</b></div>
           <div class="ct-r" role="cell">I checked with engineering what the system could actually return and worked with SMEs and the PM to define the PRD around it. Then I designed for the gaps, so a failed scan became a normal next step, not a dead end.</div>
-          <div class="ct-e" role="cell"><span class="proj">Openlane · Powersports</span><span class="res"><b>+20%</b><small>faster inspections</small></span></div>
+          <div class="ct-e" role="cell"><span class="proj">Openlane · Powersports</span><span class="res"><b>+20%</b><small>faster inspections (motorcycles)</small></span></div>
         </div>
         <div class="ct-row" role="row">
           <div class="ct-c" role="cell"><span class="n">02</span><b>Experts and new users in one tool</b></div>
@@ -794,9 +796,10 @@ window.goatcounter = { path: function (p) { try { if (p.split('?')[0] === '/' &&
         <div class="card-body">
           <div class="card-kicker"><span class="idx">01</span><span>Openlane · Powersports</span></div>
           <h3>Helping dealers list motorcycles, ATVs and snowmobiles for sale.</h3>
-          <p class="card-desc">Built for cars, the listing app failed on motorcycles, ATVs and snowmobiles, and 62% of dealers quit at step one. I led the 0→1 redesign so a failed scan never dead-ends a listing.</p>
+          <p class="card-desc">Built for cars, the listing app failed on motorcycles, ATVs and snowmobiles, and 62% of dealers quit at step one. I designed its first purpose-built powersports flow, so a failed scan never dead-ends a listing.</p>
           <ul class="card-tags" aria-label="Project details"><li>B2B marketplace</li><li>iOS &amp; Web</li><li>Lead designer</li></ul>
-          <div class="metrics"><div><b>+20%</b><small>Faster inspections</small></div><div><b>−12%</b><small>Post-sale disputes</small></div><div><b>+15%</b><small>Bid velocity</small></div></div>
+          <div class="metrics"><div><b>62→24%</b><small>Drop-off at step one</small></div><div><b>+20%</b><small>Faster inspections</small></div><div><b>−12%</b><small>Post-sale disputes</small></div></div>
+          <p class="metrics-note">Motorcycles · 8 weeks before vs after launch</p>
           <div class="card-foot">
             <div class="go-row">
               <div class="go-stack">
