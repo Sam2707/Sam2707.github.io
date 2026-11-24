@@ -974,6 +974,11 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
 .stage-panel>.slide{width:100%}
 .stage-panel>.step{width:min(560px,100%);margin:0 auto}
 #workflow .hs-legend.stage-legend{order:0;width:auto;margin:0 auto;justify-content:center}
+.pull-quote{padding-block:clamp(56px,8vw,96px)}
+.pq{margin:0 auto;max-width:860px;display:flex;flex-direction:column;align-items:center;gap:var(--space-16);text-align:center}
+.pq blockquote{margin:0}
+.pq p{font-size:clamp(26px,3.4vw,40px);line-height:1.25;font-weight:700;letter-spacing:-.01em;color:#fff;text-wrap:balance}
+.pq figcaption{font-size:12px;line-height:1.5;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--band-accent)}
 </style>
 <!-- privacy-friendly visit counts (no cookies): https://sambitux.goatcounter.com -->
 <script data-goatcounter="https://sambitux.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
@@ -1089,12 +1094,6 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
         <p class="body-large measure reveal" style="--i:2">Before someone can work as, say, a financial advisor, a state regulator reviews their application and approves or rejects it, within 30 days.</p>
         <p class="body-large measure reveal" style="--i:3">A regulator handles about 30 cases a day. Most are quick sign-offs on cases the system has already checked. The 10–12 that need a full manual review are where the real work is, and <em>renewal season (Q4–Q1) brings about 1.5× the usual volume.</em></p>
       </div>
-      <blockquote class="quote reveal">
-        <div class="quote-body">
-          <p>Regulators are audited. They would rather be slow than wrong.</p>
-          <cite>State Regulator</cite>
-        </div>
-      </blockquote>
     </div>
     <div class="context-stats">
       <div class="stat stat-center tilt reveal" data-tilt><div class="v"><span data-count="10">10</span>K<small>+</small></div><div class="k">active state regulators</div></div>
@@ -1102,6 +1101,16 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
       <div class="stat stat-center tilt reveal" data-tilt style="--i:2"><div class="v" style="white-space:nowrap">10–<span data-count="12">12</span><small>/day</small></div><div class="k">full manual review cases per regulator</div></div>
       <div class="stat stat-center tilt reveal" data-tilt style="--i:3"><div class="v"><span data-count="1.5" data-decimals="1">1.5</span><small>×</small></div><div class="k">volume in renewal season</div></div>
     </div>
+  </div>
+</section>
+
+<!-- ============ PULL QUOTE ============ -->
+<section class="band-full band-center pull-quote" aria-label="What regulators told us">
+  <div class="wrap">
+    <figure class="pq reveal">
+      <blockquote><p>“Regulators are audited. They would rather be slow than wrong.”</p></blockquote>
+      <figcaption>State Regulator</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -1393,8 +1402,8 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
           <p class="dec-debate"><span class="dec-who"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v10H9l-5 4z"/></svg>Engineering pushed back</span><span>On separate pages, each section loads on its own. Pulling them together meant one slow data source could hold up the review, and missing disclosure data could look like a clean record. I used the testing result, about 28% faster decisions, to argue for keeping the tabs.</span></p>
           <dl class="dec-rows">
             <div class="dec-row alt-r"><dt>Instead of</dt><dd>Keeping 5–7 pages, so each section had more space</dd></div>
-            <div class="dec-row cost-r"><dt>Cost</dt><dd>Denser tabs, plus extra engineering and QA work for partial loading</dd></div>
-            <div class="dec-row fix-r"><dt>Handled by</dt><dd>Building partial loading: identity and key disclosures load first, and the rest loads while the reviewer reads.</dd></div>
+            <div class="dec-row cost-r"><dt>Cost</dt><dd>Denser tabs, extra engineering and QA work, and an approval that waits when required data can’t be verified</dd></div>
+            <div class="dec-row fix-r"><dt>Handled by</dt><dd>Building partial loading: identity and key disclosures load first, and the rest loads while the reviewer reads. If disclosures can’t be verified, the case says so and approval stays on hold, while the rest of the review can continue.</dd></div>
           </dl>
         </div>
       </details>
@@ -1506,6 +1515,7 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
       <div class="stage-tabs" role="tablist" aria-label="Task list designs">
         <button type="button" role="tab" class="stage-tab" id="tl-tab-1" aria-controls="tl-panel-1" aria-selected="true"><span>1</span><b>Queue page</b></button>
         <button type="button" role="tab" class="stage-tab" id="tl-tab-2" aria-controls="tl-panel-2" aria-selected="false" tabindex="-1"><span>2</span><b>Task card</b></button>
+        <button type="button" role="tab" class="stage-tab" id="tl-tab-3" aria-controls="tl-panel-3" aria-selected="false" tabindex="-1"><span>3</span><b>Missing data</b></button>
       </div>
       <div class="stage-panel" role="tabpanel" id="tl-panel-1" aria-labelledby="tl-tab-1">
         <article class="slide">
@@ -1569,6 +1579,39 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
                   <img src="case-study%20sections/10-final-experience/Final%20design%20horizontal%20scroll%20pages/2Final%20designs_Tasklist_card_art.png"
                        width="1667" height="432" loading="lazy" decoding="async"
                        alt="A single task row from the redesigned queue, with a hover tooltip explaining the No Exam for RA Position reason and an inline Assign To panel listing colleagues to hand the task to."></figure>
+              </div>
+            </div>
+          </article>
+      </div>
+      <div class="stage-panel" role="tabpanel" id="tl-panel-3" aria-labelledby="tl-tab-3" hidden>
+        <article class="slide">
+            <div class="slide-head">
+              <span class="lbl">Final designs: task list card · missing data</span>
+              <h3 class="heading-3">Missing data never looks like a clean record</h3>
+            </div>
+            <div class="slide-split slide-full">
+              <div class="slide-copy">
+                <p>A disclosure check can find records, find none, or fail. Each one looks different, so “nothing found” is never confused with “couldn’t check”.</p>
+                <ul>
+                  <li><b>No disclosures on file:</b> continue the review</li>
+                  <li><b>Disclosures on file:</b> review them and continue</li>
+                  <li><b>Disclosures unavailable:</b> approval is on hold. Retry, review other sections, or save and return.</li>
+                </ul>
+                <div class="callout"><b>Enforced on the server too</b>
+                  <ul>
+                    <li>A stale screen or another approval path can’t get around the hold</li>
+                    <li>In testing, every approval attempt with unverified disclosures was rejected</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="slide-art">
+                <figure class="shot shot-flush" data-slot="Task list · missing data"
+                  data-full="case-study%20sections/10-final-experience/Final%20design%20horizontal%20scroll%20pages/3Final%20designs_Tasklist_missing-data.png"
+                  data-title="Final · Task list · disclosures couldn’t load"
+                  data-cap="When disclosures can’t be verified, the card says so and approval stays on hold.">
+                  <img src="case-study%20sections/10-final-experience/Final%20design%20horizontal%20scroll%20pages/3Final%20designs_Tasklist_missing-data.png"
+                       width="2870" height="320" loading="lazy" decoding="async"
+                       alt="A task row for an individual review worksheet. Total Disclosure shows a red Unavailable warning, and a red banner below reads: Disclosures couldn’t load. Approval is on hold until disclosures can be verified. A Retry button sits on the right."></figure>
               </div>
             </div>
           </article>
