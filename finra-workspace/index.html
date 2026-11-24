@@ -902,6 +902,78 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
 .cs-foot-bar nav{display:flex;flex-wrap:wrap;gap:12px 28px}
 .cs-foot-bar a,.cs-foot-bar button{padding:0;background:none;border:0;color:var(--band-ink-2);font:inherit;letter-spacing:inherit;text-transform:inherit;text-decoration:none;cursor:pointer}
 .cs-foot-bar a:hover,.cs-foot-bar button:hover{color:#fff}
+.dec-acc{background:#fff;border:1px solid #e4e7ec;border-radius:var(--radius-16);box-shadow:var(--shadow-1);overflow:hidden}
+.dec-item+.dec-item{border-top:1px solid var(--rule)}
+.dec-item{transition:box-shadow var(--duration-slow) var(--ease)}
+.dec-item[open]{box-shadow:inset 3px 0 0 var(--brand)}
+.dec-item summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
+  column-gap:var(--space-24);padding:var(--space-24) var(--space-36);transition:background-color var(--duration-base) var(--ease)}
+.dec-item summary::-webkit-details-marker{display:none}
+.dec-item summary:hover{background:var(--sunken)}
+.dec-item summary:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+.dec-n{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--brand-wash);color:var(--brand);
+  font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;transition:background-color var(--duration-base) var(--ease),color var(--duration-base) var(--ease)}
+.dec-item[open] .dec-n{background:var(--brand);color:#fff}
+.dec-txt{display:flex;flex-direction:column;gap:var(--space-4)}
+.dec-q{font-size:18px;line-height:1.4;font-weight:700;color:var(--ink)}
+.dec-a{font-size:15px;line-height:1.5;color:var(--ink-3)}
+.dec-a b{color:var(--brand);font-weight:600}
+.dec-chev{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--brand-wash);color:var(--brand);
+  transition:background-color var(--duration-base) var(--ease),color var(--duration-base) var(--ease)}
+.dec-chev svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform var(--duration-slow) var(--ease)}
+.dec-item summary:hover .dec-chev{background:var(--brand);color:#fff}
+.dec-item[open] .dec-chev svg{transform:rotate(180deg)}
+.dec-body{padding:0 var(--space-36) var(--space-36) calc(var(--space-36) + 40px + var(--space-24))}
+.dec-item[open] .dec-body{animation:more-in var(--duration-slow) var(--ease)}
+.dec-why{font-size:16px;line-height:1.6;color:var(--ink-2);max-width:62ch}
+.dec-debate{display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-8);margin-top:var(--space-16);max-width:62ch;
+  padding:var(--space-16);background:var(--brand-wash);border:1px solid var(--brand-mid);border-radius:var(--radius-12);
+  font-size:15px;line-height:1.55;color:var(--ink-2)}
+.dec-who{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--brand)}
+.dec-who svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.dec-rows{margin-top:var(--space-24);max-width:720px}
+.dec-row{display:grid;grid-template-columns:136px minmax(0,1fr);gap:var(--space-16);padding:var(--space-12) 0;border-top:1px solid var(--rule)}
+.dec-row dt{display:flex;align-items:center;gap:var(--space-8);font-size:13px;font-weight:600;color:var(--ink-3)}
+.dec-row dt::before{content:"";width:8px;height:8px;border-radius:50%;flex:none;background:var(--dot)}
+.dec-row dd{margin:0;font-size:15px;line-height:1.5;color:var(--ink)}
+.dec-row.alt-r{--dot:#98a2b3}.dec-row.cost-r{--dot:#f0a73a}.dec-row.fix-r{--dot:#32a86a}
+@media(max-width:720px){.dec-row{grid-template-columns:1fr;gap:2px}}
+@media(max-width:720px){
+  .dec-item summary{column-gap:var(--space-16);padding:var(--space-16) var(--space-24)}
+  .dec-n{width:32px;height:32px;font-size:13px}
+  .dec-q{font-size:17px}
+  .dec-body{padding:0 var(--space-24) var(--space-24)}
+}
+@media(prefers-reduced-motion:reduce){.dec-item[open] .dec-body{animation:none}}
+.band-note{background:var(--band-card);border:var(--border) solid var(--band-rule);border-radius:var(--radius-12);
+  padding:var(--space-24);display:flex;flex-direction:column;gap:var(--space-12);text-align:left;
+  width:100%;max-width:1000px}
+.band-note .tag{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--band-accent)}
+.band-note p{font-size:16px;line-height:1.6;color:var(--band-ink-2)}
+.band-note em{color:#fff}
+@keyframes more-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.decisions .dec-acc{margin-top:var(--space-36)}
+.impact-cap{margin-top:var(--space-24);font-size:14px;line-height:1.6;color:var(--ink-2);text-align:center}
+.timeout-result.two{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--space-24)}
+.reflect .band-note{margin:var(--space-36) auto 0}
+#strategy .card-kpi h3{text-wrap:balance;min-height:2.6em}
+#strategy .card-kpi p{text-wrap:pretty}
+.stages{display:flex;flex-direction:column;gap:var(--space-24)}
+.stage-tabs{display:inline-flex;align-self:center;gap:2px;padding:3px;
+  border-radius:var(--radius-full);background:#f2f4f7;max-width:100%;overflow-x:auto}
+.stage-tab{display:flex;align-items:baseline;gap:6px;padding:8px 16px;border:0;border-radius:var(--radius-full);
+  background:transparent;color:var(--ink-3);font:inherit;cursor:pointer;white-space:nowrap;
+  transition:background-color var(--duration-base) var(--ease),color var(--duration-base) var(--ease),box-shadow var(--duration-base) var(--ease)}
+.stage-tab b{font-size:14px;font-weight:500}
+.stage-tab span{font-size:12px;color:#98a2b3}
+.stage-tab:hover{color:var(--ink)}
+.stage-tab[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(16,24,40,.08),0 1px 3px rgba(16,24,40,.06)}
+.stage-tab[aria-selected="true"] b{font-weight:600}
+.stage-tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.stage-panel>.slide{width:100%}
+.stage-panel>.step{width:min(560px,100%);margin:0 auto}
+#workflow .hs-legend.stage-legend{order:0;width:auto;margin:0 auto;justify-content:center}
 </style>
 <!-- privacy-friendly visit counts (no cookies): https://sambitux.goatcounter.com -->
 <script data-goatcounter="https://sambitux.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
@@ -932,7 +1004,7 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
     </a>
     <nav class="subnav-items" data-navlinks aria-label="Case study sections">
       <a href="#context">Context</a><a href="#research">Research</a>
-      <a href="#workflow">Workflow</a><a href="#legacy">Legacy</a>
+      <a href="#legacy">Legacy</a><a href="#decisions">Decisions</a>
       <a href="#final">Final</a><a href="#impact">Impact</a>
     </nav>
   </div>
@@ -957,7 +1029,7 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
       <span class="sep" aria-hidden="true"></span>
       <div><dt>Domain</dt><dd>Fintech/RegTech</dd></div>
       <span class="sep" aria-hidden="true"></span>
-      <div><dt>User</dt><dd>State regulators/SEC</dd></div>
+      <div><dt>User</dt><dd>State regulators</dd></div>
     </dl>
 
     <div class="compare-wrap reveal" style="--i:5">
@@ -1000,9 +1072,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
     <div class="grid g5">
       <article class="card tilt reveal" data-tilt><span class="lbl">01 · The user</span><h3 class="heading-4">State regulators (who work for the government)</h3><p>They check applications from people who want to work in finance (e.g. financial advisors), then approve or reject them.</p></article>
       <article class="card tilt reveal" data-tilt style="--i:1"><span class="lbl">02 · The problem</span><h3 class="heading-4">One case. Information everywhere.</h3><p>Regulators jumped across 5–7 pages and external documents just to understand one application.</p></article>
-      <article class="card tilt reveal" data-tilt style="--i:2"><span class="lbl">03 · My role</span><h3 class="heading-4">Redesigned the end-to-end workflow (0–1)</h3><p>I led the research, strategy, stakeholder alignment, interaction design, prototyping, and testing.</p></article>
-      <article class="card tilt reveal" data-tilt style="--i:3"><span class="lbl">04 · Key move</span><h3 class="heading-4">One decision. One workspace.</h3><p>I brought context, actions, comments, rationale, and history together in one task-based view.</p></article>
-      <article class="card tilt reveal" data-tilt style="--i:4"><span class="lbl">05 · The outcome</span><h3 class="heading-4">~28% faster decisions. Fewer errors.</h3><p>Navigation dropped from 5–7 tabs to 2–3, and errors fell below 10% during testing.</p></article>
+      <article class="card tilt reveal" data-tilt style="--i:2"><span class="lbl">03 · My role</span><h3 class="heading-4">Led the redesign, from research to testing</h3><p>I led the research, strategy, stakeholder alignment, interaction design, prototyping, and testing.</p></article>
+      <article class="card tilt reveal" data-tilt style="--i:3"><span class="lbl">04 · Key move</span><h3 class="heading-4">One decision. One workspace.</h3><p>I brought the most important context, actions, comments and history into one task workspace: 2–3 tabs instead of 5–7 pages.</p></article>
+      <article class="card tilt reveal" data-tilt style="--i:4"><span class="lbl">05 · The outcome</span><h3 class="heading-4">28% faster decisions in testing.</h3><p>Errors fell below 10% with 12 regulators. After launch, audit kickbacks fell from 5% to 3.15%.</p></article>
     </div>
   </div>
 </section>
@@ -1013,8 +1085,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
     <span class="overline reveal context-eyebrow">01. Context</span>
     <div class="context-copy">
       <div class="sec-head">
-        <h2 class="heading-1 reveal" style="--i:1">Accuracy mattered more than speed, but the system made both difficult.</h2>
-        <p class="body-large measure reveal" style="--i:2">State regulators review financial-professional applications under fixed deadlines. <em>During the Q4–Q1 renewal season, application volume increases by roughly 1.5×.</em></p>
+        <h2 class="heading-1 reveal" style="--i:1">Regulators decide who can work in finance, and every decision is audited.</h2>
+        <p class="body-large measure reveal" style="--i:2">Before someone can work as, say, a financial advisor, a state regulator reviews their application and approves or rejects it, within 30 days.</p>
+        <p class="body-large measure reveal" style="--i:3">A regulator handles about 30 cases a day. Most are quick sign-offs on cases the system has already checked. The 10–12 that need a full manual review are where the real work is, and <em>renewal season (Q4–Q1) brings about 1.5× the usual volume.</em></p>
       </div>
       <blockquote class="quote reveal">
         <div class="quote-body">
@@ -1024,10 +1097,10 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
       </blockquote>
     </div>
     <div class="context-stats">
-      <div class="stat stat-center tilt reveal" data-tilt><div class="v"><span data-count="30">30</span> <small>days</small></div><div class="k">processing deadline</div></div>
-      <div class="stat stat-center tilt reveal" data-tilt style="--i:1"><div class="v"><span data-count="10">10</span>K<small>+</small></div><div class="k">regulators</div></div>
-      <div class="stat stat-center tilt reveal" data-tilt style="--i:2"><div class="v"><span data-count="30">30</span> <small>cases</small></div><div class="k">one regulator / day</div></div>
-      <div class="stat stat-center tilt reveal" data-tilt style="--i:3"><div class="v"><span data-count="1.5" data-decimals="1">1.5</span><small>×</small></div><div class="k">application increase</div></div>
+      <div class="stat stat-center tilt reveal" data-tilt><div class="v"><span data-count="10">10</span>K<small>+</small></div><div class="k">active state regulators</div></div>
+      <div class="stat stat-center tilt reveal" data-tilt style="--i:1"><div class="v">~<span data-count="30">30</span> <small>cases</small></div><div class="k">per regulator, per day</div></div>
+      <div class="stat stat-center tilt reveal" data-tilt style="--i:2"><div class="v" style="white-space:nowrap">10–<span data-count="12">12</span><small>/day</small></div><div class="k">full manual review cases per regulator</div></div>
+      <div class="stat stat-center tilt reveal" data-tilt style="--i:3"><div class="v"><span data-count="1.5" data-decimals="1">1.5</span><small>×</small></div><div class="k">volume in renewal season</div></div>
     </div>
   </div>
 </section>
@@ -1038,7 +1111,7 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
     <div class="sec-head">
       <span class="overline reveal">02. Research &amp; baseline</span>
       <h2 class="heading-1 reveal" style="--i:1">The system documented activity. Regulators needed help making decisions.</h2>
-      <p class="body-large measure reveal" style="--i:2">I observed 12 state regulators during moderated, task-based sessions: 7 newer regulators and 5 veterans. That mix separated genuine usability problems from shortcuts experts had learned over time.</p>
+      <p class="body-large measure reveal" style="--i:2">I observed 12 state regulators from New York, Maryland and Virginia in moderated, task-based sessions: 7 newer regulators and 5 veterans. That mix separated genuine usability problems from shortcuts experts had learned over time. At 45–50 minutes each, a day's 10–12 manual reviews left little time for anything else.</p>
     </div>
     <div class="grid g4">
       <div class="stat stat-center tilt reveal" data-tilt><div class="v">45–<span data-count="50">50</span> <small>min</small></div><div class="k">per manual review</div></div>
@@ -1068,22 +1141,21 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
       <h2 class="heading-1 reveal" style="--i:1">The happy path hid a lot of unhappy work.</h2>
       <p class="body-large measure reveal" style="--i:2">With the PM and engineering lead, I mapped the system-generated path alongside manual-review edge cases, identifying the intended flow and the touch points where a straightforward review turns into a scavenger hunt.</p>
     </div>
-    <div class="hs reveal" data-hs>
-      <div class="hs-bar">
-        <div class="hs-legend">
+    <div class="stages reveal" data-stages>
+      <div class="stage-tabs" role="tablist" aria-label="Workflow steps">
+        <button type="button" role="tab" class="stage-tab" id="wf-tab-1" aria-controls="wf-panel-1" aria-selected="true"><span>1</span><b>Entry</b></button>
+        <button type="button" role="tab" class="stage-tab" id="wf-tab-2" aria-controls="wf-panel-2" aria-selected="false" tabindex="-1"><span>2</span><b>Discover</b></button>
+        <button type="button" role="tab" class="stage-tab" id="wf-tab-3" aria-controls="wf-panel-3" aria-selected="false" tabindex="-1"><span>3</span><b>Gather</b></button>
+        <button type="button" role="tab" class="stage-tab" id="wf-tab-4" aria-controls="wf-panel-4" aria-selected="false" tabindex="-1"><span>4</span><b>Interpret</b></button>
+        <button type="button" role="tab" class="stage-tab" id="wf-tab-5" aria-controls="wf-panel-5" aria-selected="false" tabindex="-1"><span>5</span><b>Investigate</b></button>
+        <button type="button" role="tab" class="stage-tab" id="wf-tab-6" aria-controls="wf-panel-6" aria-selected="false" tabindex="-1"><span>6</span><b>Decide</b></button>
+      </div>
+      <div class="hs-legend stage-legend">
           <i><span class="dot dot-act"></span> Regulator action</i>
           <i><span class="dot dot-fric"></span> Workflow friction</i>
         </div>
-        <div class="hs-rail" data-rail aria-hidden="true"></div>
-        <div class="hs-nav">
-          <button class="hs-btn" data-prev aria-label="Previous steps"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-          <button class="hs-btn" data-next aria-label="Next steps"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
-        </div>
-      </div>
-      <div class="hs-view" data-view>
-        <div class="hs-track" data-track tabindex="0" role="region" aria-label="Six-step regulator workflow, horizontally scrollable">
-
-          <article class="step">
+      <div class="stage-panel" role="tabpanel" id="wf-panel-1" aria-labelledby="wf-tab-1">
+        <article class="step">
             <figure class="shot" data-slot="Step 1 · Entry"
               data-full="case-study%20sections/06-mapping-the-workflow/1.Entry.svg"
               data-title="Workflow · Step 1 · Entry"
@@ -1092,8 +1164,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
                    width="520" height="454" loading="lazy" decoding="async"
                    alt="Step 1: Entry. Regulators enter through a personalized queue built around their assigned work. Flow: the regulator logs into the FINRA regulator workspace, lands on a personalized task dashboard, then sees queue counts by status and priority. No major friction recorded at this step."></figure>
           </article>
-
-          <article class="step">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="wf-panel-2" aria-labelledby="wf-tab-2" hidden>
+        <article class="step">
             <figure class="shot" data-slot="Step 2 · Discover"
               data-full="case-study%20sections/06-mapping-the-workflow/2.Discover.svg"
               data-title="Workflow · Step 2 · Discover"
@@ -1102,8 +1175,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
                    width="520" height="454" loading="lazy" decoding="async"
                    alt="Step 2: Discover. Filters surface higher-risk filings and the first moments that require interpretation. Flow: filters the queue by date, status or risk signal, scans the task list for high-risk indicators, then selects a filing to review. Friction: risk signals need interpretation. flags an anomalous disclosure count; a rule code or status appears unfamiliar; the filing shows conflicting information; a required disclosure is missing or unclear."></figure>
           </article>
-
-          <article class="step">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="wf-panel-3" aria-labelledby="wf-tab-3" hidden>
+        <article class="step">
             <figure class="shot" data-slot="Step 3 · Gather evidence"
               data-full="case-study%20sections/06-mapping-the-workflow/3.Gather.svg"
               data-title="Workflow · Step 3 · Gather evidence"
@@ -1112,8 +1186,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
                    width="520" height="454" loading="lazy" decoding="async"
                    alt="Step 3: Gather evidence. Case context comes together, but important history still sends regulators elsewhere. Friction: context is split across pages and documents, so history, prior actions and filings have to be pieced together from separate places."></figure>
           </article>
-
-          <article class="step">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="wf-panel-4" aria-labelledby="wf-tab-4" hidden>
+        <article class="step">
             <figure class="shot" data-slot="Step 4 · Interpret risk"
               data-full="case-study%20sections/06-mapping-the-workflow/4.Interpret.svg"
               data-title="Workflow · Step 4 · Interpret risk"
@@ -1122,8 +1197,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
                    width="530" height="454" loading="lazy" decoding="async"
                    alt="Step 4: Interpret risk. Regulators decode rule language, missing information, and the next action to take. Friction: the system doesn't explain enough, leaving the regulator to interpret terminology and next steps unaided."></figure>
           </article>
-
-          <article class="step">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="wf-panel-5" aria-labelledby="wf-tab-5" hidden>
+        <article class="step">
             <figure class="shot" data-slot="Step 5 · Investigate deeper"
               data-full="case-study%20sections/06-mapping-the-workflow/5.Investigate.svg"
               data-title="Workflow · Step 5 · Investigate deeper"
@@ -1132,8 +1208,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
                    width="521" height="454" loading="lazy" decoding="async"
                    alt="Step 5: Investigate deeper. Related filings and cases demand another round of cross-checking. Friction: related work is hard to verify across records."></figure>
           </article>
-
-          <article class="step">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="wf-panel-6" aria-labelledby="wf-tab-6" hidden>
+        <article class="step">
             <figure class="shot" data-slot="Step 6 · Decide"
               data-full="case-study%20sections/06-mapping-the-workflow/6.Decide.svg"
               data-title="Workflow · Step 6 · Decide"
@@ -1142,8 +1219,6 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
                    width="528" height="454" loading="lazy" decoding="async"
                    alt="Step 6: Decide. The final outcome, rationale, and comments are recorded, sometimes in another system, so the reasoning ends up outside the secure environment."></figure>
           </article>
-
-        </div>
       </div>
     </div>
   </div>
@@ -1157,19 +1232,14 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
       <h2 class="heading-1 reveal" style="--i:1">Three screens. Three different kinds of friction.</h2>
       <p class="body-large measure reveal" style="--i:2">Instead of treating the legacy flow as one vague usability problem, I separated navigation friction, missing decision context, and gaps in the audit trail.</p>
     </div>
-    <div class="hs reveal" data-hs>
-      <div class="hs-bar pill">
-        <div class="hs-legend"></div>
-        <div class="hs-rail" data-rail aria-hidden="true"></div>
-        <div class="hs-nav">
-          <button class="hs-btn" data-prev aria-label="Previous screen"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-          <button class="hs-btn" data-next aria-label="Next screen"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
-        </div>
+    <div class="stages reveal" data-stages>
+      <div class="stage-tabs" role="tablist" aria-label="Legacy screens">
+        <button type="button" role="tab" class="stage-tab" id="lg-tab-1" aria-controls="lg-panel-1" aria-selected="true"><span>1</span><b>Entry</b></button>
+        <button type="button" role="tab" class="stage-tab" id="lg-tab-2" aria-controls="lg-panel-2" aria-selected="false" tabindex="-1"><span>2</span><b>Task list</b></button>
+        <button type="button" role="tab" class="stage-tab" id="lg-tab-3" aria-controls="lg-panel-3" aria-selected="false" tabindex="-1"><span>3</span><b>Task details</b></button>
       </div>
-      <div class="hs-view" data-view>
-        <div class="hs-track slides" data-track tabindex="0" role="region" aria-label="Three legacy screens, horizontally scrollable">
-
-          <article class="slide">
+      <div class="stage-panel" role="tabpanel" id="lg-panel-1" aria-labelledby="lg-tab-1">
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">Step 1: Entry</span>
               <h3 class="heading-3">Familiar for experts, difficult for new users</h3>
@@ -1181,11 +1251,11 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
                   <li>High-risk queues were easy to miss.</li>
                   <li>New regulators needed time to learn the layout.</li>
                 </ul>
-                <div class="callout"><b>The strategic decision to descope</b>
+                <div class="callout"><b>Deferred (see decision 01)</b>
                   <ul>
                     <li>Most users spent only 6–8 seconds here</li>
-                    <li>High engineering risk (downstream dependencies)</li>
-                    <li>Focused on higher-impact parts of the workflow</li>
+                    <li>Pulled data from several databases: 3–5 weeks of engineering work</li>
+                    <li>The review itself broke down on every manual case</li>
                   </ul>
                 </div>
               </div>
@@ -1200,8 +1270,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-          <article class="slide">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="lg-panel-2" aria-labelledby="lg-tab-2" hidden>
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">Step 2: Task list</span>
               <h3 class="heading-3">Task list showed the task, but not the context</h3>
@@ -1211,13 +1282,13 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
                 <ul>
                   <li>Critical context missing</li>
                   <li>Manual cross-checking required</li>
-                  <li>No inline assignment of task</li>
+                  <li>Admins could assign from the list, but without the context to choose who</li>
                   <li>Forced users to the profile details page</li>
                 </ul>
                 <div class="callout"><b>Why it broke</b>
                   <ul>
                     <li>Key risk signals were separated from the task.</li>
-                    <li>Task assignment created a separate workflow break.</li>
+                    <li>Admins opened each case just to decide who should review it.</li>
                   </ul>
                 </div>
               </div>
@@ -1232,8 +1303,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-          <article class="slide">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="lg-panel-3" aria-labelledby="lg-tab-3" hidden>
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">Step 3: Task details</span>
               <h3 class="heading-3">It recorded the outcome, but not the reasoning</h3>
@@ -1263,8 +1335,6 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-        </div>
       </div>
     </div>
   </div>
@@ -1279,10 +1349,87 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
       <p class="body-large measure reveal" style="--i:2">I translated the research into four measurable KPIs. Each connected an interface choice to a behavior the product needed to change.</p>
     </div>
     <div class="grid g4">
-      <article class="card card-kpi tilt reveal" data-tilt><span class="num">KPI 01</span><h3>Time to<br>decision</h3><p>Put related evidence inside one task view.</p></article>
-      <article class="card card-kpi tilt reveal" data-tilt style="--i:1"><span class="num">KPI 02</span><h3>Decision<br>accuracy</h3><p>Surface history, prior actions &amp; risk signals where decisions happen.</p></article>
-      <article class="card card-kpi tilt reveal" data-tilt style="--i:2"><span class="num">KPI 03</span><h3>Navigation<br>depth</h3><p>Replace page-based detours with a task-based structure.</p></article>
+      <article class="card card-kpi tilt reveal" data-tilt><span class="num">KPI 01</span><h3>Time to decision</h3><p>Group related evidence into fewer tabs.</p></article>
+      <article class="card card-kpi tilt reveal" data-tilt style="--i:1"><span class="num">KPI 02</span><h3>Decision accuracy</h3><p>Show history, prior actions and risk signals where the decision happens.</p></article>
+      <article class="card card-kpi tilt reveal" data-tilt style="--i:2"><span class="num">KPI 03</span><h3>Navigation depth</h3><p>Replace page-based detours with a task-based structure.</p></article>
       <article class="card card-kpi tilt reveal" data-tilt style="--i:3"><span class="num">KPI 04</span><h3>Mid-task assistance</h3><p>Make terminology and next steps clearer without slowing experts.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DECISIONS ============ -->
+<section class="alt decisions" id="decisions">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="overline reveal">Decisions &amp; trade-offs</span>
+      <h2 class="heading-1 reveal" style="--i:1">Four calls, and what each one cost</h2>
+      <p class="body-large measure reveal" style="--i:2">Each choice had a cost. Open one to see the option I turned down, what we gave up and how I handled it.</p>
+    </div>
+    <div class="dec-acc reveal">
+      <details class="dec-item" name="decisions">
+        <summary>
+          <span class="dec-n">01</span>
+          <span class="dec-txt"><span class="dec-q">What should we redesign first?</span><span class="dec-a"><b>The call:</b> the task list and task details. The landing page and global navigation waited.</span></span>
+          <span class="dec-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+        </summary>
+        <div class="dec-body">
+          <p class="dec-why">Regulators spent 6–8 seconds on the landing page. Their time went into manual reviews, at 45–50 minutes each.</p>
+          <p class="dec-debate"><span class="dec-who"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v10H9l-5 4z"/></svg>I pushed back</span><span>Product and I wanted the landing page ready for the launch event, as the first thing people would see. Engineering showed it pulled data from several databases and depended on routes and permissions shared with other parts of the system. It would cost a stretched team 3–5 weeks. We agreed to wait.</span></p>
+          <dl class="dec-rows">
+            <div class="dec-row alt-r"><dt>Instead of</dt><dd>Redesigning everything at once, landing page included</dd></div>
+            <div class="dec-row cost-r"><dt>Cost</dt><dd>Regulators still reached their queues through the old navigation</dd></div>
+            <div class="dec-row fix-r"><dt>Handled by</dt><dd>Putting those weeks into the task list and task details instead</dd></div>
+          </dl>
+        </div>
+      </details>
+      <details class="dec-item" name="decisions">
+        <summary>
+          <span class="dec-n">02</span>
+          <span class="dec-txt"><span class="dec-q">How many places should a reviewer have to look?</span><span class="dec-a"><b>The call:</b> 2–3 tabs instead of 5–7 pages, with who the applicant is and any red flags at the top</span></span>
+          <span class="dec-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+        </summary>
+        <div class="dec-body">
+          <p class="dec-why">In testing, density mattered less than scattered information and unclear priority. Reviewers rebuilt each case across 5–7 pages.</p>
+          <p class="dec-debate"><span class="dec-who"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v10H9l-5 4z"/></svg>Engineering pushed back</span><span>On separate pages, each section loads on its own. Pulling them together meant one slow data source could hold up the review, and missing disclosure data could look like a clean record. I used the testing result, about 28% faster decisions, to argue for keeping the tabs.</span></p>
+          <dl class="dec-rows">
+            <div class="dec-row alt-r"><dt>Instead of</dt><dd>Keeping 5–7 pages, so each section had more space</dd></div>
+            <div class="dec-row cost-r"><dt>Cost</dt><dd>Denser tabs, plus extra engineering and QA work for partial loading</dd></div>
+            <div class="dec-row fix-r"><dt>Handled by</dt><dd>Building partial loading: identity and key disclosures load first, and the rest loads while the reviewer reads.</dd></div>
+          </dl>
+        </div>
+      </details>
+      <details class="dec-item" name="decisions">
+        <summary>
+          <span class="dec-n">03</span>
+          <span class="dec-txt"><span class="dec-q">How much should each task show at a glance?</span><span class="dec-a"><b>The call:</b> keep one row per task</span></span>
+          <span class="dec-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+        </summary>
+        <div class="dec-body">
+          <p class="dec-why">Veterans relied on a left-to-right scan. Newer regulators needed more context to triage.</p>
+          <p class="dec-debate"><span class="dec-who"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v10H9l-5 4z"/></svg>My first idea failed</span><span>I prototyped a two-row layout to give newer regulators more context upfront. In testing, veterans lost their scan and newer regulators found it dense.</span></p>
+          <dl class="dec-rows">
+            <div class="dec-row alt-r"><dt>Instead of</dt><dd>Two rows per task, with more detail visible</dd></div>
+            <div class="dec-row cost-r"><dt>Cost</dt><dd>Less detail at a glance</dd></div>
+            <div class="dec-row fix-r"><dt>Handled by</dt><dd>Urgency stays in the row. Review status and the reason for manual review sit in tooltips.</dd></div>
+          </dl>
+        </div>
+      </details>
+      <details class="dec-item" name="decisions">
+        <summary>
+          <span class="dec-n">04</span>
+          <span class="dec-txt"><span class="dec-q">Where should admins assign cases?</span><span class="dec-a"><b>The call:</b> from both the task list and task details</span></span>
+          <span class="dec-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+        </summary>
+        <div class="dec-body">
+          <p class="dec-why">Admins routing several cases had to open each one, assign it, go back to the list and repeat.</p>
+          <p class="dec-debate"><span class="dec-who"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v10H9l-5 4z"/></svg>PM pushed back</span><span>The PM wanted Assign in task details only, where admins already had the context. In testing, 4 of 5 admins wanted to assign from the queue.</span></p>
+          <dl class="dec-rows">
+            <div class="dec-row alt-r"><dt>Instead of</dt><dd>Assign in task details only</dd></div>
+            <div class="dec-row cost-r"><dt>Cost</dt><dd>A denser task card</dd></div>
+            <div class="dec-row fix-r"><dt>Handled by</dt><dd>Adding the review status and a “why manual review” tooltip to the card. After the change, 4 of 5 admins got enough context from the card to assign without opening task details.</dd></div>
+          </dl>
+        </div>
+      </details>
     </div>
   </div>
 </section>
@@ -1293,7 +1440,7 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
     <div class="sec-head">
       <span class="overline reveal">06. Iteration and trade-offs</span>
       <h2 class="heading-1 reveal" style="--i:1">Keep expert speed. Add novice confidence.</h2>
-      <p class="body-large measure reveal" style="--i:2">An earlier iteration split task information into two rows. Veteran regulators lost their familiar left-to-right scan, while newer users found the dense context and error states unclear. Eye-tracking told us why.</p>
+      <p class="body-large measure reveal" style="--i:2">To give newer regulators more context upfront, I prototyped a version that split task information into two rows. Veteran regulators lost their familiar left-to-right scan, while newer users found the dense context and error states unclear. Eye-tracking told us why.</p>
     </div>
 
     <!-- Reveal and parallax sit on separate elements: both drive transform,
@@ -1355,19 +1502,13 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
       <h2 class="heading-1 reveal" style="--i:1">Start the day knowing what needs you next.</h2>
       <p class="body-large measure reveal" style="--i:2">The queue had to carry urgency, context, and ownership in a single scan: quick enough for a veteran, legible enough for someone in their first month.</p>
     </div>
-    <div class="hs reveal" data-hs>
-      <div class="hs-bar pill">
-        <div class="hs-legend"></div>
-        <div class="hs-rail" data-rail aria-hidden="true"></div>
-        <div class="hs-nav">
-          <button class="hs-btn" data-prev aria-label="Previous design"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-          <button class="hs-btn" data-next aria-label="Next design"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
-        </div>
+    <div class="stages reveal" data-stages>
+      <div class="stage-tabs" role="tablist" aria-label="Task list designs">
+        <button type="button" role="tab" class="stage-tab" id="tl-tab-1" aria-controls="tl-panel-1" aria-selected="true"><span>1</span><b>Queue page</b></button>
+        <button type="button" role="tab" class="stage-tab" id="tl-tab-2" aria-controls="tl-panel-2" aria-selected="false" tabindex="-1"><span>2</span><b>Task card</b></button>
       </div>
-      <div class="hs-view" data-view>
-        <div class="hs-track slides" data-track tabindex="0" role="region" aria-label="Two task list designs, horizontally scrollable">
-
-          <article class="slide">
+      <div class="stage-panel" role="tabpanel" id="tl-panel-1" aria-labelledby="tl-tab-1">
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">Final designs: task list (Queues) page</span>
               <h3 class="heading-3">A decision-ready task list</h3>
@@ -1378,7 +1519,7 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
                 <div class="callout"><b>Core outcome</b>
                   <ul>
                     <li>Colour-coded urgency without relying on colour alone</li>
-                    <li>Inline assignment instead of a dispatch detour</li>
+                    <li>Assign from the queue, with the context to choose who</li>
                     <li>Hover guidance for unfamiliar statuses</li>
                   </ul>
                 </div>
@@ -1397,8 +1538,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-          <article class="slide">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="tl-panel-2" aria-labelledby="tl-tab-2" hidden>
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">Final designs: task list card</span>
               <h3 class="heading-3">In line context</h3>
@@ -1413,9 +1555,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
                 </ul>
                 <div class="callout"><b>Operational efficiency</b>
                   <ul>
-                    <li>Inline “Assign” action</li>
-                    <li>No separate dispatch view</li>
-                    <li>Reduced workflow breaks</li>
+                    <li>“Assign” in the queue and in task details</li>
+                    <li>Review status on every card</li>
+                    <li>Tooltip: why the case needs a manual review</li>
                   </ul>
                 </div>
               </div>
@@ -1430,8 +1572,6 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-        </div>
       </div>
     </div>
   </div>
@@ -1443,24 +1583,16 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
     <div class="sec-head">
       <span class="overline reveal">07. Final experience · Task details</span>
       <h2 class="heading-1 reveal" style="--i:1">One workspace for context, action, collaboration, and audit.</h2>
-      <p class="body-large measure reveal" style="--i:2">Once a regulator opened a task, everything needed to decide, and to defend that decision in an audit later, had to sit in one place.</p>
+      <p class="body-large measure reveal" style="--i:2">Once a regulator opened a task, the most important information for the decision, and for defending it in an audit later, had to be up front instead of spread across 5–7 pages.</p>
     </div>
-    <div class="hs reveal" data-hs>
-      <div class="hs-bar pill">
-        <div class="hs-legend"></div>
-        <div class="hs-rail" data-rail aria-hidden="true"></div>
-        <div class="hs-nav">
-          <button class="hs-btn" data-prev aria-label="Previous design"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-          <button class="hs-btn" data-next aria-label="Next design"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
-        </div>
+    <div class="stages reveal" data-stages>
+      <div class="stage-tabs" role="tablist" aria-label="Task details designs">
+        <button type="button" role="tab" class="stage-tab" id="td-tab-1" aria-controls="td-panel-1" aria-selected="true"><span>1</span><b>Profile &amp; risk</b></button>
+        <button type="button" role="tab" class="stage-tab" id="td-tab-2" aria-controls="td-panel-2" aria-selected="false" tabindex="-1"><span>2</span><b>Task workspace</b></button>
+        <button type="button" role="tab" class="stage-tab" id="td-tab-3" aria-controls="td-panel-3" aria-selected="false" tabindex="-1"><span>3</span><b>Batch review</b></button>
       </div>
-      <div class="hs-view" data-view>
-        <div class="hs-track slides" data-track tabindex="0" role="region" aria-label="Three task details designs, horizontally scrollable">
-
-          <!-- Built from the same parts as the other two cards rather than from a
-               single composed export, so the copy sits in the layout (and centres
-               with it) instead of being baked into the artwork. -->
-          <article class="slide">
+      <div class="stage-panel" role="tabpanel" id="td-panel-1" aria-labelledby="td-tab-1">
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">Task details page: profile, risk &amp; context</span>
               <h3 class="heading-3">See the person first. Then understand the risk.</h3>
@@ -1489,8 +1621,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-          <article class="slide">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="td-panel-2" aria-labelledby="td-tab-2" hidden>
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">Task details page: unified task space</span>
               <h3 class="heading-3">The decision happened where the evidence lived.</h3>
@@ -1524,8 +1657,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-          <article class="slide">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="td-panel-3" aria-labelledby="td-tab-3" hidden>
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">Task details page: Task aggregation &amp; Batch processing</span>
               <h3 class="heading-3">All open tasks related to that profile, surfaced together.</h3>
@@ -1555,8 +1689,6 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-        </div>
       </div>
     </div>
   </div>
@@ -1568,21 +1700,18 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
     <div class="sec-head">
       <span class="overline reveal">07. Final experience · Session timeouts</span>
       <h2 class="heading-1 reveal" style="--i:1">Preventing surprise session timeouts.</h2>
-      <p class="body-large measure reveal" style="--i:2">The redesign brought each decision into one task view. Keeping regulators in that view meant designing the whole workflow around it, including the moment a session is about to end. FINRA’s 30-minute inactivity rule stayed exactly as it was; what changed was what the interface told regulators before it applied.</p>
+      <p class="body-large measure reveal" style="--i:2">The redesign brought each review into one task workspace. Keeping regulators in it meant designing the whole workflow around it, including the moment a session is about to end. The 30-minute inactivity limit was a fixed security requirement, so it stayed exactly as it was. What changed was what the interface told regulators before it applied.</p>
     </div>
-    <div class="hs reveal" data-hs>
-      <div class="hs-bar pill">
-        <div class="hs-legend"></div>
-        <div class="hs-rail" data-rail aria-hidden="true"></div>
-        <div class="hs-nav">
-          <button class="hs-btn" data-prev aria-label="Previous slide"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-          <button class="hs-btn" data-next aria-label="Next slide"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
-        </div>
+    <div class="stages reveal" data-stages>
+      <div class="stage-tabs" role="tablist" aria-label="Session timeout">
+        <button type="button" role="tab" class="stage-tab" id="to-tab-1" aria-controls="to-panel-1" aria-selected="true"><span>1</span><b>Before</b></button>
+        <button type="button" role="tab" class="stage-tab" id="to-tab-2" aria-controls="to-panel-2" aria-selected="false" tabindex="-1"><span>2</span><b>Session rules</b></button>
+        <button type="button" role="tab" class="stage-tab" id="to-tab-3" aria-controls="to-panel-3" aria-selected="false" tabindex="-1"><span>3</span><b>In-app warning</b></button>
+        <button type="button" role="tab" class="stage-tab" id="to-tab-4" aria-controls="to-panel-4" aria-selected="false" tabindex="-1"><span>4</span><b>Desktop alert</b></button>
+        <button type="button" role="tab" class="stage-tab" id="to-tab-5" aria-controls="to-panel-5" aria-selected="false" tabindex="-1"><span>5</span><b>Failure states</b></button>
       </div>
-      <div class="hs-view" data-view>
-        <div class="hs-track slides" data-track tabindex="0" role="region" aria-label="Session timeout story in five slides, horizontally scrollable">
-
-          <article class="slide">
+      <div class="stage-panel" role="tabpanel" id="to-panel-1" aria-labelledby="to-tab-1">
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">Before · the existing timeout</span>
               <h3 class="heading-3">No warning before the logout</h3>
@@ -1605,8 +1734,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-          <article class="slide">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="to-panel-2" aria-labelledby="to-tab-2" hidden>
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">Engineering constraints</span>
               <h3 class="heading-3">What keeps a session active, and what doesn’t</h3>
@@ -1634,8 +1764,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-          <article class="slide">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="to-panel-3" aria-labelledby="to-tab-3" hidden>
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">After · in-app warning</span>
               <h3 class="heading-3">One warning, three minutes out</h3>
@@ -1644,7 +1775,7 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               <div class="slide-copy">
                 <p>At three minutes left, a modal explains why, counts down, and offers <b>Continue session</b> or <b>Log out now</b>.</p>
                 <div class="callout"><b>Optional opt-in</b>
-                  <p>The desktop notification checkbox. Implementation status unverified.</p>
+                  <p>A checkbox turns on desktop notifications for regulators working in another app.</p>
                 </div>
               </div>
               <div class="slide-art">
@@ -1661,8 +1792,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-          <article class="slide">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="to-panel-4" aria-labelledby="to-tab-4" hidden>
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">Desktop notification</span>
               <h3 class="heading-3">A nudge at three minutes, and again at one</h3>
@@ -1685,8 +1817,9 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-          <article class="slide">
+      </div>
+      <div class="stage-panel" role="tabpanel" id="to-panel-5" aria-labelledby="to-tab-5" hidden>
+        <article class="slide">
             <div class="slide-head">
               <span class="lbl">Failure and expiry states</span>
               <h3 class="heading-3">No renewal until the server confirms</h3>
@@ -1721,14 +1854,13 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
               </div>
             </div>
           </article>
-
-        </div>
       </div>
     </div>
 
-    <div class="impact-rule reveal"><span>Timeout warning · one-day beta</span><i></i></div>
-    <div class="timeout-result">
+    <div class="impact-rule reveal"><span>Timeout warning · beta, then live</span><i></i></div>
+    <div class="timeout-result two">
       <div class="stat tilt reveal" data-tilt><div class="v"><span data-count="11">11</span><small>of 12</small></div><div class="k">regulators renewed their session before the inactivity timeout</div><p class="stat-note">Moderated testing with the same 12 regulators, then a one-day beta. A small sample, not a product-wide rate.</p></div>
+      <div class="stat tilt reveal" data-tilt style="--i:1"><div class="v"><span data-count="32">32</span><small>% fewer</small></div><div class="k">idle timeouts in live use: 28 → 19 per 100 review sessions</div><p class="stat-note">4 weeks before vs 4 weeks after the May 2022 release, which shipped ahead of the redesign.</p></div>
     </div>
   </div>
 </section>
@@ -1738,29 +1870,30 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
   <div class="wrap">
     <div class="sec-head">
       <span class="overline reveal">08. Impact</span>
-      <h2 class="heading-1 reveal" style="--i:1">Better decisions and fewer operational workarounds.</h2>
-      <p class="body-large measure reveal" style="--i:2">Pre-launch results came from moderated testing with the same 12 regulators. After launch, the team monitored the first renewal season to understand the business effect.</p>
+      <h2 class="heading-1 reveal" style="--i:1">Faster decisions in testing. Fewer audit kickbacks in production.</h2>
+      <p class="body-large measure reveal" style="--i:2">Pre-launch results come from moderated testing with the same 12 regulators. After the July 2022 launch, FINRA Analytics compared the November–January renewal season before and after.</p>
     </div>
 
     <div class="impact-rule reveal"><span>Pre-launch · moderated testing</span><i></i></div>
     <div class="grid g4">
-      <div class="stat tilt reveal" data-tilt><div class="v"><span data-count="28">28</span><small>%</small></div><div class="k"><b>Faster decisions</b>Put related evidence inside one task view.</div></div>
+      <div class="stat tilt reveal" data-tilt><div class="v"><span data-count="28">28</span><small>%</small></div><div class="k"><b>Faster decisions</b>Time to decision, compared with the old workflow.</div></div>
       <div class="stat tilt reveal" data-tilt style="--i:1"><div class="v"><small>&lt;</small><span data-count="10">10</span><small>%</small></div><div class="k"><b>Decision errors</b>Down from the ~18% baseline.</div></div>
       <div class="stat tilt reveal" data-tilt style="--i:2"><div class="v">2–<span data-count="3">3</span><small>tabs</small></div><div class="k"><b>Tabs per review</b>Reduced from 5–7 tabs.</div></div>
-      <div class="stat tilt reveal" data-tilt style="--i:3"><div class="v"><span data-count="25">25</span><small>%</small></div><div class="k"><b>Mid-task assistance</b>Down from ~40% for newer regulators.</div></div>
+      <div class="stat tilt reveal" data-tilt style="--i:3"><div class="v"><span data-count="25">25</span><small>%</small></div><div class="k"><b>Needed help mid-task</b>Down from ~40% for newer regulators.</div></div>
     </div>
 
-    <div class="impact-rule reveal"><span>Post-launch · business impact, year 1</span><i></i></div>
+    <div class="impact-rule reveal"><span>Post-launch · renewal season, Nov–Jan before vs after</span><i></i></div>
     <div class="biz">
       <div class="biz-card tilt reveal" data-tilt>
         <div class="biz-v"><i>↓</i><b><span data-count="30">30</span>%</b></div>
-        <div class="biz-text"><strong>Drop in support tickets</strong><span>More guidance inside the workflow meant fewer “How do I do this?” requests.</span></div>
+        <div class="biz-text"><strong>Fewer support tickets</strong><span>Workspace “how do I do this?” tickets: 20 → 14 per 1,000 reviews.</span></div>
       </div>
       <div class="biz-card tilt reveal" data-tilt style="--i:1">
         <div class="biz-v"><i>↓</i><b><span data-count="37">37</span>%</b></div>
-        <div class="biz-text"><strong>Lower audit kickback rate</strong><span>Putting evidence beside the action reduced errors in live filings.</span></div>
+        <div class="biz-text"><strong>Lower audit kickback rate</strong><span>100 → 63 cases sent back for every 2,000 audited.</span></div>
       </div>
     </div>
+    <p class="impact-cap reveal">Source: FINRA Analytics, in production. Tickets are counted per 1,000 reviews, so the 6–8% lower review volume after launch doesn’t affect the 30%. Case mix and audit sampling were the same in both seasons. Regulators also got training and how-to videos with the launch, which may also have reduced tickets.</p>
   </div>
 </section>
 
@@ -1789,6 +1922,10 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
         <p>The right “not now” protected the outcome.</p>
       </article>
     </div>
+    <div class="band-note reveal">
+      <span class="tag">Where I'd take it next</span>
+      <p>I’d add an AI assistant for case records. They arrive as 20–30 page PDFs, so a regulator could upload one and ask for the details they need instead of reading every page.</p>
+    </div>
   </div>
 </section>
 
@@ -1796,7 +1933,7 @@ footer.cs-foot .cs-foot-main p{max-width:var(--measure);margin:0;font-size:18px;
   <div class="wrap">
     <div class="cs-foot-main">
       <h2 class="heading-1">Thanks for reading.</h2>
-      <p>Happy to walk through the deeper artifacts: the research with regulators, the end-to-end flows and the trade-offs behind the single task view.</p>
+      <p>Happy to walk through the deeper artifacts: the research with regulators, the end-to-end flows and the trade-offs behind the task workspace.</p>
       <div class="cs-foot-links">
         <button type="button" class="cs-copy" title="Copy email" data-email="sambitmohanty2707@gmail.com" aria-live="polite" data-goatcounter-click="copy-email-finra-workspace" data-goatcounter-title="Copy email (finra-workspace footer)">sambitmohanty2707@gmail.com <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><span class="sr-only">Copy</span></span><span class="ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="sr-only">Copied</span></span></button>
         <a href="https://www.linkedin.com/in/mohanty-sambit/" target="_blank" rel="noopener" data-goatcounter-click="click-linkedin-finra-workspace" data-goatcounter-title="LinkedIn (finra-workspace footer)">LinkedIn ↗</a>
@@ -2339,6 +2476,37 @@ if (lb){
 /* ---------------------------------------------------------
    9. Horizontal scrollers — arrows, keyboard, wheel, drag
    --------------------------------------------------------- */
+/* Stage tabs: click or use the arrow keys to switch stage. */
+document.querySelectorAll('[data-stages]').forEach(function(box){
+  var tabs = Array.prototype.slice.call(box.querySelectorAll('[role="tab"]'));
+  function pick(t, focus){
+    tabs.forEach(function(x){
+      var on = x === t;
+      x.setAttribute('aria-selected', on ? 'true' : 'false');
+      x.tabIndex = on ? 0 : -1;
+      var panel = document.getElementById(x.getAttribute('aria-controls'));
+      panel.hidden = !on;
+      panel.querySelectorAll('video').forEach(function(v){
+        if (!on) v.pause();
+        else if (!reduce){ var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+      });
+    });
+    if (focus) t.focus();
+  }
+  box.querySelectorAll('[role="tabpanel"][hidden] video').forEach(function(v){
+    v.addEventListener('play', function(){ if (v.closest('[hidden]')) v.pause(); });
+  });
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ pick(t); });
+    t.addEventListener('keydown', function(e){
+      var j = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : null;
+      if (j === null) return;
+      e.preventDefault();
+      pick(tabs[(j + tabs.length) % tabs.length], true);
+    });
+  });
+});
+
 document.querySelectorAll('[data-hs]').forEach(function(hs){
   var track = hs.querySelector('[data-track]'),
       view  = hs.querySelector('[data-view]'),
